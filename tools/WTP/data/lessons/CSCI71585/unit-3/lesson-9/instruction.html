@@ -1,0 +1,256 @@
+<h1>Tutorial</h1> <!--Lesson 9: Layout: Flexbox and Grid-->
+<p>Until now, your pages have mostly been a single column, with every block stacked below the one before. Real websites need more: a header with a logo on one side and navigation on the other, a row of cards that share the space evenly, a gallery of photos in a neat grid. Modern CSS has two layout systems designed for exactly this: <strong>flexbox</strong> and <strong>grid</strong>.</p>
+<p>This is a longer lesson, so it is split into two parts. If you do not finish it in class, stop at the end of Part 1 or Part 2 and pick up from there. The starter code contains a page for a photography studio, which you will lay out using both systems. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Containers and Items</h2>
+<p>Flexbox and grid work in the same basic way. You turn an element into a layout <strong>container</strong> by setting its <code>display</code> property, and its <strong>direct children</strong> become the <strong>items</strong> that it arranges:</p>
+<pre><code class="language-html">&lt;div class="cards"&gt;          &lt;!-- the container --&gt;
+    &lt;article&gt;...&lt;/article&gt;   &lt;!-- an item --&gt;
+    &lt;article&gt;...&lt;/article&gt;   &lt;!-- an item --&gt;
+&lt;/div&gt;</code></pre>
+<pre><code class="language-css">.cards {
+    display: flex;   /* or display: grid; */
+}</code></pre>
+<p>Only the direct children become items. Elements nested deeper inside them are laid out normally, unless you make their parent a container too.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> The most common mistake with both systems is putting <code>display: flex</code> or <code>display: grid</code> on the items instead of on their parent. If nothing happens, check which element you have set it on.</div>
+<br>
+
+<h2>Part 1: Flexbox</h2>
+<p><strong>Flexbox</strong> (the flexible box layout) arranges items in <strong>one direction</strong> at a time: either in a row or in a column. It is ideal for components such as navigation bars, rows of buttons, and the contents of a card.</p>
+<br>
+
+<h2>Starting a Flex Layout</h2>
+<p>As soon as an element has <code>display: flex</code>, its items line up side by side in a row, each one only as wide as its content. They also stretch to the same height as each other.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The page <code>header</code> contains two items: the studio's name and the <code>&lt;nav&gt;</code>. Give the <code>header</code> a <code>display</code> of <code>flex</code>. The name and the navigation now sit side by side.</li>
+    <li>The navigation links are in a list. The starter CSS has already removed the list's bullets, which you will learn about in Lesson 10. Give the <code>nav ul</code> a <code>display</code> of <code>flex</code> too, so the links sit in a row.</li>
+</ol>
+<br>
+
+<h2>The Two Axes</h2>
+<p>Flexbox arranges items along two <strong>axes</strong>:</p>
+<ul>
+    <li>The <strong>main axis</strong> is the direction the items flow in. By default, this is a row, from left to right.</li>
+    <li>The <strong>cross axis</strong> runs at right angles to it. In a row, this is vertical.</li>
+</ul>
+<p>The <code>flex-direction</code> property sets the main axis:</p>
+<ul>
+    <li><code>row</code>: left to right. This is the default.</li>
+    <li><code>column</code>: top to bottom.</li>
+    <li><code>row-reverse</code> and <code>column-reverse</code>: the same, in the opposite direction.</li>
+</ul>
+<p>Every flexbox alignment property works along one of these axes, so changing the direction also changes which way they work.</p>
+<br>
+
+<h2>Spacing and Alignment</h2>
+<h3>gap</h3>
+<p>The <code>gap</code> property sets the space <strong>between</strong> items. Unlike margins, it never adds space around the outside of the first and last items.</p>
+
+<h3>justify-content</h3>
+<p><code>justify-content</code> controls how items are spread out along the <strong>main axis</strong>:</p>
+<ul>
+    <li><code>flex-start</code>: items packed at the start. This is the default.</li>
+    <li><code>flex-end</code>: items packed at the end.</li>
+    <li><code>center</code>: items packed in the centre.</li>
+    <li><code>space-between</code>: the first item at the start, the last at the end, and equal space between the rest.</li>
+    <li><code>space-around</code> and <code>space-evenly</code>: equal space around or between every item, including at the ends.</li>
+</ul>
+
+<h3>align-items</h3>
+<p><code>align-items</code> controls how items line up along the <strong>cross axis</strong>:</p>
+<ul>
+    <li><code>stretch</code>: items stretch to fill the container. This is the default, and is why flex items all match in height.</li>
+    <li><code>flex-start</code>, <code>flex-end</code> and <code>center</code>: items keep their natural size, and line up at the start, end or centre.</li>
+</ul>
+<div class="tip-box"><strong>💡 Tip:</strong> To remember which is which: <strong>justify</strong>-content works along the main axis, in the direction the items flow, and <strong>align</strong>-items works across it. In a normal row, that means justify is horizontal and align is vertical.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>header</code> a <code>justify-content</code> of <code>space-between</code>. The studio's name moves to the left edge and the navigation to the right.</li>
+    <li>The name and the links are not quite level with each other. Give the <code>header</code> an <code>align-items</code> of <code>center</code> to line them up vertically.</li>
+    <li>Give the <code>nav ul</code> a <code>gap</code> of <code>20px</code>.</li>
+</ol>
+<br>
+
+<h3>Centring</h3>
+<p>Centring something both horizontally and vertically used to be one of the hardest things to do in CSS. With flexbox, it takes three declarations on the container:</p>
+<pre><code class="language-css">.hero {
+    display: flex;
+    justify-content: center;   /* centre along the main axis */
+    align-items: center;       /* centre along the cross axis */
+    min-height: 300px;
+}</code></pre>
+<p>The container needs to be taller than its content for vertical centring to have any visible effect, which is why this example sets a <code>min-height</code>.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The <code>.hero</code> section contains a heading and a paragraph. Make it a flex container with a <code>min-height</code> of <code>300px</code>, and centre its content in both directions. Notice that the heading and paragraph sit side by side, because the direction is a row.</li>
+    <li>Add <code>flex-direction: column;</code> to stack them. The content stays centred, because <code>justify-content</code> and <code>align-items</code> have swapped directions along with the axes.</li>
+</ol>
+<br>
+
+<h2>Flexible Sizes</h2>
+<p>The "flex" in flexbox comes from the way items can grow and shrink to fill the available space. This is controlled by properties on the <strong>items</strong>, usually through the <code>flex</code> shorthand:</p>
+<pre><code class="language-css">.card {
+    flex: 1;
+}</code></pre>
+<p><code>flex: 1</code> tells each item to grow to fill an equal share of the space. If one item had <code>flex: 2</code>, it would take twice as much of the leftover space as the others.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> <code>flex</code> is a shorthand for three properties: <code>flex-grow</code>, how much an item can grow; <code>flex-shrink</code>, how much it can shrink; and <code>flex-basis</code>, its starting size before growing or shrinking. <code>flex: 1</code> means grow 1, shrink 1, and start from zero.</div>
+
+<h3>Wrapping</h3>
+<p>By default, flex items all stay on one line, shrinking as much as they can to fit. <code>flex-wrap: wrap</code> lets them move onto a new line when there is not enough room, which is essential on small screens. Combined with a minimum width, it creates a layout that adapts to any screen size:</p>
+<pre><code class="language-css">.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    flex: 1;
+    min-width: 200px;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>The <code>.services</code> section contains three <code>.card</code> elements. Make <code>.services</code> a flex container with a <code>gap</code> of <code>20px</code>. The cards sit in a row, but have different widths, because each fits its own content.</li>
+    <li>Give each <code>.card</code> a <code>flex</code> of <code>1</code>. The cards now share the width equally, and they are all the same height.</li>
+    <li>Add <code>flex-wrap: wrap;</code> to <code>.services</code> and <code>min-width: 200px;</code> to <code>.card</code>. Open the pop-out preview and drag the edge of its window to make it narrower: when there is not enough room, the cards wrap onto a new line.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> This is a good place to stop if you are short of time. Part 2 starts with grid.</div>
+<br>
+
+<h2>Part 2: Grid</h2>
+<p><strong>CSS grid</strong> arranges items in <strong>two directions</strong> at once: in rows <em>and</em> columns. You define the grid on the container, and the items fill its cells in order. It is ideal for galleries, card grids and whole-page layouts.</p>
+<br>
+
+<h2>Defining Columns</h2>
+<p>The <code>grid-template-columns</code> property defines the columns. Each value is the width of one column:</p>
+<pre><code class="language-css">.gallery {
+    display: grid;
+    grid-template-columns: 200px 200px 200px;   /* three columns, 200px each */
+    gap: 10px;
+}</code></pre>
+<p>The items fill the cells from left to right, starting a new row whenever a row is full. You do not need to say how many rows there are: the grid creates as many as the items need.</p>
+
+<h3>The fr Unit</h3>
+<p>Fixed column widths do not adapt to the screen. Instead, grid has its own unit, <code>fr</code>, which means a <strong>fraction</strong> of the available space:</p>
+<pre><code class="language-css">grid-template-columns: 1fr 1fr 1fr;   /* three equal columns */
+grid-template-columns: 2fr 1fr;       /* the first column twice as wide as the second */
+grid-template-columns: 250px 1fr;     /* a fixed column, and one that fills the rest */</code></pre>
+<p>When columns repeat, the <code>repeat()</code> function saves typing: <code>repeat(3, 1fr)</code> is the same as <code>1fr 1fr 1fr</code>.</p>
+<p><code>grid-template-rows</code> defines rows in exactly the same way, but you rarely need it, since rows usually grow to fit their content.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The <code>.gallery</code> contains six photos. Make it a grid container with three equal columns, using <code>repeat()</code> and <code>fr</code>, and a <code>gap</code> of <code>10px</code>.</li>
+    <li>Change it to four columns, and notice that the last row is only half full. Then change it back to three.</li>
+</ol>
+<br>
+
+<h2>Placing Items</h2>
+<p>The lines between columns and rows are numbered, starting from 1 at the left and top edges. A three-column grid has four column lines:</p>
+<pre><code>line 1    line 2    line 3    line 4
+  │ column 1 │ column 2 │ column 3 │</code></pre>
+<p>Items can be placed by saying which lines they start and end at, or how many columns or rows they should <strong>span</strong>:</p>
+<pre><code class="language-css">.featured {
+    grid-column: 1 / 3;   /* from column line 1 to column line 3: two columns wide */
+    grid-row: span 2;     /* two rows tall */
+}</code></pre>
+<p><code>grid-column: span 2</code> would also make the item two columns wide, starting wherever it would normally be placed.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The first photo in the gallery has the class <code>featured</code>. Make it span two columns and two rows, using <code>grid-column: span 2;</code> and <code>grid-row: span 2;</code>. Notice how the other photos flow around it to fill the gaps.</li>
+</ol>
+<br>
+
+<h2>Named Areas</h2>
+<p>For larger layouts, you can give areas of the grid names, and draw the layout as text with <code>grid-template-areas</code>. Each string in quotes is one row, and each word is one cell:</p>
+<pre><code class="language-css">.page {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-areas:
+        "header  header"
+        "sidebar content"
+        "footer  footer";
+    gap: 10px;
+}
+
+.page-header  { grid-area: header; }
+.page-sidebar { grid-area: sidebar; }
+.page-content { grid-area: content; }
+.page-footer  { grid-area: footer; }</code></pre>
+<p>Repeating a name, as with <code>header header</code>, makes that area span several cells. Each item is then placed into an area with the <code>grid-area</code> property. Each named area must form a rectangle, and a full stop (<code>.</code>) can be used for an empty cell.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The <strong>Practice Area</strong> at the bottom of the page contains a <code>.page</code> element with four children. Add the CSS from the example above. The four boxes form a classic page layout.</li>
+    <li>Change the middle row of <code>grid-template-areas</code> to <code>"content sidebar"</code>. The sidebar moves to the right without any change to the HTML.</li>
+</ol>
+<br>
+
+<h2>A Responsive Grid Without Media Queries</h2>
+<p>One combination of grid features creates a grid that automatically fits as many columns as there is room for:</p>
+<pre><code class="language-css">.gallery {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}</code></pre>
+<p>This means: create as many columns as will fit (<code>auto-fit</code>), each at least 200px wide and sharing any extra space equally (<code>minmax(200px, 1fr)</code>). On a wide screen there might be five columns, and on a phone just one.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Replace the gallery's <code>grid-template-columns</code> with the example above. Drag the edge of the pop-out preview's window to make it narrower and wider, and watch the number of columns change.</li>
+</ol>
+<br>
+
+<h2>Flexbox or Grid?</h2>
+<p>Both systems can build many of the same layouts, and real websites use both, often one inside the other. As a general guide:</p>
+<ul>
+    <li>Use <strong>flexbox</strong> for layouts in <strong>one direction</strong>, where the content decides the sizes: a navigation bar, a row of buttons, the contents of a card, or centring a single item.</li>
+    <li>Use <strong>grid</strong> for layouts in <strong>two directions</strong>, where you want to control the rows and columns: a photo gallery, a grid of cards, or the overall layout of a page.</li>
+</ul>
+<p>On this page, you used flexbox for the header, navigation, hero and service cards, and grid for the gallery and page layout.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Flexbox and grid can display items in a different order from the HTML, using properties such as <code>flex-direction: row-reverse</code>, <code>order</code>, or by placing items in grid areas. Screen readers and keyboard navigation still follow the order of the HTML, so if the visual order is very different, the page becomes confusing for those users. Make sure the HTML order makes sense on its own.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your main layout rules should be similar to these:</p>
+<pre><code class="language-css">header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    display: flex;
+    gap: 20px;
+}
+
+.services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    flex: 1;
+    min-width: 200px;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}</code></pre>
+<p>Also check that the hero content is centred in both directions, and the featured photo spans two columns and two rows.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>Which element gets <code>display: flex</code>: the container or the items?</li>
+    <li>What do <code>justify-content</code> and <code>align-items</code> each control?</li>
+    <li>What happens to <code>justify-content</code> when you set <code>flex-direction: column</code>?</li>
+    <li>What does <code>1fr</code> mean?</li>
+    <li>When would you choose grid instead of flexbox?</li>
+</ul>
+<p>In the next lesson, you will put everything together to style lists, tables and forms.</p>

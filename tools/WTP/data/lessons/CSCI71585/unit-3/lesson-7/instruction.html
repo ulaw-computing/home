@@ -1,0 +1,149 @@
+<h1>Tutorial</h1> <!--Lesson 7: Positioning-->
+<p>So far, every element you have styled has stayed in the place the browser gave it, one block after another down the page. This arrangement is called the <strong>normal flow</strong>, and it is the right choice for most content. Sometimes, though, you need an element somewhere else: a label in the corner of a photo, a header that stays at the top while the page scrolls, or a button that is always visible. The <code>position</code> property makes this possible.</p>
+<p>The starter code contains a listing for a holiday cottage. The page is long on purpose, so that you can scroll the preview. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>The position Property</h2>
+<p><code>position</code> has five values. Every value except <code>static</code> lets you move the element with four <strong>offset</strong> properties: <code>top</code>, <code>right</code>, <code>bottom</code> and <code>left</code>. Each one sets the distance from that edge of a reference point. Which reference point depends on the position value.</p>
+<ul>
+    <li><code>static</code>: the default. The element stays in the normal flow, and the offsets have no effect.</li>
+    <li><code>relative</code>: moved relative to its normal position.</li>
+    <li><code>absolute</code>: placed relative to its nearest positioned ancestor.</li>
+    <li><code>fixed</code>: placed relative to the browser window.</li>
+    <li><code>sticky</code>: stays in the normal flow until the page scrolls, then sticks in place.</li>
+</ul>
+<p>An element with any value except <code>static</code> is called a <strong>positioned</strong> element.</p>
+<br>
+
+<h2>Relative Positioning</h2>
+<p>An element with <code>position: relative</code> is moved away from where it would normally be. <code>top: 10px</code> moves it 10px <strong>down</strong>, away from the top of its normal position, and <code>left: 20px</code> moves it 20px to the <strong>right</strong>.</p>
+<pre><code class="language-css">.nudge {
+    position: relative;
+    top: 10px;
+    left: 20px;
+}</code></pre>
+<p>The important thing about relative positioning is that the element's <strong>original space is kept</strong>. Everything around it stays exactly where it was, as if the element had not moved, so a moved element can overlap its neighbours.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Relative positioning is rarely used to move things. Its main use is as a reference point for absolutely positioned elements inside it, which you will see next. A <code>position: relative</code> with no offsets does not move the element at all.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the <strong>Practice Area</strong> at the bottom of the page, there are three boxes. Give the middle one, <code>.box-two</code>, a <code>position</code> of <code>relative</code>, a <code>top</code> of <code>20px</code> and a <code>left</code> of <code>40px</code>.</li>
+    <li>Notice that the box overlaps the box below it, and that the gap where it used to be is still there.</li>
+</ol>
+<br>
+
+<h2>Absolute Positioning</h2>
+<p>An element with <code>position: absolute</code> is <strong>removed from the normal flow</strong> completely. The other elements close up the space as if it were not there, and it is placed using the offsets, measured from the edges of its <strong>containing block</strong>:</p>
+<ul>
+    <li>The containing block is its nearest <strong>ancestor that is positioned</strong>, meaning an ancestor with any position value other than <code>static</code>.</li>
+    <li>If no ancestor is positioned, it is placed relative to the page itself.</li>
+</ul>
+<p>So the usual pattern is to give the <strong>parent</strong> <code>position: relative</code>, which does not move it, and the <strong>child</strong> <code>position: absolute</code>:</p>
+<pre><code class="language-css">.photo-card {
+    position: relative;   /* the reference point */
+}
+
+.label {
+    position: absolute;
+    top: 10px;
+    left: 10px;           /* 10px from the top-left corner of .photo-card */
+}</code></pre>
+<p>Absolute positioning is ideal for small items that sit on top of something else, such as labels on images, close buttons in the corner of a box, or notification counts on an icon.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The cottage photo is inside a <code>&lt;figure class="listing-photo"&gt;</code>, along with a <code>&lt;span class="badge"&gt;</code> saying <em>Special offer</em>. Give the <code>.badge</code> a <code>position</code> of <code>absolute</code>, a <code>top</code> of <code>10px</code> and a <code>left</code> of <code>10px</code>.</li>
+    <li>The badge jumps to the top-left corner of the whole page, not of the photo, because none of its ancestors are positioned yet.</li>
+    <li>Give the <code>.listing-photo</code> a <code>position</code> of <code>relative</code>. The badge moves into the corner of the photo.</li>
+</ol>
+<br>
+
+<h2>Fixed Positioning</h2>
+<p>An element with <code>position: fixed</code> is also removed from the normal flow, but it is placed relative to the <strong>viewport</strong>, the visible area of the browser window. It stays in exactly the same place on screen, however far the page is scrolled.</p>
+<pre><code class="language-css">.help-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Fixed elements always cover whatever is behind them. Keep them small, and think about small screens and zoomed-in pages, where a large fixed element can hide much of the content. Fixed banners that cannot be closed are a common accessibility complaint.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>.book-button</code> link a <code>position</code> of <code>fixed</code>, a <code>bottom</code> of <code>20px</code> and a <code>right</code> of <code>20px</code>.</li>
+    <li>Scroll the preview. The button stays in the bottom-right corner the whole time.</li>
+</ol>
+<br>
+
+<h2>Sticky Positioning</h2>
+<p>An element with <code>position: sticky</code> is a hybrid. It stays in the normal flow, like a static element, until the page scrolls far enough for it to reach the offset you set. It then sticks at that position, like a fixed element, until its parent scrolls out of view.</p>
+<pre><code class="language-css">header {
+    position: sticky;
+    top: 0;
+}</code></pre>
+<p>A sticky element needs at least one offset, usually <code>top</code>, to know where to stick. It only sticks within its parent element, so a sticky heading inside a short section stops sticking when the section ends.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Give sticky and fixed elements a <code>background-color</code>. By default, their background is transparent, so the content scrolling underneath them shows through.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the page <code>header</code> a <code>position</code> of <code>sticky</code> and a <code>top</code> of <code>0</code>.</li>
+    <li>Scroll the preview. The header sticks to the top, but the text scrolling underneath it shows through.</li>
+    <li>Give the <code>header</code> a <code>background-color</code> of <code>white</code>.</li>
+</ol>
+<br>
+
+<h2>Stacking and z-index</h2>
+<p>When positioned elements overlap, the browser has to decide which one appears in front. By default, a positioned element that comes later in the HTML is drawn on top of one that comes earlier, and positioned elements are drawn on top of elements in the normal flow.</p>
+<p>The <code>z-index</code> property changes this order. It takes a whole number, and an element with a higher <code>z-index</code> appears in front of one with a lower value. The name comes from the z-axis, the imaginary axis that points out of the screen towards you.</p>
+<pre><code class="language-css">header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> <code>z-index</code> only works on positioned elements (and on flex and grid items, which you will meet in Lesson 9). On a static element, it does nothing at all. If a <code>z-index</code> is not working, check the element's <code>position</code> first.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> Some properties, including a positioned element's <code>z-index</code> and <code>opacity</code> below 1, create a new <strong>stacking context</strong>: a separate layer whose children are stacked only against each other. A child can never appear in front of something outside its parent's layer, however high its own <code>z-index</code> is. If a very high <code>z-index</code> still does not bring an element to the front, this is usually why.</div>
+<div class="tip-box"><strong>💡 Tip:</strong> Use small, spaced-out values such as 1, 10 and 100, rather than huge numbers like 99999. Spacing them out leaves room to add layers in between later.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Scroll the preview slowly so that the photo passes under the sticky header. The badge appears <strong>in front</strong> of the header, because both are positioned and the badge comes later in the HTML.</li>
+    <li>Give the <code>header</code> a <code>z-index</code> of <code>10</code>. The badge now passes behind it.</li>
+</ol>
+<br>
+
+<h2>A Note on float</h2>
+<p>In older code, you will often see the <code>float</code> property, such as <code>float: left</code>. It was designed to let text wrap around an image, as in a newspaper, and before flexbox and grid existed, developers used it to build entire page layouts. It still works for wrapping text around images, but for layout it has been completely replaced by the tools in Lesson 9, which are far easier and more reliable. You do not need to use it, but you should recognise it.</p>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your positioning rules should be similar to these:</p>
+<pre><code class="language-css">header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: white;
+}
+
+.listing-photo {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.book-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}</code></pre>
+<p>Also check that the header stays at the top of the preview when you scroll, the badge sits in the corner of the photo and passes behind the header, and the booking button is always visible.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the difference between relative and absolute positioning?</li>
+    <li>An absolutely positioned element appears in the wrong place. What is the most likely cause?</li>
+    <li>What is the difference between <code>fixed</code> and <code>sticky</code>?</li>
+    <li>Why might <code>z-index</code> have no effect?</li>
+</ul>
+<p>In the next lesson, you will learn powerful new selectors that target elements by their relationships and their state.</p>

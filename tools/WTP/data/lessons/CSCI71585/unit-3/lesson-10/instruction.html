@@ -1,0 +1,229 @@
+<h1>Tutorial</h1> <!--Lesson 10: Styling Lists, Tables and Forms-->
+<p>Lists, tables and forms appear on almost every website, and the browser's default styles for them are plain and often hard to use. In this lesson you will bring together selectors, pseudo-classes, the box model and flexbox to turn each of them into a polished, accessible component: a navigation menu, a readable data table, and a clear, comfortable form.</p>
+<p>The starter code contains a page for a computing society, with a navigation list, an events table and a sign-up form like the one you built in the HTML unit. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Lists</h2>
+<h3>List Markers</h3>
+<p>The bullet or number at the start of each list item is called its <strong>marker</strong>. The <code>list-style-type</code> property changes it:</p>
+<ul>
+    <li>For unordered lists: <code>disc</code> (the default), <code>circle</code> and <code>square</code>.</li>
+    <li>For ordered lists: <code>decimal</code> (the default), <code>lower-alpha</code>, <code>upper-alpha</code>, <code>lower-roman</code> and <code>upper-roman</code>.</li>
+    <li>For any list: <code>none</code>, which removes the markers completely.</li>
+</ul>
+<p>The <code>list-style</code> shorthand can set the type, along with the position of the marker and an image to use instead of it. The <code>::marker</code> pseudo-element lets you style the markers themselves, such as their colour:</p>
+<pre><code class="language-css">.rules {
+    list-style-type: square;
+}
+
+.rules li::marker {
+    color: teal;
+}</code></pre>
+<div class="info-box"><strong>ℹ️ Info:</strong> Changing the list style in CSS does not change its meaning. If the numbering is part of the content, such as steps in a process, use an <code>&lt;ol&gt;</code> in the HTML, even if the numbers are styled differently.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>The <strong>Society Rules</strong> list is an ordered list. Change its markers to lowercase letters, using the <code>.rules</code> class.</li>
+    <li>Make the markers <code>teal</code> using <code>::marker</code>.</li>
+</ol>
+<br>
+
+<h3>Building a Navigation Menu</h3>
+<p>Navigation links are usually written as a list, since they are a list of places to go. Turning that list into a horizontal menu takes three steps:</p>
+<ol>
+    <li><strong>Remove the markers and indent.</strong> Browsers indent lists using padding on the <code>&lt;ul&gt;</code>, and add margin above and below it. Removing the markers alone leaves the indent behind, so remove all three.</li>
+    <li><strong>Lay out the items</strong> in a row, using flexbox.</li>
+    <li><strong>Style the links</strong> as clear, clickable areas.</li>
+</ol>
+<pre><code class="language-css">nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 4px;
+}
+
+nav a {
+    display: block;
+    padding: 10px 16px;
+}</code></pre>
+<p>Making each link <code>display: block</code>, with padding, means the whole padded area can be clicked, not just the words. Large click targets are easier for everyone to use, especially on touchscreens and for people with limited motor control.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Turn the <code>nav ul</code> into a horizontal menu, using the example above.</li>
+    <li>Style the <code>nav a</code> links with a <code>color</code> of <code>white</code>, no underline, and <code>display: block</code> with padding.</li>
+    <li>Give the links a <code>background-color</code> of <code>#00695c</code> when they are hovered over or focused, by grouping <code>nav a:hover</code> and <code>nav a:focus</code> in one rule.</li>
+    <li>The link to the current page has <code>aria-current="page"</code> in the HTML, which tells screen readers which page the user is on. Style it differently from the others, using the selector <code>nav a[aria-current="page"]</code>: give it a <code>border-bottom</code> of <code>3px solid white</code>.</li>
+</ol>
+<div class="info-box"><strong>ℹ️ Info:</strong> <code>[aria-current="page"]</code> is an <strong>attribute selector</strong>: it selects elements with a particular attribute and value. Attribute selectors count as classes in specificity. Styling the current page this way means the visual style and the screen reader information always match.</div>
+<br>
+
+<h2>Tables</h2>
+<p>A data table's job is to make information easy to scan and compare. Good table styles usually include:</p>
+<ul>
+    <li><strong>Clear borders or dividers</strong> between rows.</li>
+    <li><strong>Padding</strong> in the cells, so the data is not cramped.</li>
+    <li><strong>Distinct header cells</strong>, so it is clear what each column contains.</li>
+    <li><strong>Consistent alignment.</strong> Text is easiest to read aligned left, and numbers are easiest to compare aligned right.</li>
+</ul>
+
+<h3>Borders</h3>
+<p>If you give table cells a border, each cell gets its own border, with a small gap between them, so the table is full of double lines. <code>border-collapse: collapse</code> on the table merges neighbouring borders into single lines:</p>
+<pre><code class="language-css">table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}</code></pre>
+
+<h3>Striped Rows</h3>
+<p>Striped rows, often called <strong>zebra striping</strong>, help the reader's eye follow a row across a wide table. The <code>:nth-child()</code> pseudo-class from Lesson 8 does this without any extra classes:</p>
+<pre><code class="language-css">tbody tr:nth-child(even) {
+    background-color: #f4f4f4;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>table</code> a <code>width</code> of <code>100%</code> and <code>border-collapse: collapse</code>.</li>
+    <li>Give the <code>th</code> and <code>td</code> cells padding, a bottom border, and left-aligned text, as in the example above.</li>
+    <li>Give the <code>thead th</code> cells a <code>background-color</code> of <code>teal</code> and a <code>color</code> of <code>white</code>.</li>
+    <li>Add striped rows to the <code>tbody</code>.</li>
+    <li>The last column contains prices. Right-align it using the <code>.price</code> class, which is already on the cells in that column. Check that its heading is right-aligned too, so it lines up with the numbers.</li>
+    <li>Style the table's <code>caption</code> with <code>text-align: left</code>, <code>font-weight: bold</code> and a <code>padding</code> of <code>8px 0</code>.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> Wide tables can overflow narrow screens. A common fix is to wrap the table in a <code>&lt;div&gt;</code> with <code>overflow-x: auto</code>, so the table scrolls sideways inside its box instead of breaking the page layout. You will look at small screens properly in the next lesson.</div>
+<br>
+
+<h2>Forms</h2>
+<p>Forms are where users do the most work on a website, so clear, comfortable forms make a real difference. Good form styles usually include:</p>
+<ul>
+    <li><strong>Labels above their fields</strong>, which are easiest to scan, especially on small screens.</li>
+    <li><strong>Fields that are large enough</strong> to read and to tap.</li>
+    <li><strong>Clear focus styles</strong>, so users always know which field they are typing in.</li>
+    <li><strong>A button that looks clickable</strong>, with clear hover and focus states.</li>
+</ul>
+
+<h3>Fonts in Form Controls</h3>
+<p>Form controls, including inputs, dropdowns, text areas and buttons, do <strong>not</strong> inherit fonts by default. Browsers give them their own small system font, so they look out of place next to the rest of your page. The fix is to tell them to inherit:</p>
+<pre><code class="language-css">input,
+select,
+textarea,
+button {
+    font: inherit;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>font: inherit</code> rule from the example above. Notice that the text in the form fields and button now matches the rest of the page.</li>
+</ol>
+<br>
+
+<h3>Laying Out Fields</h3>
+<p>In the form, each label and its field are wrapped in a <code>&lt;div class="field"&gt;</code>. Making each one a flex column puts the label above the field, with a small gap:</p>
+<pre><code class="language-css">.field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 16px;
+}</code></pre>
+<p>Fields are then given a comfortable size with padding, a clear border, and a width that fills the form:</p>
+<pre><code class="language-css">input[type="text"],
+input[type="email"],
+select,
+textarea {
+    padding: 8px;
+    border: 1px solid #767676;
+    border-radius: 4px;
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Light grey borders are fashionable, but if a field's border is too faint, users cannot see where to type. Accessibility guidelines require the edges of form controls to have a contrast ratio of at least 3:1 against the background. <code>#767676</code> passes on white.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>.field</code> rule from the example above. Each label now sits above its field.</li>
+    <li>Style the text inputs, the dropdown and the text area as in the second example.</li>
+    <li>The form is inside a <code>.signup</code> element. Give it a <code>max-width</code> of <code>500px</code>, so the fields do not stretch across very wide screens.</li>
+</ol>
+<br>
+
+<h3>Focus Styles for Fields</h3>
+<p>As with links, every form control must have a visible focus style. A thick outline in an accent colour is clear and simple:</p>
+<pre><code class="language-css">input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: 3px solid darkorange;
+    outline-offset: 2px;
+}</code></pre>
+
+<h3>Checkboxes and Radio Buttons</h3>
+<p>Checkboxes and radio buttons are difficult to restyle completely, but the <code>accent-color</code> property changes their colour in one line, while keeping them fully accessible:</p>
+<pre><code class="language-css">input[type="checkbox"],
+input[type="radio"] {
+    accent-color: teal;
+}</code></pre>
+
+<h3>Fieldsets</h3>
+<p>Fieldsets have a default border and padding from the browser. You can style them like any other box, and the <code>legend</code> like any other text.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the focus rule from the example above. Click into each field, and press <strong>Tab</strong> to move through the form, checking that you can always see which control has focus.</li>
+    <li>Give the checkboxes and radio buttons an <code>accent-color</code> of <code>teal</code>, then tick a box to see it.</li>
+    <li>Give the <code>fieldset</code> elements a <code>border</code> of <code>1px solid #ccc</code>, a <code>border-radius</code> of <code>4px</code> and a <code>margin-bottom</code> of <code>16px</code>, and make each <code>legend</code> bold.</li>
+</ol>
+<br>
+
+<h3>Buttons</h3>
+<p>A button should look clickable, and should respond when the user interacts with it:</p>
+<pre><code class="language-css">button {
+    padding: 10px 24px;
+    background-color: teal;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #00695c;
+}</code></pre>
+<p>The <code>cursor</code> property changes the mouse pointer. <code>pointer</code> shows the pointing hand that users expect over things they can click.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Style the <code>button</code> as in the example above, including its hover state.</li>
+    <li>Add a <code>button:active</code> rule with a <code>background-color</code> of <code>#004d40</code>, so the button darkens further while it is being clicked.</li>
+    <li>Fill in the form and click <strong>Sign up</strong>. The platform shows the data that would be sent, as in the HTML unit.</li>
+</ol>
+<br>
+
+<h3>What You Cannot Style</h3>
+<div class="info-box"><strong>ℹ️ Info:</strong> Some parts of form controls are drawn by the browser or the operating system, and CSS can only change them a little, or not at all. The open list of a dropdown, the calendar of a date picker and the button of a file upload field are the most common examples. The <code>appearance: none</code> property removes a control's built-in styling so you can style it from scratch, but rebuilding a control completely is a lot of work, and it is easy to make it less accessible in the process. For most forms, styling the parts you can, as in this lesson, is the right choice.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> The <code>:invalid</code> pseudo-class selects form fields whose current value fails their checks, such as a required field that is empty. It applies as soon as the page loads, so every empty required field is "invalid" before the user has even started. The newer <code>:user-invalid</code> pseudo-class only applies after the user has interacted with the field, which is usually what you want.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Check that:</p>
+<ul>
+    <li>The navigation is a horizontal menu, with no bullets or indent, a clear hover and focus style, and a marker on the current page.</li>
+    <li>The rules list uses teal lowercase letters.</li>
+    <li>The table has single-line row dividers, padded cells, a teal header, striped rows and right-aligned prices.</li>
+    <li>Every label sits above its field, and every control has a visible focus style.</li>
+    <li>The form uses the same font as the rest of the page.</li>
+    <li>The button changes when hovered over and clicked.</li>
+</ul>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>Why is <code>list-style: none</code> on its own not enough to remove a list's indent?</li>
+    <li>What does <code>border-collapse: collapse</code> do?</li>
+    <li>How do you create striped table rows without adding classes?</li>
+    <li>Why do form controls need <code>font: inherit</code>?</li>
+    <li>Why should numbers in a table be right-aligned?</li>
+</ul>
+<p>In the next lesson, you will learn how to make your pages work on every screen size.</p>

@@ -1,0 +1,24 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f2f2f2;
+}
+
+header {
+    background-color: #e0f2f1;
+}
+
+/* Practice Area boxes */
+.practice-box {
+    width: 300px;
+    background-color: lightyellow;
+    margin-bottom: 10px;
+}
+
+.practice-padded {
+    padding: 20px;
+    border: 10px solid orange;
+}
+
+/* Write your CSS below */

@@ -1,0 +1,139 @@
+<h1>Tutorial</h1> <!--Lesson 12: Consolidation: Style and Validate-->
+<p>In this final lesson, you will bring together everything from this unit to style a complete page from scratch, then check your CSS with the same kind of validator you used for HTML.</p>
+<p>The page is the <strong>Beginners' Web Workshop</strong> page from the end of the HTML unit, so its HTML is already written for you in the starter code. As in that lesson, there are no step-by-step instructions. Instead, you have a brief and a checklist. If you are unsure how to do something, look back at the relevant lesson.</p>
+<br>
+
+<h2>The Brief</h2>
+<p>The workshop organisers want their page to look friendly, modern and welcoming to complete beginners. It must be easy to read, work well on phones, and be usable by everyone, including keyboard and screen reader users.</p>
+<p>The design is up to you. The page should include the following.</p>
+<br>
+
+<h3>Foundations (Lessons 1, 2 and 6)</h3>
+<ul>
+    <li>All of your CSS in the CSS tab, with no inline styles or <code>&lt;style&gt;</code> elements.</li>
+    <li>Comments labelling each section of your stylesheet.</li>
+    <li>The <code>box-sizing: border-box</code> rule at the top.</li>
+    <li>Mostly class and element selectors, with no ID selectors used for styling. You may add classes to the HTML wherever you need them.</li>
+</ul>
+
+<h3>Colour and Type (Lessons 3 and 4)</h3>
+<ul>
+    <li>A colour scheme of two or three main colours, plus neutrals such as white and grey.</li>
+    <li>Text and background colours that pass the WCAG contrast ratio for their text size.</li>
+    <li>At least one Google Font, with a suitable font stack.</li>
+    <li>Font sizes in <code>rem</code>, and a comfortable <code>line-height</code> for body text.</li>
+    <li>A background colour or image on at least one section.</li>
+</ul>
+
+<h3>Boxes and Layout (Lessons 6, 7 and 9)</h3>
+<ul>
+    <li>The page content centred, with a <code>max-width</code> that keeps lines of text a readable length.</li>
+    <li>Consistent spacing, using padding and margins.</li>
+    <li>A header laid out with flexbox, with the site name and the navigation side by side on larger screens.</li>
+    <li>At least one layout using grid, such as placing the venue's photo beside its details on larger screens.</li>
+    <li>A sticky header, with a background colour and a suitable <code>z-index</code>.</li>
+</ul>
+
+<h3>Selectors and States (Lesson 8)</h3>
+<ul>
+    <li>Styles for all five link states, in the correct order.</li>
+    <li>A clearly visible focus style on every link and form control.</li>
+    <li>At least one combinator, and at least one pseudo-element.</li>
+</ul>
+
+<h3>Components (Lesson 10)</h3>
+<ul>
+    <li>A horizontal navigation menu with no bullets or indent.</li>
+    <li>A schedule table with collapsed borders, padded cells, styled header cells and striped rows.</li>
+    <li>A form with labels above their fields, inherited fonts, clearly visible field borders, and a styled button with hover and active states.</li>
+</ul>
+
+<h3>Responsive Design (Lesson 11)</h3>
+<ul>
+    <li>Mobile-first CSS, with at least one <code>min-width</code> media query at the end of the stylesheet.</li>
+    <li>No sideways scrolling at any width, and images that never overflow their containers.</li>
+    <li>A layout that changes sensibly between small and large screens.</li>
+</ul>
+<br>
+
+<h2>Plan Before You Build</h2>
+<p>Before writing any CSS, make some design decisions, and note them as comments at the top of your stylesheet:</p>
+<pre><code class="language-css">/*
+   Colours:  primary #00695c, accent #ffb300, text #333, background #fafafa
+   Fonts:    headings Merriweather, body Open Sans
+   Spacing:  small 8px, medium 16px, large 32px
+   Breakpoint: 700px
+*/</code></pre>
+<p>Using a small, fixed set of colours, fonts and spacing values throughout makes a design look consistent and deliberate. Check your colour pairs in the <a href="https://webaim.org/resources/contrastchecker/" target="_blank">WebAIM Contrast Checker</a> before you start.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Style the page in stages, and check the preview after each one, at both a narrow and a wide width:
+<ol>
+    <li>The basics: box-sizing, fonts, colours and the main container.</li>
+    <li>The header and navigation.</li>
+    <li>Each section of the page, one at a time.</li>
+    <li>The table and the form.</li>
+    <li>The media queries for larger screens.</li>
+    <li>Link states and focus styles.</li>
+</ol>
+</div>
+<br>
+
+<h2>Validating Your CSS</h2>
+<p>As you have seen throughout this unit, the browser silently ignores CSS it does not understand. A misspelt property, a missing semicolon or an invalid value simply stops working, with no error message. A <strong>validator</strong> checks your CSS against the rules of the language and lists every problem it finds.</p>
+<p>The standard tool is the <strong>W3C CSS Validation Service</strong>. Like the HTML validator, it can check code pasted straight into it.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>When your styling is complete, select all of the code in the CSS tab and copy it.</li>
+    <li>Open the <a href="https://jigsaw.w3.org/css-validator/#validate_by_input" target="_blank">W3C CSS Validation Service's "By direct input" page</a>.</li>
+    <li>Paste your CSS into the box and click <strong>Check</strong>.</li>
+    <li>If it shows <em>"Congratulations! No Error Found."</em>, your CSS is valid. Otherwise, work through the errors as described below until it is.</li>
+</ol>
+<br>
+
+<h3>Reading Validator Results</h3>
+<p>The validator lists <strong>errors</strong> first, each with a line number, the selector it was found in and a description. Below the errors, it shows your CSS as it understood it.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> As with HTML, fix errors from the <strong>top down</strong>, and check again after each fix. A missing closing brace makes the validator misread everything after it, so one small mistake can produce a long list of errors.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> The validator can be slower than browsers to recognise very new CSS features. If it reports an error on a property you have checked on MDN and know is valid, such as <code>accent-color</code>, you can treat it as a warning rather than a real error.</div>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Valid CSS is not the same as good CSS. The validator checks the syntax, but it cannot tell you whether your text has enough contrast, whether your focus styles are visible, or whether your layout works on a phone. Check those yourself, using the checklist below.</div>
+<br>
+
+<h3>Try It: Break It on Purpose</h3>
+<p>Make each change below, validate your CSS, read the message, then undo the change:</p>
+<ol>
+    <li>Change one <code>color</code> property to <code>colour</code>.</li>
+    <li>Change one colour value to an invalid one, such as <code>color: 12px;</code>.</li>
+    <li>Delete the semicolon between two declarations.</li>
+    <li>Add a <code>// comment</code> line above a rule.</li>
+    <li>Delete the closing brace of one rule near the top of your stylesheet.</li>
+</ol>
+<p>Notice that the first four each produce a clear error on the right line, but the missing brace may produce errors in rules that are actually correct.</p>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your page is complete when:</p>
+<ul>
+    <li>Every item in the brief is included.</li>
+    <li>The W3C CSS validator reports no errors.</li>
+    <li>Every text and background colour pair passes its contrast check.</li>
+    <li>You can reach every link and form control by pressing <strong>Tab</strong>, and you can always see which one has focus.</li>
+    <li>The page works with no sideways scrolling in a narrow pop-out preview, and makes good use of the space in the fullscreen preview.</li>
+    <li>Submitting the form shows the data that would be sent.</li>
+</ul>
+<p>Make sure you download your work using the <strong>Download</strong> button. Together with your HTML from the previous unit, you now have a complete, styled, responsive page to use as a reference.</p>
+<br>
+
+<h2>Unit Summary</h2>
+<p>In this unit, you have learned to:</p>
+<ul>
+    <li>Write CSS rules, and add CSS to a page with an external stylesheet.</li>
+    <li>Select elements by type, class, ID, relationship, state and position.</li>
+    <li>Use colours in several formats, and check their contrast.</li>
+    <li>Choose and size fonts, and style text for readability.</li>
+    <li>Predict which rule wins using the cascade, specificity and inheritance.</li>
+    <li>Control the size and spacing of elements with the box model.</li>
+    <li>Position elements, and control how they stack.</li>
+    <li>Build layouts with flexbox and grid.</li>
+    <li>Style accessible navigation menus, tables and forms.</li>
+    <li>Make pages responsive with fluid layouts, flexible images and media queries.</li>
+    <li>Check your CSS with a validator.</li>
+</ul>

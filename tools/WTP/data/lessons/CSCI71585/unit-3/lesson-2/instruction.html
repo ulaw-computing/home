@@ -1,0 +1,162 @@
+<h1>Tutorial</h1> <!--Lesson 2: Selectors-->
+<p>In the last lesson, you used element selectors, which style <em>every</em> element of one type. That is a good start, but real pages need more control: you might want one paragraph to look different from the rest, or the prices on a menu to stand out. In this lesson you will learn the selectors that make this possible, using the <code>class</code> and <code>id</code> attributes you learned about in the HTML unit.</p>
+<p>The starter code contains a menu page for a campus café. Some of its elements already have classes and IDs. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Element Selectors: A Recap</h2>
+<p>An element selector uses an element's name and selects every element of that type:</p>
+<pre><code class="language-css">li {
+    color: dimgray;
+}</code></pre>
+<p>This styles every list item on the page. Element selectors are ideal for setting the general look of a page, such as the colour of all paragraphs or all headings. When you need to style only <em>some</em> elements of a type, you need a more specific selector.</p>
+<br>
+
+<h2>Class Selectors</h2>
+<p>A <strong>class selector</strong> selects every element with a particular class. It is written as a full stop followed by the class name:</p>
+<pre><code class="language-html">&lt;p class="note"&gt;All cakes are baked on site.&lt;/p&gt;</code></pre>
+<pre><code class="language-css">.note {
+    color: darkgoldenrod;
+}</code></pre>
+<p>The full stop is only used in the CSS. In the HTML, the class attribute contains just the name.</p>
+<p>A class selector works on <strong>any</strong> element with that class, whatever type of element it is. A <code>&lt;p&gt;</code>, a <code>&lt;span&gt;</code> and an <code>&lt;li&gt;</code> with <code>class="note"</code> would all be selected by <code>.note</code>. This is what makes classes so useful: you decide which elements belong together, and style them as a group.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Class names are case-sensitive. <code>.Price</code> does not select <code>class="price"</code>. Following the convention from the HTML unit, always write class names in lowercase, with hyphens between words, such as <code>.opening-times</code>.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Every price on the menu is in a <code>&lt;span&gt;</code> with a class of <code>price</code>. In the CSS tab, add a rule that makes <code>.price</code> elements <code>darkgreen</code>.</li>
+    <li>Look at the menu in the preview. One price has not changed colour, because its <code>&lt;span&gt;</code> is missing the class. Find it in the HTML and add <code>class="price"</code>.</li>
+</ol>
+<br>
+
+<h3>Elements With Several Classes</h3>
+<p>As you saw in the HTML unit, an element can have several classes, separated by spaces. It is then selected by <strong>each</strong> of its classes:</p>
+<pre><code class="language-html">&lt;span class="tag vegan"&gt;Vegan&lt;/span&gt;
+&lt;span class="tag gluten-free"&gt;Gluten free&lt;/span&gt;</code></pre>
+<pre><code class="language-css">.tag {
+    background-color: whitesmoke;
+}
+
+.vegan {
+    color: forestgreen;
+}
+
+.gluten-free {
+    color: chocolate;
+}</code></pre>
+<p>Both tags get the shared <code>.tag</code> style, and each one also gets the colour of its own type. This pattern, a general class plus a more specific one, is very common: it avoids repeating the shared styles in every rule.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The dietary labels on the menu each have the <code>tag</code> class, plus either <code>vegan</code> or <code>gluten-free</code>. Add the three rules from the example above.</li>
+    <li>The tomato soup is suitable for vegans, but has no label yet. Add a <code>&lt;span&gt;</code> after its price with the classes <code>tag</code> and <code>vegan</code>, containing <code>Vegan</code>. Check that it picks up both styles.</li>
+</ol>
+<br>
+
+<h3>Combining an Element and a Class</h3>
+<p>You can write an element name and a class together, with <strong>no space</strong> between them, to select only elements of that type that also have that class:</p>
+<pre><code class="language-css">p.note {
+    color: darkgoldenrod;
+}</code></pre>
+<p>This selects paragraphs with the <code>note</code> class, but not a <code>&lt;span class="note"&gt;</code>. You will not need this often, since a well-named class usually only appears on one type of element anyway, but you will see it in other people's code.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> The space matters. <code>p.note</code> (no space) and <code>p .note</code> (with a space) mean completely different things. You will learn what the space means in Lesson 8.</div>
+<br>
+
+<h2>ID Selectors</h2>
+<p>An <strong>ID selector</strong> selects the one element with a particular <code>id</code>. It is written as a hash followed by the ID:</p>
+<pre><code class="language-html">&lt;p id="opening-times"&gt;Open 8am to 4pm, Monday to Friday.&lt;/p&gt;</code></pre>
+<pre><code class="language-css">#opening-times {
+    background-color: lightyellow;
+}</code></pre>
+<p>Because an ID must be unique on the page, an ID selector can only ever select one element.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Most developers avoid ID selectors for styling, and use classes instead. A class can be reused if you later need a second element to look the same, and ID selectors are so strong that they are hard to override, as you will see in Lesson 5. Keep IDs for their other jobs, such as fragment link targets and form labels.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>The paragraph with the opening times has an <code>id</code> of <code>opening-times</code>. Give it a <code>background-color</code> of <code>lightyellow</code> using an ID selector.</li>
+</ol>
+<br>
+
+<h2>The Universal Selector</h2>
+<p>The <strong>universal selector</strong>, <code>*</code>, selects every element on the page:</p>
+<pre><code class="language-css">* {
+    font-family: sans-serif;
+}</code></pre>
+<p>This example changes every element to a font without small decorative strokes (a sans-serif font). You will learn about fonts properly in Lesson 4.</p>
+<p>The universal selector is mostly used for a small number of settings that should apply to absolutely everything, usually at the very top of a stylesheet. You will see a common example in Lesson 6.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Use the universal selector sparingly. Because it selects every element directly, it can stop elements picking up styles from the elements around them, which you will learn about in Lesson 5. For fonts and text colour, styling the <code>body</code> is usually a better choice.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>At the top of your CSS, add the universal rule from the example above. Notice that every piece of text on the page changes font.</li>
+</ol>
+<br>
+
+<h2>Grouping Selectors</h2>
+<p>When several selectors need the same styles, you can <strong>group</strong> them into one rule by separating them with commas:</p>
+<pre><code class="language-css">h1, h2 {
+    color: saddlebrown;
+}</code></pre>
+<p>This is exactly the same as writing two separate rules, but shorter, and easier to update. You can group any selectors, including classes and IDs:</p>
+<pre><code class="language-css">h1,
+h2,
+.note {
+    color: saddlebrown;
+}</code></pre>
+<p>Writing each selector on its own line, as above, keeps long groups readable.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> If <strong>any</strong> selector in a group is invalid, the browser ignores the whole rule, not just that one selector. A common cause is a stray comma at the end of the group, such as <code>h1, h2, { }</code>.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add a grouped rule that makes the <code>&lt;h1&gt;</code> and every <code>&lt;h2&gt;</code> <code>saddlebrown</code>.</li>
+    <li>Add a comma after <code>h2</code>, so the selector reads <code>h1, h2,</code>. Notice that neither heading is brown any more. Then remove the comma.</li>
+</ol>
+<br>
+
+<h2>Choosing a Selector</h2>
+<ul>
+    <li><strong>Element selectors</strong> set the general look of every element of a type.</li>
+    <li><strong>Class selectors</strong> style chosen groups of elements, and should be the selector you use most.</li>
+    <li><strong>ID selectors</strong> work, but are best avoided for styling.</li>
+    <li>The <strong>universal selector</strong> is for the few settings that must apply to everything.</li>
+    <li><strong>Grouping</strong> avoids repeating the same styles in several rules.</li>
+</ul>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your CSS should contain rules similar to these, in any order:</p>
+<pre><code class="language-css">* {
+    font-family: sans-serif;
+}
+
+h1, h2 {
+    color: saddlebrown;
+}
+
+.price {
+    color: darkgreen;
+}
+
+.tag {
+    background-color: whitesmoke;
+}
+
+.vegan {
+    color: forestgreen;
+}
+
+.gluten-free {
+    color: chocolate;
+}
+
+#opening-times {
+    background-color: lightyellow;
+}</code></pre>
+<p>Also check that every price is green, and that the tomato soup has a vegan label.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>How do you write a class selector, and how do you write an ID selector?</li>
+    <li>What is selected by <code>.vegan</code> when one element has <code>class="tag vegan"</code>?</li>
+    <li>Why are classes usually a better choice than IDs for styling?</li>
+    <li>What happens to a grouped rule if one of its selectors is invalid?</li>
+</ul>
+<p>In the next lesson, you will learn the different ways to write colours, and how to add background images.</p>

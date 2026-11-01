@@ -1,0 +1,36 @@
+/* Spacing rules: you will learn about these in Lesson 6. Leave them as they are. */
+body {
+    margin: 0;
+}
+
+.hero {
+    padding: 120px 20px 40px;
+}
+
+.hero-text {
+    max-width: 500px;
+    padding: 10px 20px;
+}
+
+main,
+footer {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.info,
+.warning {
+    padding: 2px 16px;
+}
+
+.badge {
+    padding: 2px 8px;
+}
+
+/* Contrast check: this colour is too light */
+.footer-note {
+    color: #BBB;
+}
+
+/* Write your CSS below */

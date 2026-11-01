@@ -19,7 +19,7 @@
       "description": "In this unit, we will explore CSS, the language used to style and layout web pages. You'll learn how to apply styles to HTML elements, create responsive designs that adapt to different screen sizes, and understand the principles of modern web design.",
       "week": 3,
       "unlockDate": "2026-11-02",
-      "lessonCount": 4,
+      "lessonCount": 12,
       "technologies": ["HTML", "CSS"],
       "lessonsFile": "data/lessons/CSCI71585/unit-3/lessons.json"
     },

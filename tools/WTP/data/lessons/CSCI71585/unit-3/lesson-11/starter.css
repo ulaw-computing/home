@@ -1,0 +1,77 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Layout bar: shows which layout is being used */
+body::before {
+    content: "Layout: small (under 600px)";
+    display: block;
+    padding: 4px 10px;
+    background-color: #222;
+    color: white;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #4e342e;
+}
+
+.shop-name {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: white;
+}
+
+nav ul {
+    display: flex;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav a {
+    display: block;
+    padding: 12px 16px;
+    color: white;
+}
+
+.container {
+    width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: #4e342e;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.features article {
+    padding: 20px;
+    background-color: #efebe9;
+    border-radius: 8px;
+}
+
+/* Write your CSS below */

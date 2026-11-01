@@ -1,0 +1,226 @@
+{
+  "unitId": 2,
+  "unitTitle": "CSS and Responsive Design",
+  "lessons": [
+    {
+      "id": 1,
+      "title": "What is CSS?",
+      "description": "How CSS styles HTML, the syntax of a CSS rule, and the three ways to add CSS to a page.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-1/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-1/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-1/starter.css"
+      },
+      "hints": [
+        "A CSS rule is written as selector { property: value; }, e.g. h1 { color: navy; }",
+        "Every declaration ends with a semicolon. A missing semicolon merges two declarations into one invalid one, so both stop working.",
+        "CSS comments start with /* and end with */. Writing // does not create a comment in CSS and silently breaks the next rule.",
+        "In this platform, the CSS tab is your external stylesheet. It is linked to the page by the <link> element in the HTML <head>."
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Selectors",
+      "description": "Targeting elements by type, class and ID, and styling several elements with one rule.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-2/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-2/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-2/starter.css"
+      },
+      "hints": [
+        "Class selectors start with a full stop (.card) and ID selectors start with a hash (#contact). Neither symbol is used in the HTML attribute itself.",
+        "Class and ID names are case-sensitive, so the name in your CSS must match the HTML exactly.",
+        "To style several selectors with one rule, separate them with commas: h1, h2, h3 { ... }",
+        "If a style does not appear, check the selector's spelling first. This is the most common cause."
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Colours and Backgrounds",
+      "description": "Setting text and background colours in different formats, and adding background images.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-3/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-3/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-3/starter.css"
+      },
+      "hints": [
+        "color sets the text colour; background-color sets the colour behind the content.",
+        "Hex colours start with # and have either 3 or 6 characters, e.g. #333 or #94248C.",
+        "The last value in rgba() and hsla() is the transparency, from 0 (fully transparent) to 1 (fully solid).",
+        "opacity makes an element and everything inside it transparent. To make only the background transparent, use a background colour with alpha instead.",
+        "Background images use url(), e.g. background-image: url('images/coast.jpg'); Check the path and file name if the image does not appear."
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Units and Typography",
+      "description": "Sizing with CSS units, choosing and loading fonts, and styling text.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-4/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-4/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-4/starter.css"
+      },
+      "hints": [
+        "rem is relative to the root (html) font size; em is relative to the font size of the element's parent.",
+        "Font names containing spaces need quotes, e.g. font-family: \"Open Sans\", Arial, sans-serif;",
+        "Always end a font stack with a generic family such as sans-serif or serif, in case none of the other fonts are available.",
+        "A Google Fonts <link> goes in the HTML <head>. The font-family declaration that uses it goes in your CSS.",
+        "line-height works best without a unit, e.g. line-height: 1.5; which means 1.5 times the font size."
+      ]
+    },
+    {
+      "id": 5,
+      "title": "The Cascade, Inheritance and Specificity",
+      "description": "How the browser decides which rule wins when several rules style the same element.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-5/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-5/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-5/starter.css"
+      },
+      "hints": [
+        "When two rules have the same specificity, the one that comes later in the CSS wins.",
+        "An ID selector beats any number of class selectors, and a class selector beats any number of element selectors.",
+        "Text properties such as color and font-family are inherited by child elements. Box properties such as border and padding are not.",
+        "Avoid !important. If a rule is not applying, make its selector more specific or move it later instead."
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Display and the Box Model",
+      "description": "How every element is a box, and how display, padding, borders and margins control its size and spacing.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-6/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-6/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-6/starter.css"
+      },
+      "hints": [
+        "width, height and vertical margins have no effect on inline elements such as <span> and <a>. Use display: inline-block; or display: block; first.",
+        "With box-sizing: border-box; the width includes the padding and border, which makes sizes much easier to predict.",
+        "Shorthand values go clockwise from the top: margin: top right bottom left; e.g. margin: 10px 20px 10px 20px;",
+        "margin: 0 auto; only centres a block element if it has a width smaller than its container."
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Positioning",
+      "description": "Moving elements out of the normal flow with relative, absolute, fixed and sticky positioning, and layering them with z-index.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-7/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-7/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-7/starter.css"
+      },
+      "hints": [
+        "top, right, bottom and left only work when position is set to something other than static.",
+        "An absolutely positioned element is placed relative to its nearest positioned ancestor. Add position: relative; to the parent to control where it goes.",
+        "z-index only works on positioned elements (and on flex and grid items). A higher value sits in front of a lower one.",
+        "position: sticky; needs a position value such as top: 0; to know where to stick."
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Combinators and Pseudo-Selectors",
+      "description": "Selecting elements by their relationships and states, and styling parts of elements with pseudo-elements.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-8/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-8/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-8/starter.css"
+      },
+      "hints": [
+        "A space selects descendants at any depth (nav a); > selects direct children only (ul > li).",
+        "Style link states in this order, or some will not appear: :link, :visited, :hover, :focus, :active.",
+        "::before and ::after need a content property to appear, even if it is empty: content: \"\";",
+        ":nth-child() accepts odd, even or a formula, e.g. li:nth-child(odd) or li:nth-child(3n)."
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Layout: Flexbox and Grid",
+      "description": "Arranging content in rows, columns and grids with flexbox and CSS grid, and choosing between them.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-9/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-9/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-9/starter.css"
+      },
+      "hints": [
+        "display: flex; and display: grid; go on the parent (the container), not on the items inside it.",
+        "In flexbox, justify-content aligns items along the main axis and align-items aligns them along the cross axis.",
+        "flex-direction: column; swaps the axes, so justify-content then works vertically.",
+        "grid-template-columns: repeat(3, 1fr); creates three equal columns. fr means a fraction of the available space.",
+        "gap adds space between items in both flex and grid layouts, without adding space around the outside."
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Styling Lists, Tables and Forms",
+      "description": "Applying everything so far to build navigation menus, readable tables and accessible forms.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-10/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-10/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-10/starter.css"
+      },
+      "hints": [
+        "To remove bullets from a list, use list-style: none; together with padding: 0; to remove the indent as well.",
+        "border-collapse: collapse; on the table merges the double borders between cells into single lines.",
+        "For striped rows, select every other row with tr:nth-child(even).",
+        "Form controls do not inherit fonts by default. Add font: inherit; to inputs, selects and buttons.",
+        "Never remove the outline on :focus without adding another clear focus style. Keyboard users need it to see where they are."
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Responsive Design",
+      "description": "Making pages adapt to any screen size with the viewport tag, flexible images and media queries.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-11/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-11/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-11/starter.css"
+      },
+      "hints": [
+        "The viewport <meta> tag goes in the HTML <head>. Without it, phones display the page zoomed out as if on a desktop screen.",
+        "img { max-width: 100%; height: auto; } stops images overflowing their container on small screens.",
+        "In mobile-first CSS, write styles for small screens first, then use @media (min-width: ...) to add changes for larger screens.",
+        "Media queries respond to the width of the preview. Open the pop-out preview and drag its edge to test each breakpoint."
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Consolidation: Style and Validate",
+      "description": "Style the Beginners' Web Workshop page from a brief and check your CSS with the W3C validator.",
+      "language": "web",
+      "activePanels": ["html", "css"],
+      "instructionFile": "data/lessons/CSCI71585/unit-3/lesson-12/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-3/lesson-12/starter.html",
+        "css": "data/lessons/CSCI71585/unit-3/lesson-12/starter.css"
+      },
+      "hints": [
+        "Style the page in stages: base text and colours first, then the box model, then layout, then responsive changes.",
+        "Validate by copying all of your CSS into the \"By direct input\" tab of the W3C CSS Validation Service.",
+        "Fix validator errors from the top down. A missing brace can cause errors in every rule after it.",
+        "Check your text and background colours have enough contrast to be easy to read."
+      ]
+    }
+  ]
+}

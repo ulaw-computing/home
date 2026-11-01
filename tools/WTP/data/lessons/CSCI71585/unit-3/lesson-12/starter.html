@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Beginners' Web Workshop | Leeds</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <p class="site-name">Beginners' Web Workshop</p>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#venue">Venue</a></li>
+                <li><a href="#schedule">Schedule</a></li>
+                <li><a href="#register">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="about">
+            <h1>Build Your First Web Page in a Day</h1>
+            <p>Join us on <time datetime="2026-12-05">Saturday 5 December 2026</time> for a friendly, hands-on introduction to building websites. <strong>No experience is needed</strong>: we start from the very beginning.</p>
+            <p>You will learn the basics of <abbr title="HyperText Markup Language">HTML</abbr> and <abbr title="Cascading Style Sheets">CSS</abbr>, and leave with a page you have built <em>yourself</em>. To keep learning afterwards, the <a href="https://developer.mozilla.org/en-US/docs/Learn">MDN Learning Area</a> is a great next step.</p>
+        </section>
+
+        <section id="venue">
+            <h2>The Venue</h2>
+            <figure>
+                <img src="https://placehold.co/600x400?text=Venue" alt="A bright computer room with rows of desks and large windows" width="600" height="400">
+                <figcaption>The workshop takes place in our newly refurbished computer lab.</figcaption>
+            </figure>
+            <p>
+                Room 2.04, The Learning Centre<br>
+                12 Example Street<br>
+                Leeds<br>
+                LS1 1AA
+            </p>
+
+            <h3>Getting There</h3>
+            <ol>
+                <li>Leave Leeds station by the main entrance.</li>
+                <li>Turn left and walk along Boar Lane for five minutes.</li>
+                <li>Turn right onto Example Street. The Learning Centre is on your left.</li>
+            </ol>
+
+            <h3>What to Bring</h3>
+            <ul>
+                <li>A packed lunch, or money for the café</li>
+                <li>A notebook and pen</li>
+                <li>Your own laptop, if you would like to keep your work</li>
+            </ul>
+        </section>
+
+        <section id="schedule">
+            <h2>Schedule</h2>
+            <table>
+                <caption>Workshop sessions on 5 December</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Time</th>
+                        <th scope="col">Session</th>
+                        <th scope="col">Speaker</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>10:00</td>
+                        <td>Welcome and how the web works</td>
+                        <td>Amara Kofi</td>
+                    </tr>
+                    <tr>
+                        <td>10:30</td>
+                        <td>Your first HTML page</td>
+                        <td>Amara Kofi</td>
+                    </tr>
+                    <tr>
+                        <td>12:30</td>
+                        <td>Lunch</td>
+                        <td>&ndash;</td>
+                    </tr>
+                    <tr>
+                        <td>13:30</td>
+                        <td>Styling with CSS</td>
+                        <td>Tom Walsh</td>
+                    </tr>
+                    <tr>
+                        <td>15:30</td>
+                        <td>Show and tell</td>
+                        <td>Everyone</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <aside>
+            <h2>Meet the Speakers</h2>
+            <p><strong>Amara Kofi</strong> is a lead developer who has built websites for charities, universities and start-ups.</p>
+            <p><strong>Tom Walsh</strong> is a designer who believes the best interface is the one people barely notice.</p>
+        </aside>
+
+        <section id="register">
+            <h2>Register</h2>
+            <form>
+                <p>
+                    <label for="full-name">Full name</label>
+                    <input type="text" id="full-name" name="full-name" required>
+                </p>
+
+                <p>
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" name="email" required>
+                </p>
+
+                <p>
+                    <label for="session">Which session would you like?</label>
+                    <select id="session" name="session" required>
+                        <option value="">Choose a session</option>
+                        <option value="morning">Morning only</option>
+                        <option value="afternoon">Afternoon only</option>
+                        <option value="full-day">Full day</option>
+                    </select>
+                </p>
+
+                <fieldset>
+                    <legend>How much experience do you have?</legend>
+                    <input type="radio" id="experience-none" name="experience" value="none">
+                    <label for="experience-none">None at all</label>
+                    <input type="radio" id="experience-some" name="experience" value="some">
+                    <label for="experience-some">A little</label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Which topics interest you?</legend>
+                    <input type="checkbox" id="topic-html" name="topics" value="html">
+                    <label for="topic-html">HTML</label>
+                    <input type="checkbox" id="topic-css" name="topics" value="css">
+                    <label for="topic-css">CSS</label>
+                    <input type="checkbox" id="topic-accessibility" name="topics" value="accessibility">
+                    <label for="topic-accessibility">Accessibility</label>
+                </fieldset>
+
+                <button type="submit">Register</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Beginners' Web Workshop</p>
+        <p><a href="#top">Back to top</a></p>
+    </footer>
+</body>
+</html>

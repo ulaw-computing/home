@@ -1,0 +1,184 @@
+<h1>Tutorial</h1> <!--Lesson 5: The Cascade, Inheritance and Specificity-->
+<p>By now you have written enough CSS to have run into a puzzle: two rules both style the same element, and only one of them wins. Perhaps a heading kept a colour you thought you had changed, or the internal stylesheet in Lesson 1 replaced a colour from your CSS tab. In this lesson you will learn exactly how the browser decides which style to use. Understanding this is the key to fixing CSS that "doesn't work".</p>
+<p>The starter code contains a line-up page for a music festival, with some CSS already written. Several of its rules conflict on purpose. In many of the <strong>Try It</strong> sections, you will <strong>predict</strong> the result before checking it, so make a real prediction each time before you look at the preview.</p>
+<br>
+
+<h2>The Cascade</h2>
+<p>The <strong>cascade</strong> is the set of rules the browser follows when several declarations try to set the same property on the same element. In simplified form, it compares them in this order, and stops as soon as one declaration wins:</p>
+<ol>
+    <li><strong>Importance:</strong> a declaration marked <code>!important</code> beats one that is not.</li>
+    <li><strong>Specificity:</strong> a declaration with a more specific selector beats a less specific one.</li>
+    <li><strong>Source order:</strong> if everything else is equal, the declaration that comes <strong>last</strong> wins.</li>
+</ol>
+<p>The cascade works declaration by declaration, not rule by rule. If one rule sets a colour and a font, and another rule only sets a colour, the second rule can win the colour while the first rule still provides the font.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> The cascade also considers where styles come from. The browser's default stylesheet always loses to your styles, which is why your CSS can change the browser's default heading sizes and link colours.</div>
+<br>
+
+<h2>Source Order</h2>
+<p>When two declarations have the same importance and the same specificity, the one that comes later wins. "Later" means later in the stylesheet, or in a stylesheet that is loaded later. This is what happened in Lesson 1: your internal <code>&lt;style&gt;</code> was placed after the <code>&lt;link&gt;</code> to your external stylesheet, so its rule won.</p>
+<pre><code class="language-css">p {
+    color: navy;
+}
+
+p {
+    color: darkred;   /* This one wins: it comes later */
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Look at the starter CSS. There are two rules for <code>.band</code>, setting different colours. <strong>Predict</strong> which colour the band names in the line-up will be, then check the preview.</li>
+    <li>Swap the order of the two <code>.band</code> rules, and check that the colour changes.</li>
+</ol>
+<br>
+
+<h2>Specificity</h2>
+<p><strong>Specificity</strong> measures how precisely a selector targets an element. The browser calculates it by counting three kinds of selector, written as three numbers, such as <strong>(0, 1, 2)</strong>:</p>
+<ol>
+    <li><strong>IDs</strong>, such as <code>#headliner</code>.</li>
+    <li><strong>Classes</strong>, such as <code>.band</code>. Pseudo-classes, which you will meet in Lesson 8, count here too.</li>
+    <li><strong>Elements</strong>, such as <code>p</code>. Pseudo-elements, also in Lesson 8, count here too.</li>
+</ol>
+<p>The universal selector, <code>*</code>, counts as nothing at all: (0, 0, 0).</p>
+<table>
+    <thead>
+        <tr>
+            <th scope="col">Selector</th>
+            <th scope="col">IDs</th>
+            <th scope="col">Classes</th>
+            <th scope="col">Elements</th>
+            <th scope="col">Specificity</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>p</code></td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>(0, 0, 1)</td>
+        </tr>
+        <tr>
+            <td><code>.band</code></td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>(0, 1, 0)</td>
+        </tr>
+        <tr>
+            <td><code>li.band</code></td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>(0, 1, 1)</td>
+        </tr>
+        <tr>
+            <td><code>.band.local</code></td>
+            <td>0</td>
+            <td>2</td>
+            <td>0</td>
+            <td>(0, 2, 0)</td>
+        </tr>
+        <tr>
+            <td><code>#headliner</code></td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>(1, 0, 0)</td>
+        </tr>
+    </tbody>
+</table>
+<p><code>.band.local</code>, with no space, selects elements that have <strong>both</strong> classes.</p>
+<p>To compare two selectors, compare the numbers from the <strong>left</strong>. The first column with a difference decides the winner, and the columns to its right do not matter. This means:</p>
+<ul>
+    <li>One ID beats any number of classes: (1, 0, 0) beats (0, 15, 0).</li>
+    <li>One class beats any number of elements: (0, 1, 0) beats (0, 0, 8).</li>
+</ul>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Specificity is not one number you add up. Ten classes do not equal one ID. Always compare the columns from left to right.</div>
+<p>Source order only matters when specificity is <strong>exactly</strong> equal. A more specific selector wins even if it comes earlier in the stylesheet.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The Saturday headliner is an <code>&lt;li&gt;</code> with <code>class="band"</code> and <code>id="headliner"</code>. The starter CSS has a rule for <code>#headliner</code> near the top, <em>before</em> the <code>.band</code> rules. <strong>Predict</strong> which colour it will be, then check.</li>
+    <li>Two of the bands have the classes <code>band local</code>. Below all the other band rules, add a rule for <code>.local</code> that sets the colour to <code>darkgreen</code>. Does it work? Why?</li>
+    <li>Now move your <code>.local</code> rule to the very top of the CSS. It stops working. Change its selector to <code>.band.local</code>, and it works again even at the top. Use specificity to explain each result.</li>
+</ol>
+<br>
+
+<h3>Inline Styles</h3>
+<p>Styles in a <code>style</code> attribute are not part of a selector at all, and they beat <strong>every</strong> selector in a stylesheet, including IDs. You can think of them as an extra column to the left of IDs. This is one of the main reasons to avoid them: once an inline style is set, no ordinary rule in your stylesheet can override it.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the HTML, add <code>style="color: hotpink;"</code> to the headliner's <code>&lt;li&gt;</code>. It overrides the ID rule.</li>
+    <li>Remove the inline style.</li>
+</ol>
+<br>
+
+<h2>!important</h2>
+<p>Adding <code>!important</code> to the end of a declaration makes it beat every normal declaration, whatever their specificity, including inline styles:</p>
+<pre><code class="language-css">.band {
+    color: orange !important;
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Avoid <code>!important</code>. It does not fix the underlying problem; it just wins the argument by force. The only way to override an <code>!important</code> declaration is with another, more specific <code>!important</code> declaration, and stylesheets that rely on it quickly become a mess that nobody can safely change. If a rule is not applying, find out why with the steps at the end of this lesson, and fix the selector or the order instead.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add <code>!important</code> to the colour in one of your <code>.band</code> rules. Notice that every band changes, including the headliner, overriding the ID.</li>
+    <li>Remove the <code>!important</code>.</li>
+</ol>
+<br>
+
+<h2>Inheritance</h2>
+<p>Some properties are <strong>inherited</strong>: when you set them on an element, its children and other descendants use the same value, unless something sets them directly. This is why setting <code>font-family</code> on the <code>body</code> in Lesson 4 changed the font of the whole page.</p>
+<p>As a general rule:</p>
+<ul>
+    <li><strong>Text properties are inherited</strong>, such as <code>color</code>, <code>font-family</code>, <code>font-size</code>, <code>font-weight</code>, <code>line-height</code>, <code>text-align</code> and <code>letter-spacing</code>. It makes sense for text inside an element to look like the text around it.</li>
+    <li><strong>Box properties are not inherited</strong>, such as <code>background-color</code>, <code>border</code>, <code>padding</code>, <code>margin</code> and <code>width</code>. It would make little sense for every paragraph inside a bordered box to have its own border too.</li>
+</ul>
+<div class="info-box"><strong>ℹ️ Info:</strong> <code>background-color</code> can <em>look</em> inherited, because a child's background is transparent by default, so you see the parent's background through it. The child does not actually have a background colour of its own.</div>
+
+<h3>Inherited Values Always Lose</h3>
+<p>An inherited value has no specificity at all. <strong>Any</strong> rule that targets an element directly beats a value it would otherwise inherit, even a rule with the lowest specificity, and even the browser's default stylesheet.</p>
+<p>This explains a very common puzzle: if you set <code>color</code> on the <code>body</code>, links do not change colour. The browser's default stylesheet has a rule that targets <code>&lt;a&gt;</code> elements directly, making them blue, and a direct rule always beats an inherited value.</p>
+<p>The <code>inherit</code> keyword tells an element to use its parent's value for a property, even if something else is targeting it:</p>
+<pre><code class="language-css">a {
+    color: inherit;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>.stage</code> sections a <code>color</code> of <code>midnightblue</code>. Notice that the headings and the paragraph inside them change, because <code>color</code> is inherited. The band names do not change, because the <code>.band</code> rules target them directly.</li>
+    <li>The link to the stage map inside the first stage did not change colour either. Explain why, then add a rule that makes links inside a <code>.stage</code> inherit their colour, using the selector <code>.stage a</code>. You will learn how this selector works in Lesson 8.</li>
+    <li>Give the <code>.stage</code> sections a <code>border</code> of <code>2px solid midnightblue</code>. You will learn about borders in the next lesson. Notice that only the sections themselves have a border, not the headings and lists inside them, because <code>border</code> is not inherited.</li>
+</ol>
+<br>
+
+<h2>When a Style Does Not Apply</h2>
+<p>When a declaration is not working, check these things, in this order:</p>
+<ol>
+    <li><strong>Is the CSS valid?</strong> Check the spelling of the property and value, and look for missing colons, semicolons and braces. Invalid declarations are silently ignored.</li>
+    <li><strong>Does the selector match the element?</strong> Check the spelling and case of class names against the HTML.</li>
+    <li><strong>Is a more specific rule winning?</strong> Look for other rules that target the same element with IDs or more classes.</li>
+    <li><strong>Is a later rule winning?</strong> Look further down the stylesheet for rules with the same specificity.</li>
+    <li><strong>Is the value only inherited?</strong> If the element is being targeted directly by another rule, including a browser default, the inherited value loses.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> Keep your selectors as simple and low in specificity as possible, mostly single classes. When every rule has similar specificity, source order does most of the work, and your CSS stays easy to predict and to override when you need to.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Check that:</p>
+<ul>
+    <li>There is no inline style and no <code>!important</code> left in your code.</li>
+    <li>The local bands are dark green, using <code>.band.local</code>.</li>
+    <li>The link inside the first stage is the same colour as the text around it.</li>
+    <li>Only the stage sections have a border.</li>
+</ul>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>In what order does the cascade compare importance, specificity and source order?</li>
+    <li>What is the specificity of <code>li.band</code>, and does it beat <code>.band.local</code>?</li>
+    <li>Why can ten classes never beat one ID?</li>
+    <li>Why do links not change colour when you set <code>color</code> on the <code>body</code>?</li>
+    <li>Why should you avoid <code>!important</code>?</li>
+</ul>
+<p>In the next lesson, you will learn about the box model, which controls the size and spacing of every element.</p>

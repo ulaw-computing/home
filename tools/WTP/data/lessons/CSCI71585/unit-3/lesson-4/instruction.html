@@ -1,0 +1,193 @@
+<h1>Tutorial</h1> <!--Lesson 4: Units and Typography-->
+<p>Most of the web is text, so <strong>typography</strong>, the choice and arrangement of type, has a huge effect on how a page looks and how easy it is to read. In this lesson you will learn how to choose fonts and load them from Google Fonts, how to size and space text, and the units CSS uses for sizes and distances of every kind.</p>
+<p>The starter code contains a short magazine article about typography itself. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>CSS Units</h2>
+<p>Many CSS properties need a size or a distance: font sizes, widths, spacing and more. A size in CSS is a number followed by a <strong>unit</strong>, with no space between them, such as <code>16px</code> or <code>1.5rem</code>. The only exception is zero, which needs no unit, since zero of anything is the same.</p>
+<p>Units fall into two groups.</p>
+
+<h3>Absolute Units</h3>
+<p>The most common absolute unit is the <strong>pixel</strong>, <code>px</code>. A CSS pixel is a fixed size, roughly one dot on a standard screen. Pixels are predictable, which makes them a good choice for small, fixed details such as border widths.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> On high-resolution screens, such as most phones, one CSS pixel is drawn using several physical pixels, so a CSS pixel looks roughly the same size on every screen. CSS also has print units such as <code>cm</code>, <code>mm</code> and <code>pt</code>, but these are only useful for stylesheets designed for printing.</div>
+
+<h3>Relative Units</h3>
+<p>A <strong>relative</strong> unit is measured against something else, so it adapts when that thing changes:</p>
+<ul>
+    <li><code>%</code>: a percentage of the parent element. For example, <code>width: 50%</code> is half the width of the parent.</li>
+    <li><code>em</code>: relative to the element's font size. When used for <code>font-size</code> itself, it is relative to the <strong>parent's</strong> font size, so <code>2em</code> is twice the parent's text size.</li>
+    <li><code>rem</code> (short for <strong>root em</strong>): relative to the font size of the root element, <code>&lt;html&gt;</code>. In most browsers, this is 16px by default, so <code>1rem</code> is 16px and <code>1.5rem</code> is 24px.</li>
+    <li><code>vw</code> and <code>vh</code>: 1% of the width and height of the <strong>viewport</strong>, the visible area of the browser window. <code>100vh</code> is the full height of the screen.</li>
+</ul>
+
+<h3>Why Use rem for Text?</h3>
+<p>Users can change their browser's default text size in its settings, and many people with low vision do. Sizes in <code>rem</code> are based on this setting, so they grow and shrink to respect the user's choice. Text sizes in <code>px</code> ignore it.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> A good default is to use <code>rem</code> for font sizes, <code>px</code> for small fixed details such as borders, and <code>%</code> or the layout tools in Lesson 9 for widths. Avoid setting the <code>&lt;html&gt;</code> element's font size in pixels, since this overrides the user's setting for the whole page.</div>
+<br>
+
+<h3>The Problem With em</h3>
+<p>Because <code>em</code> font sizes are relative to the parent, they <strong>compound</strong> when elements are nested:</p>
+<pre><code class="language-css">.small {
+    font-size: 0.8em;
+}</code></pre>
+<pre><code class="language-html">&lt;div class="small"&gt;
+    This text is 0.8 &times; 16px = 12.8px.
+    &lt;div class="small"&gt;
+        This text is 0.8 &times; 12.8px = 10.24px.
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p>With <code>rem</code>, both would be 0.8 &times; 16px, however deeply they were nested.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The <strong>Practice Area</strong> at the bottom of the starter page has three nested <code>&lt;div&gt;</code> elements with the class <code>small</code>. Give <code>.small</code> a <code>font-size</code> of <code>0.8em</code>, and notice that the text shrinks at each level.</li>
+    <li>Change the unit to <code>0.8rem</code>. All three levels are now the same size.</li>
+</ol>
+<br>
+
+<h2>Fonts</h2>
+<h3>font-family and Font Stacks</h3>
+<p>The <code>font-family</code> property chooses the font. Its value is a <strong>font stack</strong>: a list of fonts, separated by commas, in order of preference.</p>
+<pre><code class="language-css">body {
+    font-family: "Open Sans", Arial, sans-serif;
+}</code></pre>
+<p>The browser uses the first font in the list that is available. If the user does not have Open Sans, it tries Arial, and if that is missing too, it uses its default sans-serif font. Font names that contain spaces must be written in quotes.</p>
+<p>The last item in a stack should always be a <strong>generic family</strong>, which every browser can provide:</p>
+<ul>
+    <li><code>serif</code>: fonts with small strokes at the ends of letters, such as Times New Roman. Often used for a traditional or formal feel.</li>
+    <li><code>sans-serif</code>: fonts without those strokes, such as Arial. Clean and modern, and the most common choice for body text on screen.</li>
+    <li><code>monospace</code>: every character is the same width, such as Courier. Used for code.</li>
+    <li><code>system-ui</code>: the default font of the user's operating system.</li>
+</ul>
+<div class="info-box"><strong>ℹ️ Info:</strong> Fonts that almost every computer already has installed, such as Arial, Georgia and Courier New, are often called <strong>web-safe fonts</strong>. Any other font has to be downloaded by the browser before it can be used.</div>
+<br>
+
+<h3>Google Fonts</h3>
+<p><a href="https://fonts.google.com" target="_blank">Google Fonts</a> is a free library of fonts that any website can use. You choose a font, and Google Fonts gives you a <code>&lt;link&gt;</code> element to add to your HTML. This link loads a stylesheet that downloads the font files for you. You then use the font's name in your own CSS, as normal.</p>
+<pre><code class="language-html">&lt;link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&amp;family=Open+Sans:ital,wght@0,400;0,700;1,400&amp;display=swap"&gt;</code></pre>
+<p>This link loads two fonts: <strong>Merriweather</strong> in bold (weight 700), and <strong>Open Sans</strong> in regular, bold and italic.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Put the Google Fonts link <strong>above</strong> the link to your own stylesheet. Only load the fonts, weights and styles you actually use: each one is an extra file the user has to download, which slows down the page. Two font families is usually plenty for a whole site.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the HTML tab, add the Google Fonts <code>&lt;link&gt;</code> from the example above to the <code>&lt;head&gt;</code>, above the link to <code>styles.css</code>.</li>
+    <li>In the CSS tab, give the <code>body</code> a <code>font-family</code> of <code>"Open Sans", Arial, sans-serif</code>.</li>
+    <li>Give the <code>h1</code> and <code>h2</code> elements a <code>font-family</code> of <code>Merriweather, Georgia, serif</code>.</li>
+</ol>
+<br>
+
+<h3>Font Size, Weight and Style</h3>
+<ul>
+    <li><code>font-size</code> sets the size of the text, using any of the units above.</li>
+    <li><code>font-weight</code> sets how thick the text is. It accepts <code>normal</code> and <code>bold</code>, or numbers from <code>100</code> (thin) to <code>900</code> (very heavy), where <code>400</code> is normal and <code>700</code> is bold.</li>
+    <li><code>font-style</code> sets <code>italic</code> or <code>normal</code> text.</li>
+</ul>
+<pre><code class="language-css">h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.caption {
+    font-size: 0.875rem;
+    font-style: italic;
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> A web font can only display the weights and styles that have been loaded. If you set <code>font-weight: 300</code> but only loaded weights 400 and 700, the browser uses the nearest one available. If the italic version has not been loaded, it fakes italics by slanting the regular letters, which usually looks poor.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> Remember that <code>font-weight</code> and <code>font-style</code> only change how text <em>looks</em>. If text is important or stressed, mark it up with <code>&lt;strong&gt;</code> or <code>&lt;em&gt;</code> in the HTML, as you learned in the HTML unit. CSS can then change how those elements look.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>h1</code> a <code>font-size</code> of <code>2.5rem</code>, and every <code>h2</code> a <code>font-size</code> of <code>1.5rem</code>.</li>
+    <li>Give the <code>.standfirst</code> paragraph, the introduction below the title, a <code>font-size</code> of <code>1.25rem</code>.</li>
+    <li>Give the <code>.pull-quote</code> a <code>font-size</code> of <code>1.5rem</code> and a <code>font-style</code> of <code>italic</code>.</li>
+</ol>
+<br>
+
+<h2>Styling Text</h2>
+<h3>Line Height</h3>
+<p><code>line-height</code> sets the distance between lines of text. Text with too little line height feels cramped and is hard to follow from one line to the next. For body text, a line height of around 1.5 is a good starting point.</p>
+<pre><code class="language-css">body {
+    line-height: 1.5;
+}</code></pre>
+<p>Write <code>line-height</code> as a number with <strong>no unit</strong>. This means "1.5 times the font size", so it adjusts automatically for every element, including large headings and small captions. A value with a unit, such as <code>24px</code>, would be the same for every element, however big or small its text.</p>
+
+<h3>Alignment</h3>
+<p><code>text-align</code> sets the horizontal alignment of text within its element: <code>left</code>, <code>right</code>, <code>center</code> or <code>justify</code>.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Avoid <code>justify</code> for body text on the web. To make every line the same length, the browser stretches the gaps between words, which creates uneven "rivers" of white space that make text harder to read, especially for people with dyslexia. Centred text is fine for short headings, but hard to read in long paragraphs, because each line starts in a different place.</div>
+
+<h3>Decoration, Case and Spacing</h3>
+<ul>
+    <li><code>text-decoration</code> adds or removes lines: <code>underline</code>, <code>line-through</code>, <code>overline</code> or <code>none</code>.</li>
+    <li><code>text-transform</code> changes the case of the letters: <code>uppercase</code>, <code>lowercase</code> or <code>capitalize</code>. It only changes how text is displayed, not the text itself.</li>
+    <li><code>letter-spacing</code> adds space between letters. Small amounts in <code>em</code> work best, such as <code>0.1em</code>.</li>
+</ul>
+<pre><code class="language-css">.label {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Be careful with <code>text-decoration: none</code> on links. The underline is how most people recognise a link, especially people who cannot distinguish colours. If you remove it, the link must still be clearly different from the text around it.</div>
+<div class="tip-box"><strong>💡 Tip:</strong> If text should be in capitals only as a style, such as a label, type it normally in the HTML and use <code>text-transform: uppercase</code>. Some screen readers may read words typed in capitals letter by letter, as if they were abbreviations.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>body</code> a <code>line-height</code> of <code>1.6</code>. Notice how much easier the article is to read.</li>
+    <li>Centre the <code>.pull-quote</code> with <code>text-align</code>.</li>
+    <li>The <code>.byline</code> under the title is typed in normal case. Make it display in capitals with <code>text-transform</code>, add <code>letter-spacing: 0.1em;</code> and give it a <code>font-size</code> of <code>0.875rem</code>.</li>
+    <li>The article contains a product name that has been discontinued, in a <code>&lt;span class="old-name"&gt;</code>. Give it a <code>text-decoration</code> of <code>line-through</code>.</li>
+</ol>
+<br>
+
+<h2>The font Shorthand</h2>
+<p>The <code>font</code> shorthand sets several font properties in one declaration. The values must go in this order, and the size and family are required:</p>
+<pre><code class="language-css">/* font: style weight size/line-height family; */
+.pull-quote {
+    font: italic 400 1.5rem/1.4 Merriweather, Georgia, serif;
+}</code></pre>
+<p>The line height is optional, and comes straight after the size, separated by a slash.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Like the <code>background</code> shorthand, <code>font</code> resets every property it covers. Any value you leave out, such as the line height, goes back to its default. For this reason, many developers prefer to write the individual properties.</div>
+<br>
+
+<h2>Viewport Units for Text?</h2>
+<p>It can be tempting to size headings in <code>vw</code>, so they grow and shrink with the screen.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Temporarily change the <code>h1</code> font size to <code>5vw</code>, then open the fullscreen preview. The heading is much larger on the wider screen.</li>
+    <li>Change it back to <code>2.5rem</code>.</li>
+</ol>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Text sized only in <code>vw</code> does not grow properly when the user zooms in: zooming makes the viewport narrower in CSS pixels, so the <code>vw</code> size shrinks and cancels out the zoom. It also ignores the user's text size setting. This fails accessibility guidelines, which require text to be resizable. You will learn better ways to adjust text for different screens in Lesson 11.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your typography rules should be similar to these:</p>
+<pre><code class="language-css">body {
+    font-family: "Open Sans", Arial, sans-serif;
+    line-height: 1.6;
+}
+
+h1,
+h2 {
+    font-family: Merriweather, Georgia, serif;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+.byline {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}</code></pre>
+<p>Also check that the headings use Merriweather and the body text uses Open Sans, the pull quote is large, italic and centred, and the old product name is crossed out.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the difference between <code>em</code> and <code>rem</code>, and why is <code>rem</code> usually better for font sizes?</li>
+    <li>Why should a font stack end with a generic family?</li>
+    <li>Why should <code>line-height</code> be written without a unit?</li>
+    <li>Why should you avoid sizing text only in <code>vw</code>?</li>
+</ul>
+<p>In the next lesson, you will learn how the browser decides which style to use when several rules apply to the same element.</p>

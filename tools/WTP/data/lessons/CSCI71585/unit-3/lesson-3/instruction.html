@@ -1,0 +1,185 @@
+<h1>Tutorial</h1> <!--Lesson 3: Colours and Backgrounds-->
+<p>Colour is often the first thing people notice about a website, and it does more than make a page look attractive: it creates a mood, draws attention to important content, and groups related things together. Used carelessly, it can also make a page hard or impossible to read. In this lesson you will learn the different ways to write colours in CSS, how to make colours transparent, how to check that text is readable, and how to add background images.</p>
+<p>The starter code contains a page for a coastal walking route. Its CSS tab already has a few rules for spacing, which you will learn about in Lesson 6; leave those as they are. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Text and Background Colours</h2>
+<p>You have already used the two main colour properties:</p>
+<ul>
+    <li><code>color</code> sets the colour of an element's <strong>text</strong> (and of text decorations such as underlines).</li>
+    <li><code>background-color</code> sets the colour <strong>behind</strong> an element's content, filling the whole area of the element.</li>
+</ul>
+<p>So far you have written colours as names, such as <code>navy</code>. CSS has several other ways to write a colour, and you will see all of them in real code.</p>
+<br>
+
+<h2>Colour Formats</h2>
+<h3>Named Colours</h3>
+<p>CSS has around 140 named colours, from the obvious, such as <code>red</code> and <code>white</code>, to the more unusual, such as <code>papayawhip</code> and <code>rebeccapurple</code>. Names are easy to read, but there are not many of them, so they rarely match the exact colours of a real design.</p>
+
+<h3>Hexadecimal</h3>
+<p><strong>Hex</strong> colours are the most common format on the web. A hex colour starts with <code>#</code>, followed by six hexadecimal digits: two each for the amount of <strong>red</strong>, <strong>green</strong> and <strong>blue</strong> light in the colour.</p>
+<p>For example, in <code>#94248C</code>, <code>94</code> is the amount of red, <code>24</code> the amount of green and <code>8C</code> the amount of blue. Each pair runs from <code>00</code> (none of that colour) to <code>FF</code> (the maximum, 255 in denary). So:</p>
+<ul>
+    <li><code>#000000</code> has no light at all, so it is black.</li>
+    <li><code>#FFFFFF</code> has full red, green and blue, so it is white.</li>
+    <li><code>#FF0000</code> is pure red, and <code>#0000FF</code> is pure blue.</li>
+    <li>When all three pairs are equal, such as <code>#767676</code>, the colour is a grey.</li>
+</ul>
+<p>If each pair is a repeated digit, a hex colour can be shortened to three digits: <code>#FF0000</code> can be written <code>#F00</code>, and <code>#333333</code> can be written <code>#333</code>. Hex colours are not case-sensitive, so <code>#ff0000</code> and <code>#FF0000</code> are the same.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> Hexadecimal is the base 16 number system, which uses the digits 0 to 9 followed by the letters A to F. Two hexadecimal digits can represent any number from 0 to 255, exactly the range that one byte can store.</div>
+
+<h3>RGB</h3>
+<p>The <code>rgb()</code> function describes the same three amounts of red, green and blue light, but as denary numbers from 0 to 255:</p>
+<pre><code class="language-css">color: rgb(148, 36, 140);   /* the same colour as #94248C */</code></pre>
+
+<h3>HSL</h3>
+<p>The <code>hsl()</code> function describes a colour in a way that is much closer to how people think about colour:</p>
+<ul>
+    <li><strong>Hue</strong>: the position on a colour wheel, in degrees from 0 to 360. 0 is red, 120 is green and 240 is blue.</li>
+    <li><strong>Saturation</strong>: how intense the colour is, from <code>0%</code> (grey) to <code>100%</code> (full colour).</li>
+    <li><strong>Lightness</strong>: from <code>0%</code> (black), through <code>50%</code> (the pure colour), to <code>100%</code> (white).</li>
+</ul>
+<pre><code class="language-css">background-color: hsl(200, 70%, 40%);   /* a strong blue */
+background-color: hsl(200, 70%, 90%);   /* a pale version of the same blue */</code></pre>
+<p>HSL makes it easy to create matching colours for a design: keep the hue the same, and change only the lightness to get darker and lighter versions.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> You do not need to work out colour values by hand. Most design tools give hex values, and you can search for "colour picker" in a search engine to find one that shows the same colour in hex, RGB and HSL.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>body</code> a <code>color</code> of <code>#333</code>, a dark grey that is softer on the eye than pure black.</li>
+    <li>Make the <code>h1</code> and every <code>h2</code> the colour <code>hsl(200, 70%, 30%)</code>.</li>
+    <li>Give the <code>.info</code> box a <code>background-color</code> of <code>hsl(200, 70%, 92%)</code>: a pale version of the same hue.</li>
+    <li>Give the <code>.warning</code> box a <code>background-color</code> of <code>rgb(255, 236, 179)</code>, a pale amber.</li>
+</ol>
+<br>
+
+<h2>Transparency</h2>
+<p>Colours can be made partly see-through by adding a fourth value, called <strong>alpha</strong>, which runs from <code>0</code> (completely transparent) to <code>1</code> (completely solid):</p>
+<pre><code class="language-css">background-color: rgba(0, 0, 0, 0.5);         /* black, 50% see-through */
+background-color: hsla(200, 70%, 30%, 0.8);   /* blue, 80% solid */</code></pre>
+<div class="info-box"><strong>ℹ️ Info:</strong> Modern CSS also accepts a newer, shorter syntax, where the values are separated by spaces and the alpha comes after a slash: <code>rgb(0 0 0 / 0.5)</code>. Hex colours can include alpha too, as an extra pair of digits: <code>#00000080</code>. All of these do the same thing, and you will see all of them in other people's code.</div>
+
+<h3>Alpha or Opacity?</h3>
+<p>There is also an <code>opacity</code> property, which takes a value from <code>0</code> to <code>1</code>. The difference is important:</p>
+<ul>
+    <li>A <strong>colour with alpha</strong> makes only that one colour transparent, such as the background.</li>
+    <li><code>opacity</code> makes the <strong>whole element</strong> transparent, including its text, its images and everything inside it.</li>
+</ul>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>.badge</code> element a <code>background-color</code> of <code>hsl(200, 70%, 30%)</code>, a <code>color</code> of <code>white</code>, and an <code>opacity</code> of <code>0.5</code>. Notice that the text has faded as well as the background.</li>
+    <li>Remove the <code>opacity</code>, and change the background colour to <code>hsla(200, 70%, 30%, 0.5)</code>. Now only the background is transparent, and the text stays fully solid.</li>
+</ol>
+<br>
+
+<h2>Colour Contrast</h2>
+<p><strong>Contrast</strong> is the difference in brightness between text and the colour behind it. Low contrast, such as light grey text on a white background, is hard to read for everyone, and can be impossible to read for people with low vision or colour blindness, or for anyone using a phone in bright sunlight.</p>
+<p>Contrast is measured as a ratio, from 1:1 (no difference at all) to 21:1 (black on white). The Web Content Accessibility Guidelines (WCAG), the international standard for accessible websites, require at least:</p>
+<ul>
+    <li><strong>4.5:1</strong> for normal text.</li>
+    <li><strong>3:1</strong> for large text: at least 24px, or about 19px if it is bold.</li>
+</ul>
+<p>You can check any pair of colours with the <a href="https://webaim.org/resources/contrastchecker/" target="_blank">WebAIM Contrast Checker</a>: enter the text colour and the background colour, and it tells you the ratio and whether it passes.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Never use colour as the <em>only</em> way to show information, such as marking a required form field only by making its label red. Around 1 in 12 men and 1 in 200 women have some form of colour blindness. Always add text, an icon or another visual cue as well.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>The <code>.footer-note</code> paragraph at the bottom of the page has a <code>color</code> of <code>#BBB</code> in the starter CSS. Check <code>#BBBBBB</code> on <code>#FFFFFF</code> in the WebAIM Contrast Checker. It fails.</li>
+    <li>Find a darker grey that passes for normal text, and update the rule. <code>#767676</code> is the lightest grey that passes on white.</li>
+</ol>
+<br>
+
+<h2>Background Images</h2>
+<p>The <code>background-image</code> property places an image behind an element's content. The image's path goes inside <code>url()</code>:</p>
+<pre><code class="language-css">.hero {
+    background-image: url('images/coast.jpg');
+}</code></pre>
+<p>Use background images for decoration. If an image is part of the content, and needs alt text, use an <code>&lt;img&gt;</code> element in the HTML instead: background images have no alt text, so screen reader users never know they are there.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> A path in <code>url()</code> is relative to the <strong>stylesheet</strong>, not to the HTML page. In this platform, your CSS is applied directly to the page, so <code>images/coast.jpg</code> works. In a real project where the stylesheet is in a <code>css</code> folder, you would need to go up a level first: <code>url('../images/coast.jpg')</code>.</div>
+<div class="tip-box"><strong>💡 Tip:</strong> Always set a <code>background-color</code> as well as a background image. The colour shows while the image is loading, and if it fails to load, so any text on top of it stays readable.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>.hero</code> section a <code>background-image</code> of <code>url('images/coast.jpg')</code>, and a <code>background-color</code> of <code>hsl(200, 70%, 30%)</code>.</li>
+    <li>Look at the preview. You can probably only see the top-left corner of the photo, because the image is larger than the space available.</li>
+</ol>
+<br>
+
+<h3>Repeating</h3>
+<p>By default, a background image <strong>repeats</strong> (tiles) to fill the whole element, like wallpaper. The <code>background-repeat</code> property controls this:</p>
+<ul>
+    <li><code>repeat</code>: tiles in both directions. This is the default.</li>
+    <li><code>repeat-x</code>: tiles horizontally only.</li>
+    <li><code>repeat-y</code>: tiles vertically only.</li>
+    <li><code>no-repeat</code>: shows the image once.</li>
+</ul>
+<p>Repeating is useful for small patterns and textures that are designed to tile seamlessly. For photographs, you almost always want <code>no-repeat</code>.</p>
+
+<h3>Sizing and Positioning</h3>
+<p>The <code>background-size</code> property controls how big the image is. Two keywords cover most situations:</p>
+<ul>
+    <li><code>cover</code>: scales the image so it covers the <strong>whole</strong> element, cropping any parts that do not fit. This is ideal for large photos.</li>
+    <li><code>contain</code>: scales the image so the <strong>whole image</strong> fits inside the element, leaving gaps if the shapes do not match.</li>
+</ul>
+<p>The <code>background-position</code> property controls where the image sits, using keywords such as <code>center</code>, <code>top</code>, <code>bottom</code>, <code>left</code> and <code>right</code>. Two keywords can be combined, such as <code>top right</code>. When an image is cropped by <code>cover</code>, the position decides which part stays visible.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> <code>background-size</code> and <code>background-position</code> can also take exact sizes and distances, such as <code>200px</code>. You will learn about CSS units in the next lesson.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add <code>background-size: contain;</code> to the <code>.hero</code> rule. The whole photo now fits the height of the section, and repeats to fill the width.</li>
+    <li>Add <code>background-repeat: no-repeat;</code>. The photo now appears only once, with the background colour showing beside it.</li>
+    <li>Change <code>background-size</code> to <code>cover</code>, and add <code>background-position: center;</code>. The photo now fills the section, centred.</li>
+    <li>Try <code>background-position: bottom;</code> to see a different part of the photo, then change it back to <code>center</code>.</li>
+</ol>
+<br>
+
+<h3>The background Shorthand</h3>
+<p>The <code>background</code> property is a <strong>shorthand</strong>: it sets several background properties in one declaration. When it includes a size, the size comes straight after the position, separated by a slash:</p>
+<pre><code class="language-css">.hero {
+    background: hsl(200, 70%, 30%) url('images/coast.jpg') center / cover no-repeat;
+}</code></pre>
+<p>This one line does the same job as the five separate declarations in your <code>.hero</code> rule.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> A shorthand resets <strong>every</strong> property it covers, including any you leave out. If you write <code>background: lightyellow;</code> after setting a background image, the image is removed, because the shorthand sets it back to <code>none</code>. Use the shorthand when you are setting a background from scratch, and the individual properties when you only want to change one part.</div>
+<br>
+
+<h3>Text on Images</h3>
+<p>Text placed on top of a photo is often hard to read, because a photo has light and dark areas. A common solution is to put the text on a semi-transparent background, which lets the photo show through while keeping the contrast high.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Replace the five background declarations in your <code>.hero</code> rule with the <code>background</code> shorthand from the example above. The preview should look exactly the same.</li>
+    <li>Give the <code>.hero-text</code> box a <code>background-color</code> of <code>rgba(0, 0, 0, 0.6)</code>, and a <code>color</code> of <code>white</code>.</li>
+    <li>The <code>h1</code> inside the hero is still the blue you set earlier, which is hard to read on the dark box. Add a rule for <code>.hero-text h1</code> that sets its colour to <code>white</code>. You will learn exactly how this selector works in Lesson 8.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your hero rules should look like this:</p>
+<pre><code class="language-css">.hero {
+    background: hsl(200, 70%, 30%) url('images/coast.jpg') center / cover no-repeat;
+}
+
+.hero-text {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+}
+
+.hero-text h1 {
+    color: white;
+}</code></pre>
+<p>Also check that:</p>
+<ul>
+    <li>The headings use your HSL blue, and the info box uses a pale version of it.</li>
+    <li>The badge's text is fully solid, with only its background transparent.</li>
+    <li>The footer note passes the contrast check.</li>
+</ul>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What do the three pairs of digits in a hex colour represent?</li>
+    <li>How would you make a darker version of an HSL colour?</li>
+    <li>What is the difference between <code>opacity</code> and a colour with alpha?</li>
+    <li>What contrast ratio does normal text need?</li>
+    <li>What is the difference between <code>background-size: cover</code> and <code>contain</code>?</li>
+</ul>
+<p>In the next lesson, you will learn about CSS units, and how to style text with fonts.</p>

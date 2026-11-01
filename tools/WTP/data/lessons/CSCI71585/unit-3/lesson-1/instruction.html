@@ -1,0 +1,187 @@
+<h1>Tutorial</h1> <!--Lesson 1: What is CSS?-->
+<p>In the last unit, you used HTML to describe what the content of a page <em>is</em>. Every page you built looked much the same: black text on a white background, in the browser's default font. In this unit, you will learn <strong>CSS</strong>, the language that controls how pages look, from colours and fonts to complete layouts that adapt to any screen size.</p>
+<p>This first lesson covers the foundations: what CSS is, how a CSS rule is written, and the three ways to add CSS to a page. The starter code contains a short page of study tips, with its HTML already written. You will style it as you work through the lesson. Whenever you see a <strong>Try It</strong> section, make that change in the editor before moving on, and check the preview to see the result.</p>
+<br>
+
+<h2>What Is CSS?</h2>
+<p>CSS stands for <strong>Cascading Style Sheets</strong>.</p>
+<ul>
+    <li><strong>Style</strong> means presentation: colours, fonts, spacing, sizes and layout.</li>
+    <li><strong>Sheets</strong> refers to the files that hold the styles, called <strong>stylesheets</strong>.</li>
+    <li><strong>Cascading</strong> describes how the browser decides what to do when several styles apply to the same element. You will learn exactly how this works in Lesson 5.</li>
+</ul>
+<p>HTML and CSS have separate jobs:</p>
+<ul>
+    <li><strong>HTML</strong> describes the content and its structure: <em>this is a heading, this is a list</em>.</li>
+    <li><strong>CSS</strong> describes how that content is presented: <em>headings are navy and centred, lists have no bullets</em>.</li>
+</ul>
+<p>Keeping these jobs apart is called <strong>separation of concerns</strong>. It means you can completely redesign a website by changing only its CSS, without touching any of the HTML. It also means one stylesheet can style every page of a site, so a change in one place updates the whole site.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> The browser already applies some styles to every page, even when you have written no CSS. This is the <strong>browser default stylesheet</strong> (sometimes called the user agent stylesheet), and it is why headings are bold and large, links are blue and underlined, and lists have bullets. Your CSS builds on top of these defaults, and can override any of them.</div>
+<br>
+
+<h2>Writing a CSS Rule</h2>
+<p>CSS is made up of <strong>rules</strong>. Each rule says which elements to style, and how to style them:</p>
+<pre><code class="language-css">h1 {
+    color: navy;
+}</code></pre>
+<p>This rule makes every <code>&lt;h1&gt;</code> on the page navy. It has three parts:</p>
+<ul>
+    <li>The <strong>selector</strong>, <code>h1</code>, chooses which elements the rule applies to.</li>
+    <li>The <strong>declaration block</strong> is everything between the curly braces <code>{ }</code>.</li>
+    <li>Inside the block is a <strong>declaration</strong>, <code>color: navy;</code>, which is made of a <strong>property</strong> (<code>color</code>), a colon, a <strong>value</strong> (<code>navy</code>) and a semicolon.</li>
+</ul>
+<p>The property is <em>what</em> you want to change, and the value is <em>what you want to change it to</em>.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> CSS uses American spelling, so the property is <code>color</code>, not <code>colour</code>. Writing <code>colour</code> does not cause an error message; the browser simply ignores the declaration, because it does not recognise the property. You will meet the same thing with <code>center</code> rather than <code>centre</code>.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Click the <strong>CSS</strong> tab in the editor. This is where you will write your styles.</li>
+    <li>Below the comment, add a rule that makes the <code>&lt;h1&gt;</code> navy, exactly as in the example above.</li>
+    <li>Check the preview: the main heading should now be navy.</li>
+</ol>
+<br>
+
+<h3>Several Declarations in One Rule</h3>
+<p>A rule can contain as many declarations as you need. Each one goes on its own line, and each one ends with a semicolon:</p>
+<pre><code class="language-css">h1 {
+    color: navy;
+    background-color: lightyellow;
+    text-align: center;
+}</code></pre>
+<p>Here, <code>background-color</code> sets the colour behind the heading, and <code>text-align</code> centres its text. You will learn about these properties properly in later lessons.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> The browser ignores whitespace in CSS, just as it does in HTML, so the whole rule could be written on one line. Putting each declaration on its own line, indented with <strong>Tab</strong>, makes your CSS much easier to read and edit, and is the standard convention.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add <code>background-color: lightyellow;</code> and <code>text-align: center;</code> to your <code>h1</code> rule.</li>
+    <li>Now delete the semicolon at the end of the <code>color</code> line. Notice that the heading loses its colour <em>and</em> its background colour.</li>
+    <li>Put the semicolon back.</li>
+</ol>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Without the semicolon, the browser reads <code>navy</code> and the whole next line as a single value, <code>navy background-color: lightyellow</code>. That is not a valid colour, so it ignores the combined declaration, and both styles are lost. CSS does not show you an error; styles just stop working. When a style is not appearing, check for missing semicolons, colons and braces first. The semicolon after the <em>last</em> declaration in a rule is optional, but always including it means you cannot forget it when you add another line later.</div>
+<br>
+
+<h3>Element Selectors</h3>
+<p>The selector <code>h1</code> is an <strong>element selector</strong> (also called a type selector). It uses an element's name, without the angle brackets, and selects <strong>every</strong> element of that type on the page. <code>p</code> selects every paragraph, <code>li</code> every list item, and so on.</p>
+<pre><code class="language-css">p {
+    color: dimgray;
+}</code></pre>
+<p>In the next lesson, you will learn selectors that target specific elements, rather than all of one type.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add a rule that makes every paragraph <code>dimgray</code>.</li>
+    <li>Add a rule that makes every <code>&lt;h2&gt;</code> <code>darkslateblue</code>.</li>
+    <li>Add a rule that gives the <code>&lt;body&gt;</code> a <code>background-color</code> of <code>ghostwhite</code>. Notice that this colours the whole page, because the body contains everything on it.</li>
+</ol>
+<br>
+
+<h2>Three Ways to Add CSS</h2>
+<p>There are three places you can write CSS. They all work, but they are not equally good.</p>
+
+<h3>1. External Stylesheets</h3>
+<p>An <strong>external stylesheet</strong> is a separate file, ending in <code>.css</code>, that contains only CSS. It is connected to the HTML page with a <code>&lt;link&gt;</code> element in the <code>&lt;head&gt;</code>:</p>
+<pre><code class="language-html">&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Study Tips&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;</code></pre>
+<ul>
+    <li><code>rel="stylesheet"</code> states the <strong>rel</strong>ationship: the linked file is a stylesheet for this page.</li>
+    <li><code>href</code> is the path to the CSS file. It works exactly like the paths you learned in the HTML unit, so a stylesheet in a <code>css</code> folder would be <code>href="css/styles.css"</code>.</li>
+</ul>
+<p>This is how almost all real websites add their CSS, because:</p>
+<ul>
+    <li>One stylesheet can be linked from every page of a site, so the whole site shares one design.</li>
+    <li>Changing the stylesheet changes every page at once.</li>
+    <li>The browser downloads the file once and reuses it on every page, so pages load faster.</li>
+    <li>HTML and CSS stay completely separate.</li>
+</ul>
+<div class="info-box"><strong>ℹ️ Info:</strong> In this platform, the <strong>CSS</strong> tab is your external stylesheet, and the starter HTML already contains a <code>&lt;link&gt;</code> to it. When you click <strong>Download</strong>, your work is saved as <code>index.html</code> and <code>styles.css</code>, so the link works when you open the files on your own computer. The preview applies your CSS tab automatically, but on a real website, a page without a <code>&lt;link&gt;</code> would not load the stylesheet at all.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Switch to the <strong>HTML</strong> tab and find the <code>&lt;link&gt;</code> element in the <code>&lt;head&gt;</code>. Check that you can identify its <code>rel</code> and <code>href</code> attributes.</li>
+</ol>
+<br>
+
+<h3>2. Internal Stylesheets</h3>
+<p>An <strong>internal stylesheet</strong> is CSS written inside a <code>&lt;style&gt;</code> element in the page's <code>&lt;head&gt;</code>:</p>
+<pre><code class="language-html">&lt;head&gt;
+    &lt;title&gt;Study Tips&lt;/title&gt;
+    &lt;style&gt;
+        h2 {
+            color: darkgreen;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;</code></pre>
+<p>The rules work exactly the same way, but they only apply to this one page. Internal stylesheets are occasionally useful for a single page that needs its own styles, or for quick experiments.</p>
+
+<h3>3. Inline Styles</h3>
+<p>An <strong>inline style</strong> is written directly on an element, using the <code>style</code> attribute. There is no selector and no braces, because it only ever applies to that one element:</p>
+<pre><code class="language-html">&lt;p style="color: crimson;"&gt;This paragraph is crimson.&lt;/p&gt;</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Avoid inline styles. They mix presentation back into the HTML, cannot be reused, and have to be changed one element at a time. They also override almost any rule in a stylesheet, which makes them very hard to work around later. You will see why in Lesson 5. You will still come across them, especially in HTML emails and in code generated by other tools, so it is important to recognise them.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the HTML tab, add a <code>&lt;style&gt;</code> element inside the <code>&lt;head&gt;</code>, <strong>below</strong> the <code>&lt;link&gt;</code>. Inside it, write a rule that makes <code>&lt;h2&gt;</code> elements <code>darkgreen</code>. Check the preview: the internal rule has replaced the <code>darkslateblue</code> colour from your CSS tab. You will learn why in Lesson 5.</li>
+    <li>On the first paragraph of the page, add <code>style="color: crimson;"</code>. Notice that only that one paragraph changes.</li>
+    <li>Now remove both the <code>&lt;style&gt;</code> element and the <code>style</code> attribute. From now on, all of your CSS goes in the CSS tab.</li>
+</ol>
+<br>
+
+<h2>Comments</h2>
+<p>CSS comments start with <code>/*</code> and end with <code>*/</code>. The browser ignores everything between them. The same syntax works for every kind of comment:</p>
+<pre><code class="language-css">/* A comment on its own line */
+
+/*
+   A comment that spans
+   several lines
+*/
+
+h1 {
+    color: navy; /* A comment at the end of a line */
+}</code></pre>
+<p>As in HTML, comments are useful for explaining your code, labelling sections of a long stylesheet, and temporarily switching rules off ("commenting them out").</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> CSS has <strong>no</strong> single-line comment. You may have seen <code>//</code> used for comments in other languages, such as JavaScript, but in CSS it is not a comment at all. The browser treats it as part of the code, which makes the next rule or declaration invalid, so it silently stops working. Always use <code>/* */</code>.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>At the top of your CSS, add the comment <code>/* Study Tips page styles */</code>.</li>
+    <li>Comment out your <code>body</code> rule by wrapping the whole rule in <code>/*</code> and <code>*/</code>. Check that the page background turns white again, then remove the comment markers.</li>
+    <li>Above your <code>h2</code> rule, add the line <code>// Section headings</code>. Check the preview: the <code>&lt;h2&gt;</code> headings have lost their colour.</li>
+    <li>Change the <code>//</code> comment into a proper <code>/* */</code> comment, and check that the colour comes back.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your CSS tab should look similar to this:</p>
+<pre><code class="language-css">/* Study Tips page styles */
+
+body {
+    background-color: ghostwhite;
+}
+
+h1 {
+    color: navy;
+    background-color: lightyellow;
+    text-align: center;
+}
+
+/* Section headings */
+h2 {
+    color: darkslateblue;
+}
+
+p {
+    color: dimgray;
+}</code></pre>
+<p>Also check that your HTML has no <code>&lt;style&gt;</code> element and no <code>style</code> attributes.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the difference between HTML's job and CSS's job?</li>
+    <li>Label each part of this rule: <code>p { color: navy; }</code></li>
+    <li>What happens when a semicolon is missing between two declarations?</li>
+    <li>What are the three ways to add CSS to a page, and why is an external stylesheet usually best?</li>
+    <li>Why should you never use <code>//</code> for a comment in CSS?</li>
+</ul>
+<p>In the next lesson, you will learn how to select specific elements using classes and IDs.</p>

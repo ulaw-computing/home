@@ -1,0 +1,206 @@
+<h1>Tutorial</h1> <!--Lesson 6: Display and the Box Model-->
+<p>To a browser, every element on a page is a rectangular <strong>box</strong>. Headings, paragraphs, images, links, even single words in a <code>&lt;span&gt;</code>: all of them are boxes. The <strong>box model</strong> describes how the size of each box is worked out, and how much space there is inside and around it. It is the foundation of every layout you will build, and understanding it explains most of the spacing problems you will ever meet in CSS.</p>
+<p>First, though, you need to know about the <code>display</code> property, because the box model works differently for different kinds of box. The starter code contains a team page with profile cards. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>The display Property</h2>
+<p>In the HTML unit, you learned that elements are either <strong>block</strong> or <strong>inline</strong> by default. The <code>display</code> property controls this, and CSS can change it for any element. The most common values are:</p>
+<ul>
+    <li><code>block</code>: starts on a new line and fills the full width available. The default for elements such as <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code> and <code>&lt;h1&gt;</code>.</li>
+    <li><code>inline</code>: sits within a line of text and is only as wide as its content. The default for elements such as <code>&lt;a&gt;</code>, <code>&lt;span&gt;</code> and <code>&lt;strong&gt;</code>.</li>
+    <li><code>inline-block</code>: sits within a line like an inline element, but can be sized and spaced like a block. This is useful for things like buttons that sit side by side.</li>
+    <li><code>none</code>: hides the element completely.</li>
+</ul>
+<div class="info-box"><strong>ℹ️ Info:</strong> <code>display</code> has two more important values, <code>flex</code> and <code>grid</code>, which turn an element into a layout container. You will learn about both in Lesson 9.</div>
+
+<h3>Hiding Elements</h3>
+<p><code>display: none</code> removes an element from the page as if it were not in the HTML at all: it takes up no space, and screen readers ignore it. This is different from <code>visibility: hidden</code>, which makes an element invisible but leaves an empty space where it was.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Hiding something with CSS does not remove it from the page's code. Anyone can view the HTML source and read hidden content, so never use CSS to hide anything private.</div>
+<br>
+
+<h2>The Box Model</h2>
+<p>Every box is made of four layers, from the inside out:</p>
+<pre><code>┌──────────────────────────────────┐
+│ margin                           │
+│  ┌────────────────────────────┐  │
+│  │ border                     │  │
+│  │  ┌──────────────────────┐  │  │
+│  │  │ padding              │  │  │
+│  │  │  ┌────────────────┐  │  │  │
+│  │  │  │    content     │  │  │  │
+│  │  │  └────────────────┘  │  │  │
+│  │  └──────────────────────┘  │  │
+│  └────────────────────────────┘  │
+└──────────────────────────────────┘</code></pre>
+<ul>
+    <li><strong>Content:</strong> the text, image or other content itself.</li>
+    <li><strong>Padding:</strong> space <em>inside</em> the box, between the content and the border. The element's background colour fills the padding.</li>
+    <li><strong>Border:</strong> a line around the padding.</li>
+    <li><strong>Margin:</strong> space <em>outside</em> the box, between its border and the boxes around it. The margin is always transparent.</li>
+</ul>
+<div class="tip-box"><strong>💡 Tip:</strong> To decide between padding and margin, ask whether the space should be <em>inside</em> the box, with its background colour, or <em>outside</em> it, separating it from other boxes. Space around text inside a coloured card is padding. Space between two cards is margin.</div>
+<br>
+
+<h2>Width and Height</h2>
+<p>The <code>width</code> and <code>height</code> properties set the size of the box's content area. You can use any of the units from Lesson 4.</p>
+<p>A block element is as wide as its parent by default, and as tall as its content. In most cases, you should let the content decide the height, because you rarely know how much text an element will contain, or how big the user's text will be.</p>
+<p>Two variations are often more useful than fixed sizes:</p>
+<ul>
+    <li><code>max-width</code> sets a maximum width. The element is as wide as it can be, up to that limit, so it shrinks on small screens but does not stretch too wide on large ones. Lines of text are easiest to read at around 60 to 75 characters long, so <code>max-width</code> is ideal for blocks of text.</li>
+    <li><code>min-height</code> sets a minimum height. The element is at least that tall, but can still grow if its content needs more room.</li>
+</ul>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give each <code>.card</code> a <code>width</code> of <code>300px</code> and a <code>background-color</code> of <code>white</code>. The starter CSS has already given the page a light grey background, so you can see the cards.</li>
+</ol>
+<br>
+
+<h2>Padding</h2>
+<p>Padding can be set on each side separately, with <code>padding-top</code>, <code>padding-right</code>, <code>padding-bottom</code> and <code>padding-left</code>, or all at once with the <code>padding</code> shorthand. The shorthand accepts one to four values:</p>
+<pre><code class="language-css">padding: 20px;                  /* all four sides */
+padding: 10px 20px;             /* top and bottom, left and right */
+padding: 10px 20px 30px;        /* top, left and right, bottom */
+padding: 10px 20px 30px 40px;   /* top, right, bottom, left */</code></pre>
+<p>With four values, the order goes <strong>clockwise from the top</strong>: top, right, bottom, left. The same pattern works for <code>margin</code>.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> To remember the four-value order, think of a clock starting at 12 and going round, or remember the word <strong>TRouBLe</strong>: Top, Right, Bottom, Left.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give each <code>.card</code> a <code>padding</code> of <code>20px</code>. The text moves away from the edges of the card.</li>
+    <li>Give the <code>.card h3</code> headings a <code>padding</code> of <code>0 0 10px</code>, to add space only below them.</li>
+</ol>
+<br>
+
+<h2>Borders</h2>
+<p>A border needs three things: a <strong>width</strong>, a <strong>style</strong> and a <strong>colour</strong>. They are usually set together with the <code>border</code> shorthand:</p>
+<pre><code class="language-css">border: 1px solid #ccc;</code></pre>
+<ul>
+    <li>Common styles are <code>solid</code>, <code>dashed</code>, <code>dotted</code> and <code>double</code>.</li>
+    <li>Each side can be set separately, such as <code>border-bottom: 2px solid navy;</code>. This is a popular way to underline headings.</li>
+</ul>
+<div class="warning-box"><strong>⚠️ Warning:</strong> The style is required. A border with no style, such as <code>border: 2px navy;</code>, does not appear at all, because the default style is <code>none</code>.</div>
+
+<h3>Rounded Corners</h3>
+<p><code>border-radius</code> rounds the corners of a box, even if it has no border. A radius of <code>50%</code> on a square element makes it a circle, which is a common way to display profile photos.</p>
+<pre><code class="language-css">.avatar {
+    border-radius: 50%;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give each <code>.card</code> a <code>border</code> of <code>1px solid #ddd</code> and a <code>border-radius</code> of <code>8px</code>.</li>
+    <li>Give the <code>.card h3</code> headings a <code>border-bottom</code> of <code>2px solid teal</code>.</li>
+    <li>Make the <code>.avatar</code> images circular.</li>
+</ol>
+<br>
+
+<h2>Margin</h2>
+<p>Margin uses the same shorthand pattern as padding. Most elements already have some margin from the browser's default stylesheet. For example, paragraphs and headings have margins above and below them, and the <code>body</code> has a margin of 8px all round, which is why your pages never quite touch the edge of the preview.</p>
+
+<h3>Centring With auto</h3>
+<p>Setting the left and right margins to <code>auto</code> tells the browser to share the leftover space equally between them, which centres a block element horizontally:</p>
+<pre><code class="language-css">.container {
+    max-width: 700px;
+    margin: 0 auto;   /* 0 top and bottom, auto left and right */
+}</code></pre>
+<p>This only works on a block element that is narrower than its parent. If it already fills the full width, there is no leftover space to share.</p>
+
+<h3>Collapsing Margins</h3>
+<p>When the bottom margin of one block element touches the top margin of the next, the two margins <strong>collapse</strong> into one. The gap between them is the <em>larger</em> of the two margins, not the total. For example, a paragraph with a 20px bottom margin followed by one with a 30px top margin are 30px apart, not 50px. This only happens with vertical margins, and it does not happen inside the flex and grid layouts in Lesson 9.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give each <code>.card</code> a <code>margin</code> of <code>0 auto 20px</code>. The cards are now centred, with space between them.</li>
+    <li>Give the <code>body</code> a <code>margin</code> of <code>0</code>, and notice the page heading moves to the very edge of the preview. Then give the <code>header</code> a <code>padding</code> of <code>20px</code>, and notice that its background colour fills the padding.</li>
+</ol>
+<br>
+
+<h2>box-sizing</h2>
+<p>By default, <code>width</code> only sets the width of the <strong>content</strong>. Padding and border are then added on top. So your cards are not actually 300px wide:</p>
+<pre><code>  300px  content
++  40px  padding (20px on each side)
++   2px  border  (1px on each side)
+= 342px  total width</code></pre>
+<p>This makes sizes hard to predict, especially when you change the padding later. Setting <code>box-sizing: border-box</code> changes how the width is measured, so that it <strong>includes</strong> the padding and border. A 300px card is then 300px wide, and the content shrinks to make room for the padding. The margin is never included.</p>
+<p>Almost every modern website sets this for every element, using the universal selector, at the very top of the stylesheet:</p>
+<pre><code class="language-css">* {
+    box-sizing: border-box;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Look at the <strong>Practice Area</strong> at the bottom of the page. The two boxes both have a width of 300px, but the second box has padding and a thick border, so it is much wider.</li>
+    <li>Add the <code>box-sizing</code> rule from the example above to the very top of your CSS. Both practice boxes are now exactly the same width, and so are your cards.</li>
+</ol>
+<br>
+
+<h2>The Box Model and Inline Elements</h2>
+<p>Inline elements follow the box model differently from blocks:</p>
+<ul>
+    <li><code>width</code> and <code>height</code> have <strong>no effect</strong>. An inline element is always the size of its content.</li>
+    <li>Left and right padding and margins work as normal.</li>
+    <li>Top and bottom padding is drawn, but it does <strong>not</strong> push the lines above and below away, so it can overlap them. Top and bottom margins have no effect at all.</li>
+</ul>
+<p>When you need an element to stay in the line of text, but be sized and spaced properly, use <code>display: inline-block</code>.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> Images are a special case. An <code>&lt;img&gt;</code> is inline by default, but because it is a "replaced" element, displaying an external file rather than text, its <code>width</code> and <code>height</code> do work.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>The navigation links in the header are inline <code>&lt;a&gt;</code> elements. Give the <code>nav a</code> links a <code>padding</code> of <code>10px 16px</code>, a <code>background-color</code> of <code>teal</code>, a <code>color</code> of <code>white</code> and a <code>width</code> of <code>150px</code>.</li>
+    <li>Notice that the width has done nothing. The coloured padding is drawn, but the header has not grown to make room for it.</li>
+    <li>Add <code>display: inline-block;</code> to the same rule. The links are now 150px wide, and the header grows taller to make room for their padding. Remove the <code>width</code> again, so each link fits its text.</li>
+</ol>
+<br>
+
+<h2>Overflow</h2>
+<p>If a box has a fixed height and its content needs more room, the content <strong>overflows</strong>: it spills out of the box and over whatever comes next. The <code>overflow</code> property controls what happens:</p>
+<ul>
+    <li><code>visible</code>: the content spills out. This is the default.</li>
+    <li><code>hidden</code>: the extra content is cut off and cannot be seen.</li>
+    <li><code>scroll</code>: the box always has scroll bars.</li>
+    <li><code>auto</code>: the box gets scroll bars only when they are needed.</li>
+</ul>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Avoid <code>overflow: hidden</code> on boxes that contain text. If the user's text is larger than you expected, part of it is cut off and becomes impossible to read. Usually, the best fix for overflow is to remove the fixed height.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>.bio</code> paragraphs a <code>height</code> of <code>60px</code>. The longer bio spills out of its box.</li>
+    <li>Add <code>overflow: auto;</code>. The long bio now scrolls inside its box.</li>
+    <li>Remove both declarations, so each bio is as tall as its text.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your card rules should be similar to these:</p>
+<pre><code class="language-css">* {
+    box-sizing: border-box;
+}
+
+.card {
+    width: 300px;
+    padding: 20px;
+    margin: 0 auto 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.card h3 {
+    padding: 0 0 10px;
+    border-bottom: 2px solid teal;
+}
+
+.avatar {
+    border-radius: 50%;
+}</code></pre>
+<p>Also check that the cards are centred, the photos are circles, and the navigation links look like buttons that sit side by side.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>Name the four layers of the box model, from the inside out.</li>
+    <li>What is the difference between padding and margin?</li>
+    <li>What does <code>padding: 10px 20px 30px 40px;</code> set on each side?</li>
+    <li>What does <code>box-sizing: border-box</code> change, and why is it useful?</li>
+    <li>Why does setting a <code>width</code> on an <code>&lt;a&gt;</code> element do nothing, and how do you fix it?</li>
+</ul>
+<p>In the next lesson, you will learn how to move elements out of the normal flow of the page with positioning.</p>

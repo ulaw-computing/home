@@ -1,0 +1,217 @@
+<h1>Tutorial</h1> <!--Lesson 11: Responsive Design-->
+<p>More than half of all web traffic now comes from phones, and the same page might also be viewed on a tablet, a laptop or a huge desktop monitor. <strong>Responsive design</strong> means building one page that adapts to work well on every one of them, rather than separate sites for different devices. In this lesson you will learn the techniques that make this possible, and use them to fix a page that currently only works on a large screen.</p>
+<p>The starter code contains a page for a coffee shop, designed for desktop screens only. The CSS tab already contains its styles, which you will change as you work through the lesson. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Testing at Different Widths</h2>
+<p>To test a responsive page, you need to see it at different widths. In this platform, each preview behaves like its own browser window, so the page responds to the width of whichever preview it is shown in:</p>
+<ul>
+    <li>The <strong>pop-out</strong> preview is a separate browser window. You can resize it by dragging its edges, from as narrow as a phone to as wide as your screen. <strong>This is the main way you will test in this lesson.</strong></li>
+    <li>The <strong>fullscreen</strong> preview is as wide as your screen, like a desktop browser.</li>
+    <li>The normal <strong>preview</strong> is somewhere in between, depending on the size of your screen, so it is less useful for testing small layouts.</li>
+</ul>
+<div class="tip-box"><strong>💡 Tip:</strong> Keep the pop-out window open beside the editor for the whole lesson. It updates as you type, just like the normal preview.</div>
+<p>The starter page has a dark bar across the top, which tells you which layout is currently being used. You will update it as you add each layout.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Open the pop-out preview, and drag the edge of its window until it is roughly the width of a phone, so that the layout bar reads <strong>small</strong>. The page is wider than the window, so you have to scroll sideways, the photo is cut off, and the three columns of text are cramped.</li>
+    <li>Open the fullscreen preview. On a wide screen, the page looks as it was designed to.</li>
+</ol>
+<br>
+
+<h2>The Viewport Meta Tag</h2>
+<p>When smartphones first appeared, almost no websites were designed for small screens. To cope, phone browsers pretend to be a desktop screen, usually around 980px wide, and then shrink the whole page down to fit the phone. The result is a tiny, zoomed-out page that the user has to pinch to read.</p>
+<p>The <strong>viewport</strong> <code>&lt;meta&gt;</code> tag tells the phone not to do this, and to use its real width instead:</p>
+<pre><code class="language-html">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></pre>
+<ul>
+    <li><code>width=device-width</code> sets the width of the page to the width of the device's screen.</li>
+    <li><code>initial-scale=1</code> sets the starting zoom level to 100%.</li>
+</ul>
+<p>Every responsive page needs this tag in its <code>&lt;head&gt;</code>, usually straight after the character encoding. Without it, none of the other techniques in this lesson work on a phone.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> You will sometimes see <code>maximum-scale=1</code> or <code>user-scalable=no</code> added to the viewport tag. These stop users from zooming in, which makes the page unusable for many people with low vision. Never include them.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> Desktop browsers ignore the viewport tag, and so does this platform's preview, so adding it will not change anything you can see here. It makes all the difference on a real phone.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the HTML tab, add the viewport <code>&lt;meta&gt;</code> tag from the example above, directly below the <code>charset</code> line.</li>
+</ol>
+<br>
+
+<h2>Fluid Layouts</h2>
+<p>The first rule of responsive design is to avoid fixed widths that are wider than a small screen. A container with <code>width: 960px</code> is 960px wide on every screen, so on a phone it overflows and the user has to scroll sideways. Instead, use widths that adapt:</p>
+<ul>
+    <li><code>max-width</code> instead of <code>width</code>, so the element can shrink but does not grow too wide.</li>
+    <li>Percentages, <code>fr</code> units and flexible flex items, which share out the available space.</li>
+    <li><code>flex-wrap: wrap</code> and <code>auto-fit</code> grids, from Lesson 9, which let items move onto new lines when there is not enough room.</li>
+</ul>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the CSS tab, find the <code>.container</code> rule and change its <code>width</code> to <code>max-width</code>. In the narrow pop-out window, the sideways scrolling has gone, and the text fits the window.</li>
+</ol>
+<br>
+
+<h2>Responsive Images</h2>
+<p>An image is displayed at its own size by default, so a 1200px photo is 1200px wide, even on a 375px phone. One rule fixes this for every image on the page:</p>
+<pre><code class="language-css">img {
+    max-width: 100%;
+    height: auto;
+}</code></pre>
+<ul>
+    <li><code>max-width: 100%</code> stops an image from ever being wider than its container. It can still be smaller, if the image itself is small.</li>
+    <li><code>height: auto</code> keeps the image's proportions as its width shrinks. Without it, the <code>height</code> attribute in the HTML would keep it at its full height, squashing it.</li>
+</ul>
+<p>Keep the <code>width</code> and <code>height</code> attributes on your images in the HTML, as you learned in the HTML unit. The browser uses them to work out the image's proportions and reserve the right amount of space, even while the CSS changes its size.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>img</code> rule from the example above. The photo now shrinks to fit the preview.</li>
+</ol>
+<br>
+
+<h2>Media Queries</h2>
+<p>Fluid layouts and images get you a long way, but sometimes a page needs a <strong>different layout</strong> on different screens: three columns might work on a desktop, but on a phone, one column is far easier to read. A <strong>media query</strong> applies CSS only when a condition is true, such as the screen being at least a certain width:</p>
+<pre><code class="language-css">@media (min-width: 600px) {
+    .features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}</code></pre>
+<p>The rules inside the braces work exactly like normal rules, but they only apply when the viewport is <strong>600px wide or wider</strong>. Below that width, the browser ignores them completely.</p>
+<ul>
+    <li><code>min-width</code> applies at that width <strong>and above</strong>.</li>
+    <li><code>max-width</code> applies at that width <strong>and below</strong>.</li>
+</ul>
+<p>The widths where the layout changes are called <strong>breakpoints</strong>.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> A media query does not add specificity. Its rules follow the normal cascade, so if a rule inside a media query has the same specificity as a rule outside it, whichever comes <strong>later</strong> wins. Always put your media queries <strong>after</strong> the normal rules they change, usually at the end of the stylesheet.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> Modern CSS also has a shorter <strong>range syntax</strong> for media queries, such as <code>@media (width &gt;= 600px)</code>, which means the same as <code>(min-width: 600px)</code>. You will see both in other people's code.</div>
+<br>
+
+<h2>Mobile-First Design</h2>
+<p>There are two ways to organise responsive CSS:</p>
+<ul>
+    <li><strong>Desktop-first:</strong> write the styles for large screens, then use <code>max-width</code> media queries to undo and simplify them for smaller ones.</li>
+    <li><strong>Mobile-first:</strong> write the styles for small screens first, then use <code>min-width</code> media queries to <strong>add</strong> to them as more space becomes available.</li>
+</ul>
+<p>Mobile-first is the approach most developers recommend, for several reasons:</p>
+<ul>
+    <li>The small-screen layout is usually the simplest, often a single column, so it makes a natural starting point.</li>
+    <li>It is easier to add layout as space appears than to take it away.</li>
+    <li>Phones, which often have the slowest connections, get the simplest CSS, without lots of large-screen styles they then have to undo.</li>
+    <li>It makes you decide what really matters on the page, because there is only room for the essentials on a small screen.</li>
+</ul>
+<pre><code class="language-css">/* Small screens: the default, with no media query */
+.features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+/* Medium screens and up */
+@media (min-width: 600px) {
+    .features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Large screens and up */
+@media (min-width: 900px) {
+    .features {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}</code></pre>
+<p>Each media query only needs to contain what <strong>changes</strong> at that size. Everything else, such as the <code>display</code> and the <code>gap</code>, carries on from the rules before it.</p>
+
+<h3>Choosing Breakpoints</h3>
+<p>It is tempting to choose breakpoints that match particular devices, such as a popular phone or tablet. But there are thousands of different screen sizes, and new ones every year. Instead, choose breakpoints based on your <strong>content</strong>: start with a narrow window, slowly make it wider, and add a breakpoint wherever the layout starts to look wrong, such as when lines of text become too long or there is room for another column.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Find the <code>.features</code> rule in the CSS tab. It is a desktop-first layout, with three columns on every screen. Change its <code>grid-template-columns</code> to <code>1fr</code>, so it starts as a single column.</li>
+    <li>At the <strong>end</strong> of the CSS, add the two media queries from the example above, for 600px and 900px.</li>
+    <li>Inside the 600px media query, add a rule that changes the layout bar: <code>body::before { content: "Layout: medium (600px and over)"; }</code>. Inside the 900px media query, change it to <code>"Layout: large (900px and over)"</code>.</li>
+    <li>In the pop-out preview, slowly drag the edge of the window to make it wider, then narrower again. Watch the layout bar and the number of columns change at each breakpoint.</li>
+</ol>
+<br>
+
+<h3>Responsive Navigation</h3>
+<p>Navigation menus often need to change too. On a small screen, a row of links may not fit, so stacking them in a column is simpler and gives each link plenty of room to tap.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Find the <code>nav ul</code> rule. Add <code>flex-direction: column;</code> to it, so the links stack on small screens.</li>
+    <li>Inside your 600px media query, add a rule that changes the <code>nav ul</code> back to <code>flex-direction: row;</code>.</li>
+    <li>The header contains the shop's name and the navigation side by side, which is cramped on small screens. Change the <code>header</code> rule so its <code>flex-direction</code> is <code>column</code> by default, and <code>row</code> from 600px.</li>
+</ol>
+<br>
+
+<h2>Responsive Text</h2>
+<p>Large headings that look great on a desktop can take up most of a phone screen. A simple mobile-first approach is to give headings a moderate size by default, and increase it at larger breakpoints.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Change the <code>.hero h1</code> font size to <code>2rem</code> in its main rule.</li>
+    <li>Inside the 900px media query, set it to <code>3rem</code>.</li>
+</ol>
+<div class="info-box"><strong>ℹ️ Info:</strong> The <code>clamp()</code> function can make text grow smoothly between a minimum and a maximum size, such as <code>font-size: clamp(2rem, 5vw, 3rem)</code>. Because the minimum and maximum are in <code>rem</code>, it avoids the zoom problem with plain <code>vw</code> sizes from Lesson 4.</div>
+<br>
+
+<h2>Designing for Touch</h2>
+<p>On a touchscreen, there is no mouse pointer, so users tap with a fingertip, which is far less precise. Keep these points in mind:</p>
+<ul>
+    <li><strong>Make targets large enough.</strong> Links and buttons should be at least around 44 by 44 pixels, including their padding, with space between them.</li>
+    <li><strong>Do not rely on hover.</strong> Touchscreens cannot hover, so anything that only appears on <code>:hover</code>, such as a menu or extra information, is unreachable for touch users.</li>
+</ul>
+<br>
+
+<h2>Other Media Features</h2>
+<div class="info-box"><strong>ℹ️ Info:</strong> Media queries can test many conditions besides width. Two that are increasingly important are <code>prefers-color-scheme</code>, which tells you whether the user has chosen a dark theme on their device, and <code>prefers-reduced-motion</code>, which tells you the user wants to avoid animation. You will meet these again in later units. There is also <code>@media print</code>, which applies styles only when a page is printed, for example to hide the navigation.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your media queries, at the end of your CSS, should be similar to these:</p>
+<pre><code class="language-css">@media (min-width: 600px) {
+    body::before {
+        content: "Layout: medium (600px and over)";
+    }
+
+    header,
+    nav ul {
+        flex-direction: row;
+    }
+
+    .features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    body::before {
+        content: "Layout: large (900px and over)";
+    }
+
+    .features {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+    }
+}</code></pre>
+<p>Also check that:</p>
+<ul>
+    <li>The HTML has a viewport <code>&lt;meta&gt;</code> tag.</li>
+    <li>No sideways scrolling appears at any width, and the photo always fits.</li>
+    <li>The page has one column of features on small screens, two on medium screens and three on large ones.</li>
+    <li>The navigation and header stack on small screens, and sit in a row from 600px.</li>
+</ul>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What does the viewport <code>&lt;meta&gt;</code> tag do, and why is it needed?</li>
+    <li>What do <code>max-width: 100%</code> and <code>height: auto</code> do for images?</li>
+    <li>What is the difference between a <code>min-width</code> and a <code>max-width</code> media query?</li>
+    <li>What does "mobile-first" mean, and why is it recommended?</li>
+    <li>Why should media queries come after the rules they change?</li>
+    <li>How should you choose breakpoints?</li>
+</ul>
+<p>In the final lesson, you will bring everything from this unit together to style a complete page.</p>

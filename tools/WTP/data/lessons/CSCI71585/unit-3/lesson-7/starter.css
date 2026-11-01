@@ -1,0 +1,70 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.site-name {
+    margin: 0;
+    font-weight: bold;
+    color: teal;
+}
+
+main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px 20px 100px;
+}
+
+.listing-photo {
+    margin: 0;
+}
+
+.listing-photo img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.badge {
+    padding: 4px 10px;
+    background-color: crimson;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.book-button {
+    padding: 12px 24px;
+    background-color: teal;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+/* Practice Area boxes */
+.box {
+    width: 200px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: lightyellow;
+    border: 2px solid orange;
+}
+
+.box-two {
+    background-color: lightblue;
+    border-color: steelblue;
+}
+
+/* Write your CSS below */

@@ -1,0 +1,8 @@
+/* Layout rules: you will learn about these in Lesson 6. Leave them as they are. */
+main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Write your CSS below */

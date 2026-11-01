@@ -1,0 +1,176 @@
+<h1>Tutorial</h1> <!--Lesson 8: Combinators and Pseudo-Selectors-->
+<p>The selectors you have used so far choose elements by what they are, using their type, class or ID. In this lesson you will learn three more powerful kinds of selector. <strong>Combinators</strong> select elements by their relationship to other elements, such as links inside the navigation. <strong>Pseudo-classes</strong> select elements by their state or position, such as a link the mouse is hovering over, or every other row of a list. <strong>Pseudo-elements</strong> style a part of an element, such as its first letter, or add decorative content to it.</p>
+<p>These selectors let you style a page precisely without adding classes to every element. The starter code contains a page for a walking tour company. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Combinators</h2>
+<p>A <strong>combinator</strong> joins two selectors to describe a relationship between elements. The element that is styled is always the one described by the <strong>last</strong> part of the selector. There are four combinators.</p>
+
+<h3>Descendant: a Space</h3>
+<p>A space between two selectors selects elements that are <strong>anywhere inside</strong> another element, at any depth. You have already used this, in <code>.hero-text h1</code> and <code>.card h3</code>.</p>
+<pre><code class="language-css">nav a {
+    color: white;
+}</code></pre>
+<p>This selects every <code>&lt;a&gt;</code> that is inside a <code>&lt;nav&gt;</code>, whether it is a direct child or nested inside a list. Links elsewhere on the page are not affected.</p>
+
+<h3>Child: &gt;</h3>
+<p>The <code>&gt;</code> combinator selects only <strong>direct children</strong>: elements exactly one level inside the other.</p>
+<pre><code class="language-css">.tours &gt; li {
+    font-weight: bold;
+}</code></pre>
+<p>This selects the list items directly inside <code>.tours</code>, but not the list items in a list nested inside them.</p>
+
+<h3>Adjacent Sibling: +</h3>
+<p>The <code>+</code> combinator selects an element that comes <strong>immediately after</strong> another element, with the same parent.</p>
+<pre><code class="language-css">h2 + p {
+    font-size: 1.15rem;
+}</code></pre>
+<p>This selects only the first paragraph straight after each <code>&lt;h2&gt;</code>, which is a common way to style the opening paragraph of each section.</p>
+
+<h3>General Sibling: ~</h3>
+<p>The <code>~</code> combinator selects <strong>every</strong> sibling that comes after another element, not just the next one.</p>
+<pre><code class="language-css">h2 ~ p {
+    color: #444;
+}</code></pre>
+<p>This selects every paragraph that comes after an <code>&lt;h2&gt;</code> with the same parent.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Remember from Lesson 2 that spaces matter. <code>nav a</code> is a descendant selector, while <code>nav.main</code>, with no space, selects a <code>&lt;nav&gt;</code> that has the class <code>main</code>.</div>
+<div class="tip-box"><strong>💡 Tip:</strong> Keep combinator chains short, ideally two or three parts. A long selector such as <code>body main section article ul li a</code> is fragile, since it breaks if the HTML structure changes even slightly, and its specificity makes it hard to override. A class is often the simpler solution.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Below the comment in the CSS tab, add a new <code>nav a</code> rule that makes the links inside the <code>nav</code> <code>white</code>. The starter CSS already has a <code>nav a</code> rule for spacing; leave that one as it is. The links in the main content should stay as they are.</li>
+    <li>The <strong>Our Tours</strong> list has a nested list of stops inside each tour. Use a child selector to make only the tour names, the <code>&lt;li&gt;</code> elements directly inside <code>.tours</code>, bold. Check that the nested stops stay normal weight.</li>
+    <li>Make the first paragraph after each <code>&lt;h2&gt;</code> a <code>font-size</code> of <code>1.15rem</code>, using an adjacent sibling selector.</li>
+</ol>
+<br>
+
+<h2>Pseudo-Classes</h2>
+<p>A <strong>pseudo-class</strong> selects an element when it is in a particular <strong>state</strong>, or in a particular <strong>position</strong> among its siblings. It is written with a single colon, straight after a selector with no space, such as <code>a:hover</code>.</p>
+
+<h3>Link and Interaction States</h3>
+<ul>
+    <li><code>:link</code>: a link that has not been visited yet.</li>
+    <li><code>:visited</code>: a link to a page the user has already visited.</li>
+    <li><code>:hover</code>: an element the mouse pointer is over.</li>
+    <li><code>:focus</code>: an element that has keyboard focus, such as a link the user has tabbed to, or a form field they are typing in.</li>
+    <li><code>:active</code>: an element at the moment it is being clicked.</li>
+</ul>
+<p>Because these rules all have the same specificity, their order matters: a later rule overrides an earlier one when an element is in both states. To make sure each state appears when it should, write them in this order:</p>
+<pre><code class="language-css">a:link    { color: teal; }
+a:visited { color: darkslateblue; }
+a:hover   { color: darkorange; }
+a:focus   { color: darkorange; }
+a:active  { color: crimson; }</code></pre>
+<div class="tip-box"><strong>💡 Tip:</strong> A popular way to remember the order is <strong>L</strong>o<strong>V</strong>e <strong>H</strong>ate <strong>F</strong>or <strong>A</strong>ll: link, visited, hover, focus, active.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> To protect users' privacy, browsers only let <code>:visited</code> change colours. Otherwise, a website could detect which other sites you have visited by measuring how its links are displayed.</div>
+
+<h3>Focus Styles</h3>
+<p>Many people navigate the web using only a keyboard, pressing <strong>Tab</strong> to move from one link or form field to the next. The browser shows which element has focus with an <strong>outline</strong>, usually a blue or black ring.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Never remove focus outlines with <code>outline: none</code> unless you replace them with a style that is at least as visible. Without one, keyboard users cannot see where they are on the page, which makes the site unusable for them. Removing focus outlines is one of the most common accessibility failures on the web.</div>
+<p>You can make focus clearer, and match your design, with the <code>outline</code> property. It works like <code>border</code>, but does not take up any space, so it never moves the content around:</p>
+<pre><code class="language-css">a:focus {
+    outline: 3px solid darkorange;
+    outline-offset: 2px;
+}</code></pre>
+<div class="info-box"><strong>ℹ️ Info:</strong> There is also a <code>:focus-visible</code> pseudo-class, which only applies when the browser thinks a visible focus indicator is needed, such as when the user is navigating by keyboard rather than clicking with a mouse.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the five link state rules from the example above. Hover over a link in the main content, and click and hold on one to see the active state.</li>
+    <li>Look at the navigation: its links are no longer white. <code>a:link</code> and <code>a:visited</code> are more specific than <code>nav a</code>, as you will see at the end of this lesson. Change the selector of the <code>nav a</code> rule you added to <code>nav a:link, nav a:visited</code>, and the navigation links turn white again.</li>
+    <li>Add the <code>a:focus</code> outline rule from the example above.</li>
+    <li>Click on the preview, then press <strong>Tab</strong> several times to move through the links. Check that you can always see which link has focus, including in the navigation.</li>
+    <li>The navigation links have no underline. Add a <code>nav a:hover</code> rule that gives them a <code>text-decoration</code> of <code>underline</code>, so they still change when the mouse is over them.</li>
+</ol>
+<br>
+
+<h3>Structural Pseudo-Classes</h3>
+<p>These pseudo-classes select elements by their <strong>position among their siblings</strong>:</p>
+<ul>
+    <li><code>:first-child</code>: an element that is the first child of its parent.</li>
+    <li><code>:last-child</code>: an element that is the last child of its parent.</li>
+    <li><code>:nth-child(n)</code>: an element at a particular position, counting from 1.</li>
+</ul>
+<p><code>:nth-child()</code> accepts a number, a keyword or a formula:</p>
+<ul>
+    <li><code>li:nth-child(3)</code>: the third item.</li>
+    <li><code>li:nth-child(odd)</code> and <code>li:nth-child(even)</code>: every other item. This is the usual way to create striped rows.</li>
+    <li><code>li:nth-child(3n)</code>: every third item: the 3rd, 6th, 9th and so on.</li>
+</ul>
+<div class="warning-box"><strong>⚠️ Warning:</strong> <code>p:first-child</code> does not mean "the first paragraph". It means "a paragraph that is the first child of its parent". If a heading comes first, no paragraph matches. To count only elements of one type, use <code>:first-of-type</code>, <code>:last-of-type</code> or <code>:nth-of-type()</code> instead.</div>
+<p>The <code>:not()</code> pseudo-class selects elements that do <strong>not</strong> match a selector. A common use is adding a line between items, but not after the last one:</p>
+<pre><code class="language-css">.reviews li:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give every odd item in the <code>.reviews</code> list a <code>background-color</code> of <code>#f4f4f4</code>.</li>
+    <li>Add the <code>:not(:last-child)</code> rule from the example above, so every review except the last has a line below it.</li>
+</ol>
+<br>
+
+<h2>Pseudo-Elements</h2>
+<p>A <strong>pseudo-element</strong> styles a specific <strong>part</strong> of an element, or adds content that is not in the HTML. It is written with <strong>two</strong> colons, such as <code>p::first-line</code>, to distinguish it from a pseudo-class.</p>
+
+<h3>First Letter and First Line</h3>
+<ul>
+    <li><code>::first-letter</code> styles the first letter of a block of text, which is how magazines create large opening letters (called <strong>drop caps</strong>).</li>
+    <li><code>::first-line</code> styles the first line of a block of text, however long that line turns out to be on the user's screen.</li>
+</ul>
+<pre><code class="language-css">.intro::first-letter {
+    font-size: 2.5rem;
+    color: teal;
+}</code></pre>
+
+<h3>::before and ::after</h3>
+<p><code>::before</code> and <code>::after</code> insert content as the first and last thing <strong>inside</strong> an element. The content is set with the <code>content</code> property:</p>
+<pre><code class="language-css">.tip::before {
+    content: "Tip: ";
+    font-weight: bold;
+}</code></pre>
+<p>The inserted content can be styled like any other element. These pseudo-elements are often used for decorative touches, such as icons, quotation marks and arrows.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> A <code>::before</code> or <code>::after</code> pseudo-element only appears if it has a <code>content</code> property, even if it is empty: <code>content: "";</code>. It does not work on elements that cannot contain anything, such as <code>&lt;img&gt;</code> and <code>&lt;input&gt;</code>.</div>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Do not use <code>::before</code> and <code>::after</code> for important content. Screen readers handle generated content inconsistently, and it cannot be selected or copied by the user. If the content matters, put it in the HTML.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> You will often see the box-sizing rule from Lesson 6 written as <code>*, *::before, *::after { box-sizing: border-box; }</code>. This is because the universal selector does not select pseudo-elements, so they need to be included separately.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the first letter of the <code>.intro</code> paragraph a <code>font-size</code> of <code>2.5rem</code> and a <code>color</code> of <code>teal</code>.</li>
+    <li>Use <code>::before</code> to add the text <code>Tip: </code> in bold to the start of the <code>.tip</code> paragraph. Check the space after the colon is inside the quotes.</li>
+    <li>Use <code>::after</code> on the <code>.tours &gt; li</code> elements to add <code> →</code> after each tour name. Notice that the arrow appears at the very end of each item, after the nested list of stops, because <code>::after</code> is added as the last thing inside the element.</li>
+    <li>Remove the <code>::after</code> rule.</li>
+</ol>
+<br>
+
+<h2>Specificity of the New Selectors</h2>
+<p>The new selectors fit into the specificity rules from Lesson 5:</p>
+<ul>
+    <li><strong>Pseudo-classes</strong> count as <strong>classes</strong>. <code>a:hover</code> is (0, 1, 1).</li>
+    <li><strong>Pseudo-elements</strong> count as <strong>elements</strong>. <code>p::first-line</code> is (0, 0, 2).</li>
+    <li><strong>Combinators</strong> add nothing; only the selectors either side of them count. <code>nav a</code> is (0, 0, 2), and so is <code>nav &gt; a</code>.</li>
+    <li><code>:not()</code> itself adds nothing, but the selector inside it counts. <code>li:not(.featured)</code> is (0, 1, 1).</li>
+</ul>
+<p>This explains what happened to your navigation links. <code>nav a</code> looks more targeted than <code>a:link</code>, but its specificity is (0, 0, 2), while <code>a:link</code> is (0, 1, 1). Comparing from the left, neither has an ID, and <code>a:link</code> has one class-level selector to <code>nav a</code>'s none, so <code>a:link</code> won. Your new selector, <code>nav a:link</code>, is (0, 1, 2), which beats both.</p>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Check that:</p>
+<ul>
+    <li>The navigation links are white, and the content links use your five state colours.</li>
+    <li>You can always see which link has focus when you press Tab.</li>
+    <li>Only the tour names are bold, not the stops.</li>
+    <li>The first paragraph of each section is slightly larger.</li>
+    <li>The reviews are striped, with a line between each one but not after the last.</li>
+    <li>The introduction has a large teal first letter, and the tip starts with a bold <em>Tip:</em>.</li>
+</ul>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the difference between <code>nav a</code> and <code>nav &gt; a</code>?</li>
+    <li>Which element does <code>h2 + p</code> select?</li>
+    <li>In what order should the five link states be written, and why?</li>
+    <li>Why must you never remove focus outlines without a replacement?</li>
+    <li>What is the difference between a pseudo-class and a pseudo-element?</li>
+    <li>What does a <code>::before</code> pseudo-element need in order to appear?</li>
+</ul>
+<p>In the next lesson, you will learn how to build page layouts with flexbox and grid.</p>
