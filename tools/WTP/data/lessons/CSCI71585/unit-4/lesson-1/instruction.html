@@ -1,0 +1,159 @@
+<h1>Tutorial</h1> <!--Lesson 1: What is JavaScript?-->
+<p>In the last two units, you used HTML to describe the content of a page and CSS to control how it looks. Both are static: once the page has loaded, it stays the same until the user goes somewhere else. In this unit, you will learn <strong>JavaScript</strong>, the programming language that makes pages respond to the people using them: menus that open, forms that check what you type, content that updates without reloading the page.</p>
+<p>This first lesson covers the foundations: what JavaScript is, how to add it to a page, and how to see what your code is doing. Whenever you see a <strong>Try It</strong> section, make that change in the editor before moving on.</p>
+<br>
+
+<h2>What Is JavaScript?</h2>
+<p>JavaScript is a <strong>programming language</strong>. Unlike HTML and CSS, which describe a page, JavaScript gives the browser <strong>instructions</strong> to follow: do this, then this, and if this happens, do that instead.</p>
+<p>The three languages of the web each have their own job:</p>
+<ul>
+    <li><strong>HTML</strong> is the <strong>content and structure</strong>: what is on the page.</li>
+    <li><strong>CSS</strong> is the <strong>presentation</strong>: how it looks.</li>
+    <li><strong>JavaScript</strong> is the <strong>behaviour</strong>: what it does.</li>
+</ul>
+<p>Some of the things JavaScript does on almost every website are:</p>
+<ul>
+    <li>Responding to the user, such as opening a menu when a button is clicked.</li>
+    <li>Changing the page after it has loaded, such as adding an item to a basket.</li>
+    <li>Checking information before it is sent, such as an email address in a form.</li>
+    <li>Fetching new data from a server without reloading the page, such as new messages in a chat. You will learn how to do this in the next unit.</li>
+</ul>
+<p>The JavaScript in this unit runs inside the user's browser, on their own device. This is called <strong>client-side</strong> code, because it runs on the client (the browser) rather than on the web server.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> Despite the name, JavaScript has nothing to do with the Java programming language. The name was chosen for marketing reasons when it was created in 1995, because Java was popular at the time. The official standard for the language is called <strong>ECMAScript</strong>, and JavaScript can also run outside the browser, for example on servers, using a tool called Node.js.</div>
+<br>
+
+<h2>Adding JavaScript to a Page</h2>
+<p>JavaScript is added to a page with the <code>&lt;script&gt;</code> element. Just as with CSS, the code can be written inside the element, or kept in a separate file:</p>
+<pre><code class="language-html">&lt;!-- Internal: the code is inside the element --&gt;
+&lt;script&gt;
+    console.log("Hello from the page!");
+&lt;/script&gt;
+
+&lt;!-- External: the code is in a separate file --&gt;
+&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+<p>For the same reasons as external stylesheets, external scripts are usually best: one file can be shared by every page of a site, and the HTML and the JavaScript stay separate. Notice that an external <code>&lt;script&gt;</code> still needs its closing tag, even though it is empty.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> In this platform, the <strong>JS</strong> tab is your external script, and the starter HTML already contains a <code>&lt;script src="script.js"&gt;</code> element that links to it. When you click <strong>Download</strong>, your JavaScript is saved as <code>script.js</code>, so the link still works on your own computer.</div>
+<br>
+
+<h3>Where to Put the Script</h3>
+<p>The browser reads an HTML page from top to bottom, building the page as it goes. When it reaches a <code>&lt;script&gt;</code> element, it stops and runs the script straight away, before reading the rest of the page.</p>
+<p>This matters, because most JavaScript works with elements on the page. If the script runs before the browser has reached those elements, they do not exist yet, and the code fails. For this reason, the usual place for a script is <strong>at the end of the body</strong>, just before <code>&lt;/body&gt;</code>, so that the whole page has been built before the script runs:</p>
+<pre><code class="language-html">&lt;body&gt;
+    &lt;h1&gt;My Page&lt;/h1&gt;
+    &lt;p id="output"&gt;&lt;/p&gt;
+
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+<div class="info-box"><strong>ℹ️ Info:</strong> You will also see scripts placed in the <code>&lt;head&gt;</code> with a <code>defer</code> attribute: <code>&lt;script src="script.js" defer&gt;&lt;/script&gt;</code>. <code>defer</code> tells the browser to download the script straight away, but wait to run it until the page has been built. This works well on real websites, but this platform's preview does not support it, so in these lessons, always place your script just before <code>&lt;/body&gt;</code>.</div>
+<br>
+
+<h2>The Console</h2>
+<p>When you write JavaScript, you need a way to see what your code is doing. Every browser has built-in <strong>developer tools</strong>, and one of them is the <strong>console</strong>: a panel that shows messages from your code.</p>
+<p>To open the console:</p>
+<ul>
+    <li><strong>Chrome or Edge on Windows:</strong> press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>J</kbd>, or press <kbd>F12</kbd> and click the <strong>Console</strong> tab.</li>
+    <li><strong>Chrome on a Mac:</strong> press <kbd>Cmd</kbd> + <kbd>Option</kbd> + <kbd>J</kbd>.</li>
+    <li><strong>Firefox:</strong> press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>K</kbd> (or <kbd>Cmd</kbd> + <kbd>Option</kbd> + <kbd>K</kbd> on a Mac).</li>
+</ul>
+<p>The console opens as a panel at the side or bottom of the browser window. You can keep it open while you work.</p>
+
+<h3>Writing to the Console</h3>
+<p><code>console.log()</code> writes a message to the console. Whatever you put between the brackets is displayed:</p>
+<pre><code class="language-javascript">console.log("Hello, world!");
+console.log(42);
+console.log(2 + 3);</code></pre>
+<p>Text must be written in quotes, so that JavaScript knows it is text and not code. Numbers and calculations do not need quotes: <code>console.log(2 + 3)</code> displays <code>5</code>, because JavaScript works out the answer first. <code>console.log("2 + 3")</code>, with quotes, displays the text <code>2 + 3</code> exactly as written.</p>
+<p>The console is a tool for <strong>you</strong>, the developer. Users never see it, so it is not a way to show information to the people using your page. You will learn how to do that later in this lesson.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Open the console in your browser. The starter JavaScript contains one line, which writes <code>The script is connected!</code> to the console. Check that you can see the message.</li>
+    <li>Below that line in the JS tab, add <code>console.log("Hello, world!");</code> and check that it appears in the console.</li>
+    <li>Add <code>console.log(2 + 3);</code> and <code>console.log("2 + 3");</code> and compare the two results.</li>
+</ol>
+<br>
+
+<h3>The Console in This Platform</h3>
+<p>The preview runs your JavaScript again every time you change your code, so the console fills up with repeated messages as you type. Before checking your output, <strong>clear the console</strong>: click the 🚫 button at the top of the console, or press <kbd>Ctrl</kbd> + <kbd>L</kbd> (<kbd>Cmd</kbd> + <kbd>K</kbd> on a Mac) while the console is selected.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> Repeated messages do <strong>not</strong> mean your code is running twice by mistake, or that something is wrong. They are simply left over from earlier runs of the preview. The console is there so you can see the output of your code; clear it and check again whenever you are unsure which messages are new.</div>
+<p>The fullscreen preview runs your code too, so its messages appear in the same console. The pop-out preview is a separate window, so its messages only appear if you open the console in that window.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Get into the habit of clearing the console, making a change, then checking the new output. If you are ever unsure which messages are new, clear the console and make any small change in the editor to run your code again.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Change the text of your <code>Hello, world!</code> message, one letter at a time. Notice that the console fills up with repeated messages.</li>
+    <li>Clear the console, then make one more small change. Now only the latest output is shown.</li>
+</ol>
+<br>
+
+<h2>Statements and Syntax</h2>
+<p>A JavaScript program is made up of <strong>statements</strong>: individual instructions, such as <code>console.log("Hello");</code>. The browser runs them one at a time, from top to bottom.</p>
+<ul>
+    <li><strong>Each statement ends with a semicolon.</strong> JavaScript can often work out where a statement ends without one, but leaving them out occasionally causes confusing bugs, so always include them.</li>
+    <li><strong>JavaScript is case-sensitive.</strong> <code>console.log</code> works, but <code>Console.log</code> and <code>console.Log</code> do not. This is different from HTML, where <code>&lt;P&gt;</code> and <code>&lt;p&gt;</code> are the same.</li>
+    <li><strong>Whitespace is ignored</strong>, as in HTML and CSS, so you can use blank lines and indentation to make your code readable.</li>
+    <li><strong>Brackets and quotes come in pairs.</strong> Every opening <code>(</code> needs a closing <code>)</code>, and every opening quote needs a closing quote of the same kind.</li>
+</ul>
+<br>
+
+<h2>Comments</h2>
+<p>JavaScript has two kinds of comment, and the browser ignores both:</p>
+<pre><code class="language-javascript">// A single-line comment: everything after the two slashes is ignored
+
+/*
+   A multi-line comment,
+   just like in CSS
+*/
+
+console.log("Hello"); // A comment at the end of a line</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Remember the CSS unit: <code>//</code> is <strong>not</strong> a comment in CSS, and silently breaks the next rule. It only works in JavaScript. <code>/* */</code> works in both, so if you are ever unsure, use that.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add a single-line comment at the top of your JavaScript, describing what the file is for.</li>
+    <li>Put <code>//</code> at the start of your <code>console.log("2 + 3");</code> line. Clear the console and check that the message no longer appears. This is called <strong>commenting out</strong> a line, and it is a quick way to switch code off while you test something.</li>
+</ol>
+<br>
+
+<h2>Showing Output on the Page</h2>
+<p>The console is for developers, but most of the time, you want your JavaScript to change what the <strong>user</strong> sees. You will learn exactly how this works in Lesson 5. Until then, you can use this pattern to put text into an element on the page:</p>
+<pre><code class="language-javascript">document.querySelector("#output").textContent = "Hello from JavaScript!";</code></pre>
+<p>Read it from left to right: in the page (<code>document</code>), find the element with the ID <code>output</code> (<code>querySelector("#output")</code>), and set its text (<code>textContent</code>) to the message. The selector inside the brackets is written exactly like a CSS selector.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The starter HTML contains an empty paragraph with the ID <code>output</code>. Add the line from the example above to the end of your JavaScript, and check that the message appears on the page in the preview.</li>
+    <li>Change the message to your own name, and check that the page updates.</li>
+</ol>
+<br>
+
+<h3>Why the Script Goes at the End</h3>
+<p>You can now see for yourself why the position of the <code>&lt;script&gt;</code> element matters.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the HTML tab, move the <code>&lt;script src="script.js"&gt;&lt;/script&gt;</code> line from the end of the body into the <code>&lt;head&gt;</code>, just below the <code>&lt;link&gt;</code>.</li>
+    <li>Look at the preview. Your message has gone from the page. The script ran before the browser had built the paragraph, so <code>querySelector</code> could not find it, and the text had nowhere to go.</li>
+    <li>Move the script back to just before <code>&lt;/body&gt;</code>, and check that the message returns.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> Remember this. If your code is meant to change the page but nothing happens, check two things first: that the selector matches the element exactly, and that the script is just before <code>&lt;/body&gt;</code>.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your JavaScript should look similar to this, with your own comment and name:</p>
+<pre><code class="language-javascript">// Practising the basics of JavaScript
+console.log("The script is connected!");
+console.log("Hello, world!");
+console.log(2 + 3);
+// console.log("2 + 3");
+
+document.querySelector("#output").textContent = "Hello from Sam!";</code></pre>
+<p>Also check that the <code>&lt;script&gt;</code> element is just before <code>&lt;/body&gt;</code>, and your message appears on the page.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the job of JavaScript, compared with HTML and CSS?</li>
+    <li>Why should a script usually be placed just before <code>&lt;/body&gt;</code>?</li>
+    <li>What is the difference between <code>console.log(2 + 3)</code> and <code>console.log("2 + 3")</code>?</li>
+    <li>What are the two ways to write a comment in JavaScript, and which one also works in CSS?</li>
+</ul>
+<p>In the next lesson, you will learn how to store and work with values using variables.</p>

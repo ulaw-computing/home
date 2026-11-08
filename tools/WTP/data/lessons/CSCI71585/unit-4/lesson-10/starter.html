@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student Help Centre</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main>
+        <h1>Student Help Centre</h1>
+
+        <section class="panel">
+            <h2>Frequently Asked Questions</h2>
+
+            <h3>
+                <button type="button" class="accordion-button" aria-expanded="false" aria-controls="answer-1">
+                    When does term start?
+                </button>
+            </h3>
+            <div class="accordion-panel" id="answer-1" hidden>
+                <p>Term starts on Monday 21 September, with an induction week before teaching begins.</p>
+            </div>
+
+            <h3>
+                <button type="button" class="accordion-button" aria-expanded="false" aria-controls="answer-2">
+                    How do I get my student card?
+                </button>
+            </h3>
+            <div class="accordion-panel" id="answer-2" hidden>
+                <p>Upload a photo through the student portal before you arrive, and collect your card from reception during induction week.</p>
+            </div>
+
+            <h3>
+                <button type="button" class="accordion-button" aria-expanded="false" aria-controls="answer-3">
+                    Where can I get help with my studies?
+                </button>
+            </h3>
+            <div class="accordion-panel" id="answer-3" hidden>
+                <p>The library runs study skills workshops every week, and you can book one-to-one sessions with your personal tutor.</p>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Our Campuses</h2>
+
+            <div class="tab-list" role="tablist" aria-label="Campuses">
+                <button type="button" role="tab" id="tab-leeds" aria-selected="true" aria-controls="panel-leeds">Leeds</button>
+                <button type="button" role="tab" id="tab-london" aria-selected="false" aria-controls="panel-london">London</button>
+                <button type="button" role="tab" id="tab-manchester" aria-selected="false" aria-controls="panel-manchester">Manchester</button>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="panel-leeds" aria-labelledby="tab-leeds">
+                <p>Our Leeds campus is in the city centre, a ten-minute walk from the railway station.</p>
+            </div>
+            <div class="tab-panel" role="tabpanel" id="panel-london" aria-labelledby="tab-london" hidden>
+                <p>Our London campus is close to several Underground stations, with excellent transport links.</p>
+            </div>
+            <div class="tab-panel" role="tabpanel" id="panel-manchester" aria-labelledby="tab-manchester" hidden>
+                <p>Our Manchester campus is next to a large park, with a café and quiet study spaces.</p>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Glossary</h2>
+
+            <label for="glossary-search">Search the glossary</label>
+            <input type="search" id="glossary-search">
+
+            <p class="glossary-count" id="glossary-count" aria-live="polite">Showing 12 of 12 terms</p>
+            <p class="no-results" id="no-results" hidden>No terms match your search.</p>
+
+            <ul class="glossary">
+                <li><strong>API</strong>: a way for one program to request data or services from another.</li>
+                <li><strong>Browser</strong>: the program used to view websites, such as Chrome or Firefox.</li>
+                <li><strong>CSS</strong>: the language used to style web pages.</li>
+                <li><strong>DOM</strong>: the browser's model of a web page, which JavaScript can change.</li>
+                <li><strong>Domain</strong>: the name of a website, such as example.com.</li>
+                <li><strong>HTML</strong>: the language used to structure the content of web pages.</li>
+                <li><strong>HTTP</strong>: the rules browsers and servers use to send pages to each other.</li>
+                <li><strong>JavaScript</strong>: the programming language that makes web pages interactive.</li>
+                <li><strong>JSON</strong>: a text format for sending data, based on JavaScript objects.</li>
+                <li><strong>Server</strong>: a computer that stores websites and sends them to browsers.</li>
+                <li><strong>URL</strong>: the address of a page or file on the web.</li>
+                <li><strong>Viewport</strong>: the visible area of a web page in the browser window.</li>
+            </ul>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Leeds Code Club</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">Leeds Code Club</p>
+
+        <div class="header-buttons">
+            <button type="button" id="theme-button" aria-pressed="false">Dark mode</button>
+            <button type="button" class="menu-button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+        </div>
+
+        <nav class="site-nav" id="site-nav">
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#sessions">Sessions</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#join">Join</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <p class="layout-status" id="layout-status">Layout: unknown</p>
+
+    <main>
+        <section id="about">
+            <h1>Learn to Code Together</h1>
+            <p>Leeds Code Club is a free, friendly club for anyone who wants to learn to code, from complete beginners to experienced developers looking for a project to work on.</p>
+            <p>We meet every week in the city centre, with mentors on hand to help with whatever you are working on.</p>
+        </section>
+
+        <section id="sessions">
+            <h2>Sessions</h2>
+            <p>Sessions run every Wednesday evening from 6pm to 8pm. Bring your own laptop if you have one, or borrow one of ours.</p>
+            <p>Each session starts with a short talk on a new topic, followed by time to work on your own projects, with help from our mentors.</p>
+        </section>
+
+        <section id="projects">
+            <h2>Projects</h2>
+            <p>Members have built personal websites, games, weather apps, quiz tools and much more. At the end of each term, everyone is invited to show what they have made.</p>
+            <p>If you are not sure what to build, our mentors keep a list of project ideas for every level of experience.</p>
+        </section>
+
+        <section id="join">
+            <h2>Join</h2>
+            <p>Membership is free. Just come along to any session and introduce yourself to one of the mentors.</p>
+            <p>Under 18? Please come along with a parent or guardian on your first visit.</p>
+        </section>
+
+        <button type="button" id="back-to-top">Back to top</button>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

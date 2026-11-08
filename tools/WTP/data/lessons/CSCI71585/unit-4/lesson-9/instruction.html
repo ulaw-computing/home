@@ -1,0 +1,199 @@
+<h1>Tutorial</h1> <!--Lesson 9: Creating Elements From Data-->
+<p>So far, your JavaScript has changed elements that were already written in the HTML. But on most modern websites, much of the content is <strong>built by JavaScript</strong>, from data: a list of search results, the products in a shop, the messages in a chat. The data might be written in the script, or, as you will see in the next unit, fetched from a server. In this lesson you will learn how to create elements from an array of objects, add them to the page, and update the page whenever the data changes.</p>
+<p>This is the most important skill in the unit, and everything in it will be used again when you work with real data from the web. The starter code contains a reading list for a book club, with the data already written in the script. As before, keep the console open, and complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Data First</h2>
+<p>When content is built from data, the <strong>data</strong> becomes the single source of truth. The page is just a picture of the data at one moment. To change what the page shows, you never edit the page directly: you change the data, and then rebuild the page from it. This is the same state pattern you used in Lesson 6, applied to whole lists.</p>
+<pre><code>change the data  →  rebuild the page from the data</code></pre>
+<p>This approach has a big advantage: the data and the page can never get out of step, because the page is always built from the data.</p>
+<br>
+
+<h2>Creating Elements</h2>
+<p><code>document.createElement()</code> creates a new element. It takes the tag name, as a string, without angle brackets:</p>
+<pre><code class="language-javascript">const heading = document.createElement("h3");
+heading.textContent = "The Secret Garden";
+heading.classList.add("book-title");</code></pre>
+<p>The new element exists, and you can set its text, classes and attributes exactly as you did in Lesson 5. But it is <strong>not on the page yet</strong>. It only exists in JavaScript until you add it to an element that is already on the page.</p>
+
+<h3>Adding Elements to the Page</h3>
+<ul>
+    <li><code>parent.append(child)</code> adds the child as the <strong>last</strong> thing inside the parent. It can add several elements at once: <code>parent.append(first, second)</code>.</li>
+    <li><code>parent.prepend(child)</code> adds it as the <strong>first</strong> thing inside the parent.</li>
+</ul>
+<pre><code class="language-javascript">const bookList = document.querySelector("#book-list");
+bookList.append(heading);</code></pre>
+<div class="info-box"><strong>ℹ️ Info:</strong> You will also see <code>appendChild()</code> in older code. It works in a similar way to <code>append()</code>, but can only add one element at a time.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, below the <code>books</code> array, create an <code>&lt;h3&gt;</code> element, set its <code>textContent</code> to the title of the first book (<code>books[0].title</code>), and log it. Check the preview: nothing has appeared yet.</li>
+    <li>The starter code has already selected the <code>#book-list</code> element and stored it in <code>bookList</code>. <code>append</code> your heading to it. The title now appears on the page.</li>
+</ol>
+<br>
+
+<h2>Building a Card From an Object</h2>
+<p>Each book should appear as a card, containing several elements. The best way to do this is to write a function that takes <strong>one object</strong>, builds the elements for it, and <strong>returns</strong> the finished card:</p>
+<pre><code class="language-javascript">function createBookCard(book) {
+    const card = document.createElement("article");
+    card.classList.add("book-card");
+
+    const title = document.createElement("h3");
+    title.textContent = book.title;
+
+    const author = document.createElement("p");
+    author.textContent = `by ${book.author}`;
+
+    const details = document.createElement("p");
+    details.classList.add("book-details");
+    details.textContent = `${book.genre} · ${book.pages} pages`;
+
+    card.append(title, author, details);
+    return card;
+}</code></pre>
+<p>Like <code>convertToMiles</code> in Lesson 4, this function does not change the page itself: it returns a value, here an element, which the code that calls it can add to the page wherever it is needed.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> You will often see cards built by writing a template literal of HTML and setting it with <code>innerHTML</code>, such as <code>card.innerHTML = `&lt;h3&gt;${book.title}&lt;/h3&gt;`</code>. This is shorter, but as you learned in Lesson 5, it is dangerous with any data you did not write yourself. When the data comes from users or from another website, a title containing HTML could run harmful code on your page. Creating elements and setting <code>textContent</code> is always safe, so use it for anything built from data.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Delete your code from the last Try It.</li>
+    <li>Add the <code>createBookCard</code> function from the example above.</li>
+    <li>Test it with one book: <code>bookList.append(createBookCard(books[0]));</code>. A styled card appears.</li>
+</ol>
+<br>
+
+<h2>Rendering the Whole List</h2>
+<p>To display every book, loop through the array, create a card for each object, and append it. Putting this in a function, usually called <code>render</code>, means you can rebuild the list whenever the data changes:</p>
+<pre><code class="language-javascript">function render() {
+    bookList.replaceChildren();   // remove the old cards first
+
+    books.forEach((book) =&gt; {
+        bookList.append(createBookCard(book));
+    });
+}
+
+render();</code></pre>
+<p><code>replaceChildren()</code>, called with nothing in its brackets, removes everything inside the element. This matters: without it, every call to <code>render</code> would add a second copy of every card below the first.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Replace your single <code>append</code> line with the <code>render</code> function from the example above, and call it. Every book now appears as a card.</li>
+    <li>Add a line to <code>render</code> that displays <code>[number] books on the list</code> in the <code>#book-count</code> element.</li>
+    <li>Add a new book object to the <code>books</code> array in the starter code, with an <code>id</code> of <code>5</code>, and check that it appears, and the count updates, without any other changes to your code.</li>
+</ol>
+<br>
+
+<h2>Adding Items</h2>
+<p>Because the page is built from the data, adding a new item takes two steps: add it to the array, and call <code>render</code> again.</p>
+<pre><code class="language-javascript">function addBook(title, author) {
+    books.push({
+        id: Date.now(),
+        title: title,
+        author: author,
+        genre: "Unknown",
+        pages: 0
+    });
+    render();
+}</code></pre>
+<p>Each book needs a unique <code>id</code>. <code>Date.now()</code> returns the number of milliseconds since 1 January 1970, which is different every time it is called, so it makes a quick and simple unique ID.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>addBook</code> function from the example above.</li>
+    <li>Add a click listener to the <code>#add-button</code> that reads the trimmed values of the <code>#new-title</code> and <code>#new-author</code> boxes, and calls <code>addBook</code> with them. Then clear both boxes by setting their <code>value</code> to <code>""</code>.</li>
+    <li>Only add the book if a title has been typed. Use an <code>if</code> statement: an empty string is falsy.</li>
+    <li>Add a few books in the preview, and check that each one appears and the count goes up.</li>
+</ol>
+<div class="info-box"><strong>ℹ️ Info:</strong> The books you add are only stored in the <code>books</code> array in memory. They disappear when the preview reloads, because the script starts again from the original array. Saving data permanently needs storage in the browser or on a server, which you will meet in later units.</div>
+<br>
+
+<h2>Removing Items</h2>
+<p>Each card should have a <strong>Remove</strong> button. To know which book to remove, the button needs to carry the book's ID, using a data attribute:</p>
+<pre><code class="language-javascript">const removeButton = document.createElement("button");
+removeButton.type = "button";
+removeButton.classList.add("remove-button");
+removeButton.textContent = "Remove";
+removeButton.dataset.id = book.id;</code></pre>
+<p>Setting <code>dataset.id</code> creates a <code>data-id</code> attribute on the button. To remove the book, you change the data, then render again. <code>filter</code> is ideal for this, since it creates a new array without the item you want to remove:</p>
+<pre><code class="language-javascript">function removeBook(id) {
+    books = books.filter((book) =&gt; book.id !== id);
+    render();
+}</code></pre>
+<p>Because this replaces the whole array with a new one, <code>books</code> must be declared with <code>let</code>, not <code>const</code>. The starter code already does this.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> Elements also have a <code>remove()</code> method, which deletes the element itself from the page: <code>card.remove()</code>. That changes the page but not the data, so the book would come back the next time the list is rendered. Changing the data and rendering again keeps them in step.</div>
+<br>
+
+<h3>Listening for Clicks: Event Delegation</h3>
+<p>There is a problem with adding a click listener to each Remove button. Every time the list is rendered, the old buttons are thrown away and brand new ones are created, which do not have listeners. You could add a listener to each new button inside <code>createBookCard</code>, but there is a better way.</p>
+<p>When you click an element, the click event also travels <strong>up</strong> through all of its ancestors, an effect called <strong>bubbling</strong>. So a click on a Remove button is also a click on the card, and on the <code>#book-list</code> element that contains every card. This means you can add <strong>one</strong> listener to the list itself, which never changes, and work out which button was clicked from <code>event.target</code>:</p>
+<pre><code class="language-javascript">bookList.addEventListener("click", (event) =&gt; {
+    const button = event.target.closest(".remove-button");
+
+    if (button) {
+        removeBook(Number(button.dataset.id));
+    }
+});</code></pre>
+<ul>
+    <li><code>closest(".remove-button")</code> looks at the clicked element, then its parent, then its parent's parent, and so on, and returns the first one that matches the selector, or <code>null</code> if none do.</li>
+    <li>If the click was not on a Remove button, such as on a book's title, <code>button</code> is <code>null</code>, so nothing happens.</li>
+    <li>Data attributes are strings, so the ID is converted back to a number before comparing, since <code>"5" !== 5</code>.</li>
+</ul>
+<p>This technique is called <strong>event delegation</strong>: one listener on a parent handles events for all of its children, including children that are created later.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>In <code>createBookCard</code>, create the Remove button from the example above, and add it to the card's <code>append</code> call.</li>
+    <li>Add the <code>removeBook</code> function.</li>
+    <li>Add the event delegation listener to <code>bookList</code>. Remove a book in the preview, and check that it disappears and the count goes down.</li>
+    <li>Add a new book, then remove it, to check that delegation works for cards created after the page loaded.</li>
+</ol>
+<br>
+
+<h2>Empty States</h2>
+<p>When a list is empty, a blank space is confusing: the user cannot tell whether the list is empty, still loading or broken. A short message explaining that there is nothing to show is called an <strong>empty state</strong>.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The starter HTML has a hidden <code>#empty-message</code> paragraph. In <code>render</code>, show it by removing its <code>hidden</code> class when <code>books.length</code> is <code>0</code>, and hide it by adding the class otherwise.</li>
+    <li>Remove every book in the preview, and check that the message appears.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your <code>render</code> function and listener should be similar to these:</p>
+<pre><code class="language-javascript">function render() {
+    bookList.replaceChildren();
+
+    books.forEach((book) =&gt; {
+        bookList.append(createBookCard(book));
+    });
+
+    document.querySelector("#book-count").textContent = `${books.length} books on the list`;
+
+    const emptyMessage = document.querySelector("#empty-message");
+    if (books.length === 0) {
+        emptyMessage.classList.remove("hidden");
+    } else {
+        emptyMessage.classList.add("hidden");
+    }
+}
+
+bookList.addEventListener("click", (event) =&gt; {
+    const button = event.target.closest(".remove-button");
+
+    if (button) {
+        removeBook(Number(button.dataset.id));
+    }
+});
+
+render();</code></pre>
+<p>Also check that new books can be added, and only when a title has been typed.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>Why is the data, not the page, the "single source of truth"?</li>
+    <li>What two things must happen before an element created with <code>createElement</code> appears on the page?</li>
+    <li>Why does <code>render</code> call <code>replaceChildren()</code> first?</li>
+    <li>Why is <code>textContent</code> safer than building cards with <code>innerHTML</code>?</li>
+    <li>What is event delegation, and why is it needed for elements created by JavaScript?</li>
+</ul>
+<p>In the next lesson, you will use these skills to build common interactive components.</p>

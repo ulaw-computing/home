@@ -1,0 +1,178 @@
+<h1>Tutorial</h1> <!--Lesson 7: Arrays and Loops-->
+<p>Most real data comes in lists: the items in a basket, the posts in a feed, the results of a search. Storing each one in its own variable would quickly become impossible. In this lesson you will learn how JavaScript stores lists of values in <strong>arrays</strong>, and how to repeat code for every item in a list using <strong>loops</strong> and the array methods that make working with lists so much simpler.</p>
+<p>The starter code contains a revision planner, with spaces for a list of topics and a set of practice test results. As before, keep the console open, and complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Arrays</h2>
+<p>An <strong>array</strong> is an ordered list of values, stored in a single variable. It is written in square brackets, with the values, called <strong>elements</strong> or <strong>items</strong>, separated by commas:</p>
+<pre><code class="language-javascript">const topics = ["HTML", "CSS", "JavaScript"];</code></pre>
+<p>An array can hold any type of value, including numbers, booleans and even other arrays, although most arrays hold items of one type.</p>
+
+<h3>Indexes</h3>
+<p>Each item has a numbered position, called its <strong>index</strong>. Indexes start at <strong>0</strong>, not 1, so the first item is at index 0, the second at index 1, and so on. You get an item by writing its index in square brackets after the array's name:</p>
+<pre><code class="language-javascript">console.log(topics[0]);   // "HTML"
+console.log(topics[2]);   // "JavaScript"
+console.log(topics[5]);   // undefined: there is no item at index 5</code></pre>
+<p>The <code>length</code> property is the number of items. Because indexes start at 0, the last item is always at index <code>length - 1</code>:</p>
+<pre><code class="language-javascript">console.log(topics.length);                   // 3
+console.log(topics[topics.length - 1]);       // "JavaScript"</code></pre>
+<p>You can also change an item by assigning to its index: <code>topics[0] = "HTML5";</code>.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> Notice that <code>topics</code> is declared with <code>const</code>, but its items can still be changed. <code>const</code> stops the variable being replaced with a completely different value, but the array it holds can still be changed. Arrays are almost always declared with <code>const</code>.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, declare the <code>topics</code> array from the example above, and log it. Click the arrow beside it in the console to see each item with its index.</li>
+    <li>Log the first item, the length, and the last item using <code>length - 1</code>.</li>
+</ol>
+<br>
+
+<h2>Changing Arrays</h2>
+<p>Arrays have built-in methods for adding and removing items:</p>
+<ul>
+    <li><code>push(item)</code> adds an item to the <strong>end</strong>.</li>
+    <li><code>pop()</code> removes the last item, and returns it.</li>
+    <li><code>unshift(item)</code> adds an item to the <strong>start</strong>.</li>
+    <li><code>shift()</code> removes the first item, and returns it.</li>
+</ul>
+<p>Two more methods help you search an array:</p>
+<ul>
+    <li><code>includes(item)</code> returns <code>true</code> if the array contains the item, and <code>false</code> if not.</li>
+    <li><code>indexOf(item)</code> returns the index of the item, or <code>-1</code> if it is not in the array.</li>
+</ul>
+<p>And <code>join(separator)</code> joins every item into one string, with the separator between them, which is very useful for displaying an array:</p>
+<pre><code class="language-javascript">topics.push("Accessibility");
+console.log(topics.join(", "));   // "HTML, CSS, JavaScript, Accessibility"</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add <code>"Accessibility"</code> to the end of <code>topics</code>, and <code>"Web Basics"</code> to the start.</li>
+    <li>Display the topics in the <code>#topic-list</code> element, joined with <code>", "</code>.</li>
+    <li>Log whether <code>topics</code> includes <code>"CSS"</code>, and whether it includes <code>"Python"</code>.</li>
+    <li>Display <code>[number] topics to revise</code> in the <code>#topic-count</code> element.</li>
+</ol>
+<br>
+
+<h2>Loops</h2>
+<p>A <strong>loop</strong> repeats a block of code. Loops are what make arrays so powerful: whether a list has three items or three thousand, one loop can do something with every one of them.</p>
+
+<h3>The for Loop</h3>
+<p>The classic <code>for</code> loop repeats a block a set number of times, using a counter variable. Its brackets contain three parts, separated by semicolons:</p>
+<pre><code class="language-javascript">for (let i = 1; i &lt;= 5; i++) {
+    console.log(`Revision session ${i}`);
+}</code></pre>
+<ol>
+    <li><code>let i = 1</code> runs once, before the loop starts, and creates the counter.</li>
+    <li><code>i &lt;= 5</code> is checked before every repeat. The loop keeps going while it is true, and stops as soon as it is false.</li>
+    <li><code>i++</code> runs after every repeat, adding 1 to the counter.</li>
+</ol>
+<p>This logs <em>Revision session 1</em> through to <em>Revision session 5</em>. Each repeat is called an <strong>iteration</strong>. The counter is traditionally called <code>i</code>, short for <strong>index</strong>.</p>
+<p>A <code>for</code> loop can go through an array by counting from 0 up to, but not including, its length:</p>
+<pre><code class="language-javascript">for (let i = 0; i &lt; topics.length; i++) {
+    console.log(`${i + 1}. ${topics[i]}`);
+}</code></pre>
+<p>This logs a numbered list. The number displayed is <code>i + 1</code>, because people count from 1, even though indexes start at 0.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Write the first <code>for</code> loop from the examples above, and check that it logs five sessions.</li>
+    <li>Write the second loop, which logs a numbered list of your topics.</li>
+</ol>
+<br>
+
+<h3>The for...of Loop</h3>
+<p>When you need every item in an array but not its index, the <code>for...of</code> loop is simpler. It gives you each item in turn, with no counter to manage:</p>
+<pre><code class="language-javascript">for (const topic of topics) {
+    console.log(topic);
+}</code></pre>
+<p>Read it as "for each topic of the topics array". Each time round the loop, <code>topic</code> holds the next item. By convention, the array's name is plural and the loop variable is the singular.</p>
+
+<h3>Building a String in a Loop</h3>
+<p>A common use of a loop is to build up a piece of text, adding to it on each iteration:</p>
+<pre><code class="language-javascript">let list = "";
+
+for (const topic of topics) {
+    list += `• ${topic}\n`;
+}
+
+document.querySelector("#topic-list").textContent = list;</code></pre>
+<p><code>\n</code> inside a string is a special code for a <strong>new line</strong>. The starter CSS has set the <code>#topic-list</code> element to keep new lines, so each topic appears on its own line.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Replace your <code>join</code> line with the <code>for...of</code> loop above, so the topics display as a bulleted list on separate lines.</li>
+</ol>
+<br>
+
+<h3>The while Loop</h3>
+<p>A <code>while</code> loop repeats as long as its condition is true. It is useful when you do not know in advance how many times the loop will need to run:</p>
+<pre><code class="language-javascript">let hoursLeft = 10;
+let day = 1;
+
+while (hoursLeft &gt; 0) {
+    console.log(`Day ${day}: ${hoursLeft} hours left`);
+    hoursLeft -= 3;
+    day++;
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> If a loop's condition never becomes false, the loop never ends. This is called an <strong>infinite loop</strong>, and it freezes the page. In a <code>while</code> loop, make sure something inside the loop always moves it towards finishing, such as <code>hoursLeft -= 3</code> above. In this platform, the preview stops any loop that runs for more than a second and shows a message, but on a real website, an infinite loop would freeze the user's browser tab.</div>
+<br>
+
+<h2>Array Methods With Callbacks</h2>
+<p>Loops work, but they can be long-winded. Arrays also have methods that take a callback function and call it for every item, so you describe <strong>what</strong> to do with each item, and the method handles the looping. You met the first of these, <code>forEach</code>, in Lesson 5.</p>
+<p>The examples below use this array of practice test results:</p>
+<pre><code class="language-javascript">const scores = [72, 45, 58, 91, 63, 38];</code></pre>
+
+<h3>forEach</h3>
+<p><code>forEach</code> calls the function once for every item. It is the method version of <code>for...of</code>:</p>
+<pre><code class="language-javascript">scores.forEach((score) =&gt; {
+    console.log(`Score: ${score}`);
+});</code></pre>
+
+<h3>map</h3>
+<p><code>map</code> creates a <strong>new array</strong>, by calling the function on every item and collecting what it returns. The new array always has the same number of items as the original:</p>
+<pre><code class="language-javascript">const labels = scores.map((score) =&gt; `${score}%`);
+console.log(labels);   // ["72%", "45%", "58%", "91%", "63%", "38%"]</code></pre>
+
+<h3>filter</h3>
+<p><code>filter</code> creates a new array containing only the items for which the function returns <code>true</code>:</p>
+<pre><code class="language-javascript">const passes = scores.filter((score) =&gt; score &gt;= 50);
+console.log(passes);   // [72, 58, 91, 63]</code></pre>
+
+<h3>find</h3>
+<p><code>find</code> returns the <strong>first</strong> item for which the function returns <code>true</code>, or <code>undefined</code> if there is none:</p>
+<pre><code class="language-javascript">const firstDistinction = scores.find((score) =&gt; score &gt;= 70);
+console.log(firstDistinction);   // 72</code></pre>
+<p>None of these methods change the original array. <code>map</code> and <code>filter</code> return new arrays, <code>find</code> returns a single item, and <code>forEach</code> returns nothing at all.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Because <code>map</code> and <code>filter</code> return arrays, you can call another method straight after them, which is called <strong>chaining</strong>: <code>scores.filter((score) =&gt; score &gt;= 50).map((score) =&gt; `${score}%`)</code> gives the passing scores as labels.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Declare the <code>scores</code> array from the example above.</li>
+    <li>Use <code>map</code> to create an array of labels, and display them in the <code>#all-scores</code> element, joined with <code>", "</code>.</li>
+    <li>Use <code>filter</code> to create an array of passing scores, of 50 or above. Display <code>[number] of [total] tests passed</code> in <code>#passed-count</code>, using the <code>length</code> of both arrays.</li>
+    <li>Use <code>find</code> to find the first score below 50, and display it in <code>#first-fail</code>.</li>
+    <li>Change one score in the <code>scores</code> array, and check that every result on the page updates.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your scores code should be similar to this:</p>
+<pre><code class="language-javascript">const scores = [72, 45, 58, 91, 63, 38];
+
+const labels = scores.map((score) =&gt; `${score}%`);
+document.querySelector("#all-scores").textContent = labels.join(", ");
+
+const passes = scores.filter((score) =&gt; score &gt;= 50);
+document.querySelector("#passed-count").textContent = `${passes.length} of ${scores.length} tests passed`;
+
+const firstFail = scores.find((score) =&gt; score &lt; 50);
+document.querySelector("#first-fail").textContent = firstFail;</code></pre>
+<p>Also check that the topics appear as a bulleted list, starting with <em>Web Basics</em> and ending with <em>Accessibility</em>, and that the topic count is 5.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the index of the first item in an array, and how do you find the last item?</li>
+    <li>What do <code>push</code> and <code>pop</code> do?</li>
+    <li>What are the three parts of a <code>for</code> loop's brackets?</li>
+    <li>When would you use <code>for...of</code> instead of a <code>for</code> loop?</li>
+    <li>What is the difference between <code>map</code>, <code>filter</code> and <code>find</code>?</li>
+</ul>
+<p>In the next lesson, you will learn how to group related values together in objects.</p>

@@ -29,7 +29,7 @@
       "description": "In this unit, we will explore the basics of JavaScript, the programming language that brings interactivity to web pages. You'll learn how to write JavaScript code, manipulate the DOM, and create dynamic user experiences.",
       "week": 4,
       "unlockDate": "2026-11-09",
-      "lessonCount": 5,
+      "lessonCount": 12,
       "technologies": ["HTML", "CSS", "JavaScript"],
       "lessonsFile": "data/lessons/CSCI71585/unit-4/lessons.json"
     },

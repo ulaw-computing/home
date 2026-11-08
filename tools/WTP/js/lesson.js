@@ -236,7 +236,7 @@ const LOOP_TYPES = new Set([
 // No newline at the end, so the student's line numbers stay the same.
 const LOOP_STOP_PRELUDE =
     'var __loopStop=__loopStop||function(line){' +
-    'try{var h=window.opener||window.parent;' +
+    'try{var h=window.parent;if(typeof h.reportInfiniteLoop!=="function"&&h.opener)h=h.opener;' +
     'if(h&&h!==window&&typeof h.reportInfiniteLoop==="function"){h.reportInfiniteLoop(line);}}catch(e){}' +
     'throw new RangeError("Possible infinite loop stopped (line "+line+")");};';
 
@@ -259,7 +259,7 @@ function collectLoops(node, parent, out) {
 // Runs inside the preview. Keeps links and forms from navigating the preview away.
 const PREVIEW_HELPER =
     '<script>(function(){' +
-    'var h=window.opener||window.parent;if(h===window)h=null;' +
+    'var h=window.parent;if(typeof h.reportPreviewLink!=="function"&&h.opener)h=h.opener;if(h===window)h=null;' +
     'document.addEventListener("click",function(e){' +
         'var a=e.target.closest&&e.target.closest("a[href]");' +
         'if(!a||e.defaultPrevented)return;' +
@@ -507,15 +507,26 @@ function updatePreviewPageTitle(title) {
     });
 }
 
-function updatePreview() {
-    const previewFrame = document.getElementById('preview');
-    const htmlCode = buildPreviewDocument();
 
-    const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
-    previewDoc.open();
-    previewDoc.write(htmlCode);
-    previewDoc.close();
-    updatePreviewPageTitle(previewDoc.title);
+
+// Give the student's code a brand-new page on every update.
+// Rewriting the same iframe keeps its old window, so let/const variables,
+// timers and window listeners from the previous run would still exist.
+function writeToFreshFrame(oldFrame, html) {
+    const newFrame = oldFrame.cloneNode(false);   // same id, class and attributes
+    oldFrame.replaceWith(newFrame);
+
+    const doc = newFrame.contentDocument;
+    doc.open();
+    doc.write(html);
+    doc.close();
+
+    return newFrame;
+}
+
+function updatePreview() {
+    const previewFrame = writeToFreshFrame(document.getElementById('preview'), buildPreviewDocument());
+    updatePreviewPageTitle(previewFrame.contentDocument.title);
 }
 
 
@@ -1583,12 +1594,26 @@ function closePopoutPreview() {
 //     popoutWindow.document.close();
 // }
 
+// The pop-out window holds a full-size iframe, so it can be replaced like the others
+const POPOUT_SHELL =
+    '<!DOCTYPE html><html><head><title>Preview</title>' +
+    '<style>html,body{margin:0;height:100%}iframe{display:block;width:100%;height:100%;border:0}</style>' +
+    '</head><body><iframe id="popoutFrame"></iframe></body></html>';
+
 function updatePopoutPreview() {
     if (!popoutWindow || popoutWindow.closed) return;
 
-    popoutWindow.document.open();
-    popoutWindow.document.write(buildPreviewDocument());
-    popoutWindow.document.close();
+    let frame = popoutWindow.document.getElementById('popoutFrame');
+
+    if (!frame) {
+        popoutWindow.document.open();
+        popoutWindow.document.write(POPOUT_SHELL);
+        popoutWindow.document.close();
+        frame = popoutWindow.document.getElementById('popoutFrame');
+    }
+
+    const newFrame = writeToFreshFrame(frame, buildPreviewDocument());
+    popoutWindow.document.title = newFrame.contentDocument.title || 'Preview';
 }
 
 // ===========================
@@ -1645,16 +1670,12 @@ function closeFullscreenPreview() {
 // }
 
 function updateFullscreenPreview() {
-    const fullscreenPreview = document.getElementById('fullscreenPreview');
     const overlay = document.getElementById('fullscreenOverlay');
 
     // Only update if fullscreen is active
     if (!overlay.classList.contains('active')) return;
 
-    const fullscreenDoc = fullscreenPreview.contentDocument || fullscreenPreview.contentWindow.document;
-    fullscreenDoc.open();
-    fullscreenDoc.write(buildPreviewDocument());
-    fullscreenDoc.close();
+    writeToFreshFrame(document.getElementById('fullscreenPreview'), buildPreviewDocument());
 }
 
 // Show next lesson prompt after completion

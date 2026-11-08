@@ -1,0 +1,132 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f0e8;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1,
+h2 {
+    color: #5d4037;
+}
+
+.add-book {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.add-book h2 {
+    width: 100%;
+    margin: 0;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+}
+
+input,
+button {
+    font: inherit;
+}
+
+input {
+    padding: 6px;
+    border: 1px solid #767676;
+    border-radius: 4px;
+}
+
+button {
+    padding: 6px 16px;
+    background-color: #5d4037;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3e2723;
+}
+
+button:focus {
+    outline: 3px solid #ffb300;
+    outline-offset: 2px;
+}
+
+.count {
+    font-weight: bold;
+}
+
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+/* Cards created by JavaScript */
+.book-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background-color: white;
+    border-top: 5px solid #8d6e63;
+    border-radius: 8px;
+}
+
+.book-card h3 {
+    margin: 0 0 4px;
+    color: #3e2723;
+}
+
+.book-card p {
+    margin: 0 0 8px;
+}
+
+.book-details {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.remove-button {
+    margin-top: auto;
+    align-self: flex-start;
+    background-color: #b71c1c;
+}
+
+.remove-button:hover {
+    background-color: #7f0000;
+}
+
+.empty-message {
+    padding: 16px;
+    background-color: white;
+    border-radius: 8px;
+    font-style: italic;
+}
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order | Kirkgate Coffee</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main>
+        <h1>Kirkgate Coffee</h1>
+
+        <section class="panel">
+            <button type="button" id="welcome-button">Say hello</button>
+            <p id="welcome-message"></p>
+        </section>
+
+        <section class="panel">
+            <h2>Build Your Order</h2>
+
+            <p>
+                <label for="customer-name">Your name</label>
+                <input type="text" id="customer-name">
+            </p>
+
+            <h3>Drinks</h3>
+            <div class="drinks">
+                <button type="button" class="drink-button" data-drink="Espresso" data-price="2.20">Espresso £2.20</button>
+                <button type="button" class="drink-button" data-drink="Americano" data-price="2.60">Americano £2.60</button>
+                <button type="button" class="drink-button" data-drink="Latte" data-price="3.20">Latte £3.20</button>
+                <button type="button" class="drink-button" data-drink="Hot chocolate" data-price="3.00">Hot chocolate £3.00</button>
+            </div>
+
+            <p>
+                <label for="milk">Milk</label>
+                <select id="milk">
+                    <option value="Whole">Whole</option>
+                    <option value="Semi-skimmed">Semi-skimmed</option>
+                    <option value="Oat">Oat</option>
+                    <option value="None">None</option>
+                </select>
+            </p>
+
+            <p>
+                <button type="button" id="add-button">Add a coffee</button>
+                <button type="button" id="clear-button">Clear order</button>
+            </p>
+        </section>
+
+        <section class="panel order-summary">
+            <h2>Your Order</h2>
+            <p id="order-name">Order for: (no name yet)</p>
+            <p id="order-milk">Milk: Whole</p>
+            <p>Items: <span id="item-count">0</span></p>
+            <p>Total: <span id="order-total">£0.00</span></p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

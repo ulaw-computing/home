@@ -1,0 +1,234 @@
+{
+  "unitId": 3,
+  "unitTitle": "JavaScript Fundamentals",
+  "lessons": [
+    {
+      "id": 1,
+      "title": "What is JavaScript?",
+      "description": "What JavaScript does, how to add it to a page, and how to see its output and errors in the console.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-1/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-1/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-1/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-1/starter.js"
+      },
+      "hints": [
+        "Open the console with F12 or Ctrl+Shift+J on Windows, or Cmd+Option+J on a Mac.",
+        "The preview re-runs your code every time it changes, so messages repeat in the console. Clear it (Ctrl+L) before checking your output.",
+        "JavaScript is case-sensitive: console.log works, but Console.log and console.Log do not.",
+        "Put the <script> element just before </body>, so the page has loaded before your code runs."
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Variables and Data Types",
+      "description": "Storing values in variables, the main types of data, and combining text and numbers.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-2/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-2/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-2/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-2/starter.js"
+      },
+      "hints": [
+        "Use const by default, and let only for a value that needs to change. A const cannot be given a new value.",
+        "A string must start and end with the same kind of quote: 'text' or \"text\".",
+        "Template literals use backticks, not quotes, with values inside ${}, e.g. `Hello, ${name}!`",
+        "\"5\" + 5 gives \"55\", because + joins strings. Convert text to a number first with Number(\"5\")."
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Operators and Conditionals",
+      "description": "Comparing values and making decisions in your code with if statements.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-3/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-3/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-3/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-3/starter.js"
+      },
+      "hints": [
+        "A single = assigns a value. To compare two values, use ===.",
+        "Always use === and !== rather than == and !=, which convert types first and can give surprising results.",
+        "&& means both conditions must be true; || means at least one must be true.",
+        "The condition goes in round brackets and the code to run goes in curly braces: if (score >= 50) { ... }"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Functions",
+      "description": "Grouping code into reusable functions that take inputs and return results.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-4/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-4/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-4/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-4/starter.js"
+      },
+      "hints": [
+        "Defining a function does not run it. Call it by writing its name followed by brackets, e.g. greet();",
+        "return sends a value back to where the function was called, and stops the function immediately.",
+        "Variables declared inside a function only exist inside that function.",
+        "An arrow function is a shorter way to write a function, e.g. const add = (a, b) => a + b;"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "The DOM: Selecting and Changing Elements",
+      "description": "Finding elements on the page with JavaScript and changing their text, classes and attributes.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-5/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-5/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-5/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-5/starter.js"
+      },
+      "hints": [
+        "querySelector uses CSS selectors, so IDs need a # and classes need a full stop, e.g. document.querySelector('#title').",
+        "If querySelector returns null, no element matched. Check the selector's spelling against the HTML.",
+        "querySelectorAll returns a list of elements, so you need a loop to change each one.",
+        "Use textContent to change text. Never put user input into innerHTML, as it can run harmful code."
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Events",
+      "description": "Making the page respond to clicks, typing and key presses.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-6/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-6/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-6/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-6/starter.js"
+      },
+      "hints": [
+        "Pass the function itself, without brackets: button.addEventListener('click', handleClick); Writing handleClick() runs it straight away instead.",
+        "Event names are lowercase, with no \"on\" at the start: 'click', not 'onClick'.",
+        "Inside the event handler, event.target is the element that the event happened on.",
+        "The 'input' event fires every time the value of a text box changes, so it is ideal for live updates."
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Arrays and Loops",
+      "description": "Storing lists of values in arrays, and repeating code for each item with loops and array methods.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-7/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-7/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-7/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-7/starter.js"
+      },
+      "hints": [
+        "Array indexes start at 0, so the first item is items[0] and the last is items[items.length - 1].",
+        "If a loop never ends, the platform stops it after a second. Check that the loop's condition will eventually become false.",
+        "map returns a new array with every item changed; filter returns a new array of only the matching items.",
+        "find returns the first matching item, or undefined if nothing matches. forEach returns nothing at all."
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Objects",
+      "description": "Grouping related data into objects, and working with arrays of objects.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-8/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-8/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-8/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-8/starter.js"
+      },
+      "hints": [
+        "Properties are written as name: value, separated by commas, e.g. { title: 'HTML Basics', level: 'beginner' }",
+        "Use dot notation (session.title) for known property names, and brackets (session[key]) when the name is in a variable.",
+        "Reading a property that does not exist gives undefined. If a value is missing, check the property name's spelling.",
+        "In an array of objects, loop through the array, then use dot notation on each object."
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Creating Elements From Data",
+      "description": "Building page content from data, and updating it when the data changes.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-9/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-9/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-9/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-9/starter.js"
+      },
+      "hints": [
+        "createElement makes a new element, but it does not appear on the page until you add it with append.",
+        "Put data onto the page with textContent, not innerHTML, so it is always treated as text.",
+        "Before re-rendering a list, clear the old items first with container.replaceChildren();",
+        "For elements created later, add one listener to their parent, and use event.target.closest() to find which one was clicked."
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Interactive Components",
+      "description": "Building accordions, tabs and live filters, and keeping them accessible.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-10/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-10/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-10/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-10/starter.js"
+      },
+      "hints": [
+        "Store the current state in a variable, such as which tab is open, and update the page from that variable.",
+        "Use JavaScript to add and remove classes, and let CSS decide how each class looks.",
+        "aria-expanded must be updated every time a section opens or closes, using setAttribute('aria-expanded', 'true').",
+        "For a search that ignores capitals, convert both the search text and the item text with toLowerCase() before comparing."
+      ]
+    },
+    {
+      "id": 11,
+      "title": "JavaScript and Responsive Design",
+      "description": "Building a mobile navigation menu, responding to media queries in JavaScript, and respecting user preferences.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-11/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-11/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-11/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-11/starter.js"
+      },
+      "hints": [
+        "Let CSS show or hide the menu button at each screen size. JavaScript should only toggle a class.",
+        "Update the menu button's aria-expanded every time the menu opens or closes.",
+        "window.matchMedia('(min-width: 600px)').matches is true when the preview is at least 600px wide.",
+        "Test the mobile menu in a narrow pop-out preview, as in the CSS unit."
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Consolidation: Build an Interactive Page",
+      "description": "Build an interactive session browser for the Beginners' Web Workshop, using everything from this unit.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-4/lesson-12/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-4/lesson-12/starter.html",
+        "css": "data/lessons/CSCI71585/unit-4/lesson-12/starter.css",
+        "js": "data/lessons/CSCI71585/unit-4/lesson-12/starter.js"
+      },
+      "hints": [
+        "Build one feature at a time, and check it works before starting the next.",
+        "Use console.log to check your data at each step, e.g. console.log(filteredSessions);",
+        "If a feature stops working, undo your last change and check it works again, then make the change in smaller steps.",
+        "Test the page in both a narrow pop-out preview and the fullscreen preview."
+      ]
+    }
+  ]
+}

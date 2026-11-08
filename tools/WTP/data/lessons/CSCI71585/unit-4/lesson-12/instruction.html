@@ -1,0 +1,171 @@
+<h1>Tutorial</h1> <!--Lesson 12: Consolidation: Build an Interactive Page-->
+<p>In this final lesson, you will bring together everything from this unit to build a complete interactive page: a <strong>session browser</strong> for the Beginners' Web Workshop, which displays every session from an array of data, and lets users filter and search them.</p>
+<p>This is very close to what you will build in the next unit. There, the data will come from an API on the web rather than being written in your script, but the code that turns the data into a page, and makes it interactive, will be almost exactly the same.</p>
+<p>The HTML and CSS are already written in the starter code, along with the data. Your job is the JavaScript. As in the consolidation lessons of the previous units, there are no step-by-step instructions: you have a brief, a plan and a checklist. If you are unsure how to do something, look back at the relevant lesson.</p>
+<br>
+
+<h2>The Brief</h2>
+<p>The page must include the following features.</p>
+
+<h3>Rendering the Sessions (Lessons 8 and 9)</h3>
+<ul>
+    <li>Every session in the <code>sessions</code> array is displayed as a card in the <code>#session-list</code> element.</li>
+    <li>Each card shows the session's title, time, speaker and description, and its level as a tag.</li>
+    <li>Cards are created with <code>createElement</code> and <code>textContent</code>, not <code>innerHTML</code>.</li>
+    <li>The level tag has the class <code>level-tag</code>, plus the session's level as a second class, so the starter CSS can colour it. For example, <code>class="level-tag intermediate"</code>.</li>
+</ul>
+
+<h3>Filtering by Level (Lessons 3, 6 and 10)</h3>
+<ul>
+    <li>Clicking a filter button shows only the sessions at that level. <strong>All</strong> shows every session.</li>
+    <li>Each button has a <code>data-level</code> attribute in the HTML, which your code should use to know which level was chosen.</li>
+    <li>The chosen button has <code>aria-pressed="true"</code>, and every other filter button has <code>aria-pressed="false"</code>. The starter CSS styles the chosen button from this attribute.</li>
+</ul>
+
+<h3>Searching (Lessons 2, 6 and 10)</h3>
+<ul>
+    <li>Typing in the search box shows only the sessions whose title <strong>or</strong> speaker includes the search text, updating as the user types.</li>
+    <li>The search ignores capital letters, and any spaces at the start or end.</li>
+    <li>Search and level filter work <strong>together</strong>: searching for <em>chen</em> with <strong>Advanced</strong> chosen shows only Li Chen's advanced session.</li>
+</ul>
+
+<h3>Feedback (Lessons 9 and 10)</h3>
+<ul>
+    <li>The <code>#session-count</code> element always shows how many sessions are displayed, such as <code>Showing 3 of 8 sessions</code>.</li>
+    <li>When no sessions match, the <code>#empty-message</code> is shown, and it is hidden otherwise.</li>
+</ul>
+
+<h3>Responsive Menu and Theme (Lesson 11)</h3>
+<ul>
+    <li>On small screens, the <strong>Menu</strong> button opens and closes the navigation, with <code>aria-expanded</code> kept up to date.</li>
+    <li>The menu closes when a link is chosen, when <kbd>Escape</kbd> is pressed, and when the layout changes to desktop. The CSS breakpoint is <code>700px</code>.</li>
+    <li>The theme button switches dark mode on and off, starting from the user's device setting, with <code>aria-pressed</code> kept up to date.</li>
+</ul>
+<br>
+
+<h2>Plan Before You Build</h2>
+<p>The key to this page is the state pattern from Lessons 6 and 9. The page has two pieces of state: the chosen <strong>level</strong>, and the <strong>search text</strong>. Store them in two <code>let</code> variables at the top of your script:</p>
+<pre><code class="language-javascript">let currentLevel = "all";
+let searchText = "";</code></pre>
+<p>Then plan your code as a few small functions, each with one job:</p>
+<ul>
+    <li><code>createSessionCard(session)</code> builds and <strong>returns</strong> one card from one session object.</li>
+    <li><code>getVisibleSessions()</code> uses <code>filter</code> to <strong>return</strong> a new array of only the sessions that match <strong>both</strong> the current level and the current search text.</li>
+    <li><code>render()</code> clears the list, creates a card for each visible session, and updates the count and the empty message.</li>
+</ul>
+<p>Every event listener then follows the same two steps: <strong>update the state</strong>, then <strong>call <code>render()</code></strong>. For example, the search box's listener updates <code>searchText</code> and calls <code>render()</code>, and a filter button's listener updates <code>currentLevel</code> and calls <code>render()</code>.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Inside <code>getVisibleSessions</code>, it is easier to work out the two conditions separately, as booleans, and then combine them with <code>&amp;&amp;</code>:
+<pre><code class="language-javascript">const matchesLevel = currentLevel === "all" || session.level === currentLevel;
+const matchesSearch = /* your search check here */;
+return matchesLevel &amp;&amp; matchesSearch;</code></pre>
+</div>
+<br>
+
+<h2>Build in Stages</h2>
+<p>Build one feature at a time, and check that it works before starting the next. Use <code>console.log</code> to check your values at each step: for example, log <code>getVisibleSessions()</code> to check it returns the sessions you expect, before you try to display them.</p>
+<ol>
+    <li><strong>One card:</strong> write <code>createSessionCard</code>, and test it by appending one card for <code>sessions[0]</code>.</li>
+    <li><strong>Every card:</strong> write <code>render</code>, displaying every session, with the count.</li>
+    <li><strong>Level filter:</strong> add <code>currentLevel</code>, <code>getVisibleSessions</code> with the level check only, and the filter button listeners.</li>
+    <li><strong>Search:</strong> add <code>searchText</code>, the search check and the search box listener.</li>
+    <li><strong>Empty state:</strong> show and hide the empty message.</li>
+    <li><strong>Menu and theme:</strong> add the code from Lesson 11, adapted for this page.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> If a feature stops working after a change, undo your last change and check that it works again, then make the change again in smaller steps. Small, tested steps are much faster in the end than writing everything at once.</div>
+<br>
+
+<h2>Debugging Challenge</h2>
+<p>Each of the snippets below is from a session browser that does not work properly. The problem is described, but not the cause. For each one, find the bug by reading the code carefully. You can check your answer by revealing it.</p>
+
+<h3>1. The Beginner filter shows nothing</h3>
+<p>Clicking <strong>All</strong> shows every session, but clicking <strong>Beginner</strong> shows none at all, even though there are three beginner sessions.</p>
+<pre><code class="language-javascript">const matchesLevel = currentLevel === "all" || session.level === "Beginner";</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p>The code compares the session's level with the string <code>"Beginner"</code>, with a capital B, but the levels in the data are all lowercase, such as <code>"beginner"</code>. Strings are case-sensitive, so no session ever matches. It also checks for beginner sessions whichever button was clicked. It should compare with the current state instead: <code>session.level === currentLevel</code>.</p>
+</details>
+
+<h3>2. The count never changes</h3>
+<p>The filters and search work, but the count always says <em>Showing 8 of 8 sessions</em>.</p>
+<pre><code class="language-javascript">const visibleSessions = getVisibleSessions();
+// ...
+countElement.textContent = `Showing ${sessions.length} of ${sessions.length} sessions`;</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p>The first number uses <code>sessions.length</code>, the length of the full array, which is always 8. It should use <code>visibleSessions.length</code>, the length of the filtered array.</p>
+</details>
+
+<h3>3. Cards multiply as you type</h3>
+<p>Every time a letter is typed in the search box, another full set of matching cards appears below the last one.</p>
+<pre><code class="language-javascript">function render() {
+    getVisibleSessions().forEach((session) =&gt; {
+        sessionList.append(createSessionCard(session));
+    });
+}</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p><code>render</code> adds new cards without removing the old ones first. It needs <code>sessionList.replaceChildren();</code> as its first line.</p>
+</details>
+
+<h3>4. Every title is blank</h3>
+<p>The cards appear, with the right speakers and times, but there is no title on any card.</p>
+<pre><code class="language-javascript">const title = document.createElement("h3");
+title.textContent = session.tittle;</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p>The property name is misspelt: <code>tittle</code> instead of <code>title</code>. Reading a property that does not exist gives <code>undefined</code>, and setting <code>textContent</code> to <code>undefined</code> leaves the heading empty.</p>
+</details>
+
+<h3>5. The search only works for exact capitals</h3>
+<p>Searching for <em>grid</em> finds the flexbox and grid session, but searching for <em>Grid</em>, with a capital G, finds nothing.</p>
+<pre><code class="language-javascript">const matchesSearch = session.title.toLowerCase().includes(searchText);
+// ...
+searchInput.addEventListener("input", () =&gt; {
+    searchText = searchInput.value.trim();
+    render();
+});</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p>The session's title is converted to lowercase, but the search text is not, so a search containing any capital letter can never match. The search text needs <code>.toLowerCase()</code> too: <code>searchText = searchInput.value.trim().toLowerCase();</code>.</p>
+</details>
+<br>
+
+<h2>Extension Challenges</h2>
+<p>If you finish early, try one or more of these:</p>
+<ul>
+    <li><strong>Saved sessions:</strong> add a <strong>Save</strong> button to each card. Using event delegation, store the IDs of saved sessions in an array, show a count of saved sessions, and change the button's text to <strong>Saved</strong> for sessions already saved.</li>
+    <li><strong>Search descriptions:</strong> make the search also look in each session's description.</li>
+    <li><strong>Sorting:</strong> add buttons to sort the sessions by time or by title. Look up the array <code>sort</code> method on MDN.</li>
+</ul>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your page is complete when:</p>
+<ul>
+    <li>All eight sessions are shown when the page loads, with the count <em>Showing 8 of 8 sessions</em>.</li>
+    <li>Each filter button shows only its level, and only the chosen button is highlighted.</li>
+    <li>Searching for <em>chen</em>, <em>CHEN</em> or <em> chen </em> (with spaces) finds Li Chen's sessions.</li>
+    <li>The filter and search work together, and the empty message appears when nothing matches.</li>
+    <li>Every button works with the keyboard, using <kbd>Tab</kbd> and <kbd>Enter</kbd>.</li>
+    <li>In a narrow pop-out preview, the menu opens and closes, including with <kbd>Escape</kbd>, and closes when the window is widened to the desktop layout.</li>
+    <li>The theme button switches between light and dark mode.</li>
+    <li>No card is built with <code>innerHTML</code>.</li>
+</ul>
+<p>Make sure you download your work using the <strong>Download</strong> button. You will use the same patterns in the next unit, with real data from the web.</p>
+<br>
+
+<h2>Unit Summary</h2>
+<p>In this unit, you have learned to:</p>
+<ul>
+    <li>Add JavaScript to a page, and use the console to check what your code is doing.</li>
+    <li>Store values in variables, and work with strings, numbers and booleans.</li>
+    <li>Make decisions with comparison operators and conditionals.</li>
+    <li>Write reusable functions that take parameters and return values.</li>
+    <li>Find and change elements on the page through the DOM.</li>
+    <li>Respond to clicks, typing and key presses with events.</li>
+    <li>Work with lists of data using arrays, loops and array methods.</li>
+    <li>Group related data into objects, and work with arrays of objects.</li>
+    <li>Build page content from data, safely, and update it when the data changes.</li>
+    <li>Build accessible accordions, tabs and live filters.</li>
+    <li>Make JavaScript work with responsive design and the user's own preferences.</li>
+</ul>

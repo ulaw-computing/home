@@ -1,0 +1,186 @@
+<h1>Tutorial</h1> <!--Lesson 6: Events-->
+<p>In the last lesson, your JavaScript changed the page as soon as it loaded. That is useful, but the real power of JavaScript is making the page respond to the <strong>user</strong>: something happens when they click a button, type in a box or press a key. These moments are called <strong>events</strong>, and in this lesson you will learn how to listen for them and respond.</p>
+<p>The starter code contains an ordering page for a coffee shop. By the end of the lesson, it will build an order as the user clicks and types. As before, keep the console open, and complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>What Is an Event?</h2>
+<p>An <strong>event</strong> is something that happens on the page, which the browser announces so that your code can respond. Some of the most common are:</p>
+<ul>
+    <li><code>click</code>: the user clicks an element, or presses <kbd>Enter</kbd> or <kbd>Space</kbd> on a focused button.</li>
+    <li><code>input</code>: the value of a text box, or other form field, changes.</li>
+    <li><code>change</code>: the user finishes changing a field, such as choosing an option from a dropdown.</li>
+    <li><code>keydown</code>: the user presses a key.</li>
+</ul>
+<p>Code that waits for events and responds to them is called <strong>event-driven</strong>. Instead of running once from top to bottom and finishing, the page sits waiting, and runs your functions whenever the user does something.</p>
+<br>
+
+<h2>Listening for Events</h2>
+<p>To respond to an event, you add an <strong>event listener</strong> to an element, with the <code>addEventListener</code> method. It takes two arguments: the <strong>type</strong> of event, as a string, and the <strong>function</strong> to call when it happens, called the <strong>event handler</strong>:</p>
+<pre><code class="language-javascript">const welcomeButton = document.querySelector("#welcome-button");
+
+function showWelcome() {
+    document.querySelector("#welcome-message").textContent = "Welcome to Kirkgate Coffee!";
+}
+
+welcomeButton.addEventListener("click", showWelcome);</code></pre>
+<p>This says: "when <code>welcomeButton</code> is clicked, call <code>showWelcome</code>". The handler is a callback, just like the function you passed to <code>setTimeout</code> in Lesson 4.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Pass the function <strong>without brackets</strong>: <code>addEventListener("click", showWelcome)</code>. With brackets, <code>showWelcome()</code> runs immediately, when the page loads, and the listener is given its result instead of the function, so nothing happens on click.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> Event types are always lowercase, with no "on" at the start: <code>"click"</code>, not <code>"onClick"</code>. In older code, you may see handlers written as HTML attributes, such as <code>&lt;button onclick="showWelcome()"&gt;</code>. This mixes JavaScript into the HTML, in the same way that inline styles mix CSS into it, so always use <code>addEventListener</code> instead.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, add the code from the example above. Click the <strong>Say hello</strong> button in the preview, and check that the welcome message appears.</li>
+    <li>Add brackets after <code>showWelcome</code> in the <code>addEventListener</code> call. Notice the message now appears straight away, without a click. Remove the brackets again.</li>
+</ol>
+<br>
+
+<h3>Arrow Functions as Handlers</h3>
+<p>When a handler is short and only used in one place, it is common to write it as an arrow function, directly inside <code>addEventListener</code>:</p>
+<pre><code class="language-javascript">welcomeButton.addEventListener("click", () =&gt; {
+    document.querySelector("#welcome-message").textContent = "Welcome to Kirkgate Coffee!";
+});</code></pre>
+<p>Both styles work in exactly the same way. A named function is better when the same handler is used by several elements, or when it is long enough to deserve its own name.</p>
+<br>
+
+<h2>Keeping Track of State</h2>
+<p>Most interactive pages need to remember things between events: how many items are in the basket, which tab is open, what the user has chosen. This information is called the page's <strong>state</strong>, and it is usually stored in <code>let</code> variables declared at the top of the script, outside any function, so that every handler can use and update them.</p>
+<p>A good pattern is to keep the state in variables, and write <strong>one function</strong> that updates the page to match the current state. Every handler then changes the state and calls that function:</p>
+<pre><code class="language-javascript">let itemCount = 0;
+
+function updateOrder() {
+    document.querySelector("#item-count").textContent = itemCount;
+}
+
+document.querySelector("#add-button").addEventListener("click", () =&gt; {
+    itemCount++;
+    updateOrder();
+});</code></pre>
+<p>This means the code that changes the page is written once, in one place, however many different buttons can change the order. You will use this pattern for the rest of the unit.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Declare a <code>let</code> called <code>itemCount</code>, set to <code>0</code>, and a function called <code>updateOrder</code> that displays it in the <code>#item-count</code> element, as in the example above.</li>
+    <li>Add a click listener to the <strong>Add a coffee</strong> button (<code>#add-button</code>) that adds 1 to <code>itemCount</code> and calls <code>updateOrder</code>. Click it several times.</li>
+    <li>Add a click listener to the <strong>Clear order</strong> button (<code>#clear-button</code>) that sets <code>itemCount</code> back to <code>0</code> and calls <code>updateOrder</code>.</li>
+</ol>
+<br>
+
+<h2>The Event Object</h2>
+<p>When the browser calls an event handler, it passes in an <strong>event object</strong> as the first argument, containing information about what happened. You can receive it by giving the handler a parameter, usually called <code>event</code>:</p>
+<pre><code class="language-javascript">button.addEventListener("click", (event) =&gt; {
+    console.log(event.target);   // the element that was clicked
+});</code></pre>
+<p>The most useful property is <code>event.target</code>: the element the event happened on. This lets one handler work for <strong>several</strong> elements, and find out which one was used.</p>
+
+<h3>Data Attributes</h3>
+<p>To store extra information on an element for JavaScript to use, HTML has <strong>data attributes</strong>: any attribute whose name starts with <code>data-</code>. JavaScript reads them through the element's <code>dataset</code> property, without the <code>data-</code> part:</p>
+<pre><code class="language-html">&lt;button type="button" class="drink-button" data-drink="Latte" data-price="3.20"&gt;Latte&lt;/button&gt;</code></pre>
+<pre><code class="language-javascript">console.log(button.dataset.drink);   // "Latte"
+console.log(button.dataset.price);   // "3.20", a string</code></pre>
+<p>Data attribute values are always strings, so remember to convert them with <code>Number()</code> before doing any maths with them.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The drinks menu has four buttons with the class <code>drink-button</code>, each with a <code>data-drink</code> and a <code>data-price</code>. Declare a <code>let</code> called <code>total</code>, set to <code>0</code>.</li>
+    <li>Write a function called <code>addDrink(event)</code> that adds <code>Number(event.target.dataset.price)</code> to <code>total</code>, adds 1 to <code>itemCount</code>, logs the name of the drink, and calls <code>updateOrder</code>.</li>
+    <li>Select all of the drink buttons with <code>querySelectorAll</code>, and use <code>forEach</code> to add <code>addDrink</code> as the click handler for each one.</li>
+    <li>Update <code>updateOrder</code> so it also displays the total in <code>#order-total</code>, formatted as a price with <code>£</code> and <code>.toFixed(2)</code>. Update your <strong>Clear order</strong> handler to reset <code>total</code> too.</li>
+</ol>
+<br>
+
+<h2>Responding to Typing</h2>
+<p>Form fields have a <code>value</code> property, which is whatever is currently in the field. The <code>input</code> event fires every time the value changes, so it is ideal for updating the page live, as the user types:</p>
+<pre><code class="language-javascript">const nameInput = document.querySelector("#customer-name");
+
+nameInput.addEventListener("input", () =&gt; {
+    console.log(nameInput.value);
+});</code></pre>
+<div class="tip-box"><strong>💡 Tip:</strong> Use <code>.trim()</code> from Lesson 2 on values the user has typed, to remove any accidental spaces at the start and end. Remember that <code>value</code> is always a string, even in a number field.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add an <code>input</code> listener to the <code>#customer-name</code> box that displays <code>Order for: [name]</code> in the <code>#order-name</code> element, using the trimmed value.</li>
+    <li>If the box is empty, display <code>Order for: (no name yet)</code> instead. Use what you learned about falsy values in Lesson 3: an empty string is falsy.</li>
+</ol>
+<br>
+
+<h3>The change Event</h3>
+<p>For dropdowns, checkboxes and radio buttons, the <code>change</code> event fires when the user makes a choice:</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add a <code>change</code> listener to the <code>#milk</code> dropdown that displays <code>Milk: [choice]</code> in <code>#order-milk</code>.</li>
+</ol>
+<br>
+
+<h2>Keyboard Events</h2>
+<p>The <code>keydown</code> event fires when a key is pressed. Its event object has a <code>key</code> property, containing the name of the key, such as <code>"a"</code>, <code>"Enter"</code>, <code>"Escape"</code> or <code>"ArrowUp"</code>:</p>
+<pre><code class="language-javascript">document.addEventListener("keydown", (event) =&gt; {
+    console.log(event.key);
+});</code></pre>
+<p>Adding the listener to <code>document</code> means it responds to key presses anywhere on the page.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Be careful with keyboard shortcuts that use single letters. A user typing their name in a text box presses letter keys too, and screen reader users rely on many single keys to navigate. Keys such as <kbd>Escape</kbd> are much safer choices.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add a <code>keydown</code> listener to the <code>document</code> that logs <code>event.key</code>. Click on the preview, then press a few keys and check the console.</li>
+    <li>Change it so that pressing <kbd>Escape</kbd> clears the order, in the same way as the <strong>Clear order</strong> button. Avoid repeating the code: move your clearing code into a function called <code>clearOrder</code>, and call it from both places.</li>
+</ol>
+<br>
+
+<h2>Accessible Interactive Elements</h2>
+<p>Anything the user can click to make something happen should be a real <code>&lt;button&gt;</code> element, not a <code>&lt;div&gt;</code> or <code>&lt;span&gt;</code> with a click listener. Buttons come with essential behaviour built in:</p>
+<ul>
+    <li>They can be reached with the <kbd>Tab</kbd> key, and show a focus outline.</li>
+    <li>They respond to <kbd>Enter</kbd> and <kbd>Space</kbd>, which fire the <code>click</code> event, so your click handler works for keyboard users too.</li>
+    <li>Screen readers announce them as buttons, so users know they can press them.</li>
+</ul>
+<p>A <code>&lt;div&gt;</code> has none of this. To make it work for everyone, you would have to add all of it yourself.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Remember from the HTML unit that a button inside a form submits the form by default. Give buttons that only run JavaScript <code>type="button"</code>, as every button on the starter page does.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> Some elements have their own default behaviour when an event happens: a link goes to its address when clicked, and a form is submitted. The event object's <code>event.preventDefault()</code> method stops this default behaviour, so that your JavaScript can handle the event instead. You will use this with forms in the next unit.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your order code should be similar to this:</p>
+<pre><code class="language-javascript">let itemCount = 0;
+let total = 0;
+
+function updateOrder() {
+    document.querySelector("#item-count").textContent = itemCount;
+    document.querySelector("#order-total").textContent = `£${total.toFixed(2)}`;
+}
+
+function addDrink(event) {
+    total += Number(event.target.dataset.price);
+    itemCount++;
+    console.log(`Added: ${event.target.dataset.drink}`);
+    updateOrder();
+}
+
+function clearOrder() {
+    itemCount = 0;
+    total = 0;
+    updateOrder();
+}
+
+document.querySelectorAll(".drink-button").forEach((button) =&gt; {
+    button.addEventListener("click", addDrink);
+});
+
+document.querySelector("#clear-button").addEventListener("click", clearOrder);
+
+document.addEventListener("keydown", (event) =&gt; {
+    if (event.key === "Escape") {
+        clearOrder();
+    }
+});</code></pre>
+<p>Also check that the order name updates as you type, the milk choice appears when you choose one, and every button works using the keyboard: press <kbd>Tab</kbd> to reach it and <kbd>Enter</kbd> to press it.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What two arguments does <code>addEventListener</code> need?</li>
+    <li>Why must the handler be passed without brackets?</li>
+    <li>What is <code>event.target</code>, and why is it useful?</li>
+    <li>What is the difference between the <code>input</code> and <code>change</code> events?</li>
+    <li>Why should interactive elements be real buttons rather than <code>&lt;div&gt;</code> elements?</li>
+</ul>
+<p>In the next lesson, you will learn how to store and work with lists of values.</p>

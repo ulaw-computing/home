@@ -1,0 +1,213 @@
+<h1>Tutorial</h1> <!--Lesson 11: JavaScript and Responsive Design-->
+<p>In the CSS unit, you built pages that adapt to any screen size, using fluid layouts and media queries. Some responsive patterns, though, need JavaScript as well. The most common is the mobile navigation menu: on a small screen there is no room for every link, so the links are hidden behind a button that opens and closes them. In this lesson you will build one, learn how JavaScript can respond to media queries, and use the user's own device settings, such as dark mode, to decide how the page behaves.</p>
+<p>The starter code contains a page for a coding club, with its CSS already written mobile-first. As in the CSS unit, you will test it in the <strong>pop-out preview</strong>, so open it now and keep it beside the editor. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>CSS for Layout, JavaScript for State</h2>
+<p>The most important principle in this lesson is a division of labour:</p>
+<ul>
+    <li><strong>CSS decides the layout</strong> at each screen size, using media queries, exactly as in the CSS unit. It decides whether the menu button is visible, and what an open or closed menu looks like.</li>
+    <li><strong>JavaScript only changes the state</strong>, usually by adding or removing a class, and updating the ARIA attributes to match.</li>
+</ul>
+<p>JavaScript should never be setting widths, positions or <code>display</code> values that a media query could handle. CSS is faster, works before any JavaScript has loaded, and keeps all of the layout in one place.</p>
+<p>Look at the starter CSS to see how this works for the menu:</p>
+<pre><code class="language-css">/* Small screens: the menu button shows, and the menu is closed */
+.site-nav {
+    display: none;
+}
+
+/* When JavaScript adds the open class, the menu shows */
+.site-nav.open {
+    display: block;
+}
+
+/* Large screens: no button, and the menu always shows */
+@media (min-width: 700px) {
+    .menu-button {
+        display: none;
+    }
+
+    .site-nav {
+        display: block;
+    }
+}</code></pre>
+<p>The JavaScript does not need to know about screen sizes at all. It only adds or removes the <code>open</code> class, and the CSS decides what that means at each size.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the pop-out preview, make the window narrow until the layout status reads <strong>mobile</strong>. The navigation links have disappeared, and a <strong>Menu</strong> button has appeared, which does nothing yet.</li>
+    <li>Make the window wide. The button disappears, and the links appear in a row.</li>
+</ol>
+<br>
+
+<h2>The Mobile Menu</h2>
+<p>The menu button in the starter HTML already has the attributes it needs:</p>
+<pre><code class="language-html">&lt;button type="button" class="menu-button" aria-expanded="false" aria-controls="site-nav"&gt;Menu&lt;/button&gt;
+&lt;nav class="site-nav" id="site-nav"&gt;...&lt;/nav&gt;</code></pre>
+<p>This is the same pattern as the accordion in the last lesson: <code>aria-controls</code> connects the button to the menu, and <code>aria-expanded</code> tells screen reader users whether it is open.</p>
+<p>The <code>classList.toggle()</code> method has a useful feature: it <strong>returns</strong> <code>true</code> if it has just added the class, and <code>false</code> if it has just removed it. That is exactly the value <code>aria-expanded</code> needs:</p>
+<pre><code class="language-javascript">const menuButton = document.querySelector(".menu-button");
+const siteNav = document.querySelector("#site-nav");
+
+menuButton.addEventListener("click", () =&gt; {
+    const isOpen = siteNav.classList.toggle("open");
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+});</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, add the menu code from the example above.</li>
+    <li>In a narrow pop-out preview, click the <strong>Menu</strong> button to open and close the menu.</li>
+    <li>Press <kbd>Tab</kbd> to reach the button, and press <kbd>Enter</kbd> to open the menu. Keep pressing <kbd>Tab</kbd>, and check that you can reach every link in the menu.</li>
+</ol>
+<br>
+
+<h3>Closing the Menu</h3>
+<p>Users expect a menu to close in a few situations, as well as when they click the button again:</p>
+<ul>
+    <li><strong>When they choose a link.</strong> On this page, the links jump to sections of the same page, so the menu would otherwise stay open on top of the content they wanted to see.</li>
+    <li><strong>When they press <kbd>Escape</kbd>.</strong> This is the standard way to close anything that has opened, and it is essential for keyboard users. Focus should then return to the menu button, so the user is not left somewhere unexpected on the page.</li>
+</ul>
+<p>Since the menu now needs to close from several places, it makes sense to write a <code>closeMenu</code> function:</p>
+<pre><code class="language-javascript">function closeMenu() {
+    siteNav.classList.remove("open");
+    menuButton.setAttribute("aria-expanded", "false");
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>closeMenu</code> function.</li>
+    <li>Add a click listener to <code>siteNav</code>, using event delegation from Lesson 9: if <code>event.target.closest("a")</code> finds a link, call <code>closeMenu()</code>. Open the menu and choose a link, and check that the menu closes.</li>
+    <li>Add a <code>keydown</code> listener to the <code>document</code>. If the key is <code>"Escape"</code> and the menu is open (<code>siteNav.classList.contains("open")</code>), call <code>closeMenu()</code>, then move focus back to the button with <code>menuButton.focus()</code>.</li>
+</ol>
+<br>
+
+<h2>Media Queries in JavaScript</h2>
+<p>Occasionally, JavaScript does need to know which layout is being used. <code>window.matchMedia()</code> takes a media query, written exactly as in CSS, and returns an object describing it. Its <code>matches</code> property is <code>true</code> if the query currently applies:</p>
+<pre><code class="language-javascript">const desktopQuery = window.matchMedia("(min-width: 700px)");
+
+console.log(desktopQuery.matches);   // true on a wide screen, false on a narrow one</code></pre>
+<p>The object also fires a <code>change</code> event whenever the query starts or stops applying, such as when the user resizes the window across the breakpoint:</p>
+<pre><code class="language-javascript">desktopQuery.addEventListener("change", () =&gt; {
+    console.log(`Desktop layout: ${desktopQuery.matches}`);
+});</code></pre>
+<p>A real use for this is the menu. If a user opens the mobile menu, then widens their window to the desktop layout, the menu's <code>open</code> class and <code>aria-expanded="true"</code> are left behind. If they later narrow the window again, the menu would appear already open. Closing the menu whenever the layout changes to desktop avoids this.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Use the same breakpoint in JavaScript as in your CSS. If the CSS switches layout at 700px but the JavaScript checks for 600px, the two disagree for every width in between.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Create the <code>desktopQuery</code> from the example above.</li>
+    <li>Write a function called <code>updateLayoutStatus</code> that displays <code>Layout: desktop</code> or <code>Layout: mobile</code> in the <code>#layout-status</code> element, using <code>desktopQuery.matches</code> and the ternary operator. Call it once when the page loads.</li>
+    <li>Add a <code>change</code> listener to <code>desktopQuery</code> that calls <code>updateLayoutStatus</code>, and also calls <code>closeMenu</code> if the layout is now desktop.</li>
+    <li>In a narrow pop-out preview, open the menu, then widen the window to the desktop layout, then narrow it again. The menu is closed, and the status updates each time the layout changes.</li>
+</ol>
+<br>
+
+<h3>Why Not Use the resize Event?</h3>
+<p>The window also has a <code>resize</code> event, which fires every time the window's size changes. You will see it in older code, but it is rarely the right choice:</p>
+<ul>
+    <li>It fires many times a second while the window is being resized, so code in it runs far more often than needed, which can make the page slow.</li>
+    <li>Most things people use it for, such as changing a layout at a certain width, are better done with a CSS media query.</li>
+    <li>When JavaScript does need to know about a breakpoint, <code>matchMedia</code> only fires its <code>change</code> event at the moment the breakpoint is crossed.</li>
+</ul>
+<br>
+
+<h2>Respecting User Preferences</h2>
+<p>Media queries can also test the settings the user has chosen on their own device. In CSS, these are written in a media query, and in JavaScript, they can be checked with <code>matchMedia</code> in exactly the same way.</p>
+
+<h3>Dark Mode</h3>
+<p>Many people set their device to a dark theme, which some find easier on the eyes, especially at night, and which can save battery on some screens. The <code>prefers-color-scheme</code> media feature tells you which they have chosen:</p>
+<pre><code class="language-javascript">const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;</code></pre>
+<p>A good theme toggle <strong>starts</strong> from the user's device setting, and then lets them change it for this page with a button. The starter CSS has a <code>dark</code> class for the <code>&lt;body&gt;</code>, which changes the page's colours.</p>
+<p>The theme button uses <code>aria-pressed</code>, which describes a <strong>toggle button</strong>: a button that stays on or off, like a light switch. Screen readers announce it as, for example, <em>"Dark mode, toggle button, pressed"</em>.</p>
+<pre><code class="language-javascript">const themeButton = document.querySelector("#theme-button");
+
+function setDarkMode(isDark) {
+    document.body.classList.toggle("dark", isDark);
+    themeButton.setAttribute("aria-pressed", String(isDark));
+}
+
+setDarkMode(prefersDark);   // start from the device setting</code></pre>
+<p>Here, <code>toggle</code> is given a second argument. Instead of flipping the class, <code>toggle("dark", isDark)</code> <strong>adds</strong> it if <code>isDark</code> is true, and <strong>removes</strong> it if it is false.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>prefersDark</code> check, the <code>setDarkMode</code> function and the call to it.</li>
+    <li>Add a click listener to <code>themeButton</code> that calls <code>setDarkMode</code> with the <strong>opposite</strong> of the current state: <code>!document.body.classList.contains("dark")</code>.</li>
+    <li>Click the button to switch between light and dark.</li>
+</ol>
+<div class="info-box"><strong>ℹ️ Info:</strong> If your device is set to a dark theme, the page starts in dark mode. You can usually change this in your operating system's display or appearance settings, to test both. The user's choice on this page is forgotten when the page reloads. Remembering it needs browser storage, which you will meet in a later unit.</div>
+<br>
+
+<h3>Reduced Motion</h3>
+<p>Animation and movement on a page, such as smooth scrolling or sliding panels, can make some people feel dizzy or unwell, particularly people with vestibular (inner ear) disorders. Most devices have a setting to reduce motion, and the <code>prefers-reduced-motion</code> media feature tells you whether the user has turned it on.</p>
+<p>The <strong>Back to top</strong> button at the bottom of the page scrolls back to the top. Smooth scrolling looks good, but it should only be used if the user has not asked for reduced motion:</p>
+<pre><code class="language-javascript">const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+document.querySelector("#back-to-top").addEventListener("click", () =&gt; {
+    window.scrollTo({
+        top: 0,
+        behavior: reduceMotion ? "auto" : "smooth"
+    });
+});</code></pre>
+<p><code>window.scrollTo()</code> scrolls the page to a position. Its <code>behavior</code> option is <code>"smooth"</code> for an animated scroll, or <code>"auto"</code> to jump straight there.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the reduced motion check and the <strong>Back to top</strong> listener. Scroll down the page and click the button.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> Whenever you add movement to a page, in CSS or JavaScript, check <code>prefers-reduced-motion</code> first. You will use it again with CSS animations in the next unit.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your menu and layout code should be similar to this:</p>
+<pre><code class="language-javascript">const menuButton = document.querySelector(".menu-button");
+const siteNav = document.querySelector("#site-nav");
+const desktopQuery = window.matchMedia("(min-width: 700px)");
+
+function closeMenu() {
+    siteNav.classList.remove("open");
+    menuButton.setAttribute("aria-expanded", "false");
+}
+
+function updateLayoutStatus() {
+    document.querySelector("#layout-status").textContent =
+        desktopQuery.matches ? "Layout: desktop" : "Layout: mobile";
+}
+
+menuButton.addEventListener("click", () =&gt; {
+    const isOpen = siteNav.classList.toggle("open");
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+});
+
+siteNav.addEventListener("click", (event) =&gt; {
+    if (event.target.closest("a")) {
+        closeMenu();
+    }
+});
+
+document.addEventListener("keydown", (event) =&gt; {
+    if (event.key === "Escape" &amp;&amp; siteNav.classList.contains("open")) {
+        closeMenu();
+        menuButton.focus();
+    }
+});
+
+desktopQuery.addEventListener("change", () =&gt; {
+    updateLayoutStatus();
+    if (desktopQuery.matches) {
+        closeMenu();
+    }
+});
+
+updateLayoutStatus();</code></pre>
+<p>Also check, in both a narrow and a wide pop-out preview, that the theme button switches between light and dark, and the <strong>Back to top</strong> button works.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>Which parts of a responsive menu are CSS's job, and which are JavaScript's?</li>
+    <li>What value does <code>classList.toggle()</code> return, and why is it useful here?</li>
+    <li>Why should focus return to the menu button when <kbd>Escape</kbd> closes the menu?</li>
+    <li>Why is <code>matchMedia</code> usually a better choice than the <code>resize</code> event?</li>
+    <li>What do <code>prefers-color-scheme</code> and <code>prefers-reduced-motion</code> tell you?</li>
+</ul>
+<p>In the final lesson, you will bring everything from this unit together to build an interactive page.</p>

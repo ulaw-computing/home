@@ -1,0 +1,198 @@
+<h1>Tutorial</h1> <!--Lesson 2: Variables and Data Types-->
+<p>Almost every program needs to remember things: a user's name, the number of items in a basket, whether a menu is open or closed. In this lesson you will learn how JavaScript stores values in <strong>variables</strong>, the main <strong>types</strong> of value it works with, and how to combine and change them.</p>
+<p>The starter code contains a profile card for a student, with empty spaces for their details. You will fill it in using JavaScript. Keep the console open as you work, and clear it whenever you want to check new output. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>What Is a Variable?</h2>
+<p>A <strong>variable</strong> is a named container for a value. Once a value is stored in a variable, you can use the name anywhere in your code to get the value back, and you can change the value later if you need to.</p>
+<pre><code class="language-javascript">let studentName = "Amira";
+console.log(studentName);   // Amira</code></pre>
+<p>This statement has three parts:</p>
+<ul>
+    <li><code>let</code> is a <strong>keyword</strong> that creates (or <strong>declares</strong>) a new variable.</li>
+    <li><code>studentName</code> is the variable's <strong>name</strong>.</li>
+    <li><code>= "Amira"</code> <strong>assigns</strong> a value to it. In JavaScript, a single <code>=</code> always means "store this value", not "is equal to".</li>
+</ul>
+<p>Notice that <code>studentName</code> has no quotes in <code>console.log(studentName)</code>. Without quotes, JavaScript looks up the variable and uses its value. With quotes, <code>console.log("studentName")</code> would display the word <em>studentName</em> itself.</p>
+<br>
+
+<h3>let and const</h3>
+<p>There are two keywords for declaring variables in modern JavaScript:</p>
+<ul>
+    <li><code>let</code> declares a variable whose value <strong>can be changed</strong> later.</li>
+    <li><code>const</code> (short for <strong>constant</strong>) declares a variable whose value <strong>cannot be replaced</strong> once it has been set.</li>
+</ul>
+<pre><code class="language-javascript">let score = 10;
+score = 15;            // allowed: score is now 15
+
+const course = "MSc Computing";
+// course = "MSc Law"; would not be allowed</code></pre>
+<p>When you change the value of a <code>let</code> variable, you do not write <code>let</code> again. <code>let</code> is only used once, when the variable is first created.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Use <code>const</code> by default, and only use <code>let</code> when you know the value will need to change. This makes your code easier to understand, because anyone reading it knows that a <code>const</code> will always hold the same value.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> You will often see a third keyword, <code>var</code>, in older code and online examples. It was the only way to declare variables before 2015, and it behaves in some surprising ways that <code>let</code> and <code>const</code> were designed to fix. Recognise it, but do not use it in your own code.</div>
+
+<h3>Naming Variables</h3>
+<p>Variable names must follow a few rules:</p>
+<ul>
+    <li>They can contain letters, digits, underscores (<code>_</code>) and dollar signs (<code>$</code>), but no spaces or hyphens.</li>
+    <li>They cannot start with a digit.</li>
+    <li>They are case-sensitive: <code>score</code> and <code>Score</code> are two different variables.</li>
+    <li>They cannot be one of JavaScript's own keywords, such as <code>let</code>, <code>const</code> or <code>if</code>.</li>
+</ul>
+<p>The standard convention in JavaScript is <strong>camelCase</strong>: the first word is lowercase, and each word after it starts with a capital letter, such as <code>studentName</code> or <code>totalPrice</code>. Choose names that describe what the value <em>is</em>: <code>totalPrice</code> is far clearer than <code>tp</code> or <code>x</code>.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Notice the difference from CSS, where class names use hyphens, such as <code>.total-price</code>. In JavaScript, a hyphen means subtraction, so <code>total-price</code> would mean "total minus price". Use camelCase in JavaScript and hyphens in CSS.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, declare a <code>const</code> called <code>studentName</code> that holds your name, in quotes.</li>
+    <li>Declare a <code>const</code> called <code>course</code> that holds <code>"MSc Computing"</code>.</li>
+    <li>Log both variables to the console.</li>
+    <li>Put your name onto the profile card with <code>document.querySelector("#student-name").textContent = studentName;</code>, and do the same for the course, using the ID <code>#student-course</code>.</li>
+</ol>
+<br>
+
+<h2>Data Types</h2>
+<p>Every value in JavaScript has a <strong>type</strong>, which decides what you can do with it. The five you will use most are:</p>
+<ul>
+    <li><strong>String:</strong> text, written in quotes, such as <code>"Leeds"</code>. Single quotes, double quotes and backticks all create strings.</li>
+    <li><strong>Number:</strong> any number, whole or decimal, such as <code>42</code> or <code>3.5</code>. Numbers are written without quotes.</li>
+    <li><strong>Boolean:</strong> either <code>true</code> or <code>false</code>, written without quotes. Booleans answer yes-or-no questions, such as whether a user is logged in.</li>
+    <li><strong>Undefined:</strong> the value of a variable that has been declared but not given a value yet.</li>
+    <li><strong>Null:</strong> a value that deliberately means "nothing" or "empty". You met this in Lesson 1, when <code>querySelector</code> could not find an element.</li>
+</ul>
+<p>The <code>typeof</code> operator tells you the type of any value:</p>
+<pre><code class="language-javascript">console.log(typeof "Leeds");   // string
+console.log(typeof 42);        // number
+console.log(typeof true);      // boolean
+
+let nickname;
+console.log(nickname);         // undefined</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> <code>"42"</code> and <code>42</code> are different values. The first is a string, made of the characters 4 and 2, and the second is a number. As you will see later in this lesson, mixing them up causes some surprising results.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Declare a <code>const</code> called <code>year</code> with the number <code>1</code>, and a <code>let</code> called <code>isEnrolled</code> with the value <code>true</code>.</li>
+    <li>Log the <code>typeof</code> each of your four variables, and check that you get <code>string</code>, <code>string</code>, <code>number</code> and <code>boolean</code>.</li>
+</ol>
+<br>
+
+<h2>Working With Strings</h2>
+<h3>Joining Strings</h3>
+<p>The <code>+</code> operator joins strings together. This is called <strong>concatenation</strong>:</p>
+<pre><code class="language-javascript">const firstName = "Amira";
+const greeting = "Hello, " + firstName + "!";
+console.log(greeting);   // Hello, Amira!</code></pre>
+<p>Notice the space inside <code>"Hello, "</code>. JavaScript joins strings exactly as they are, so without it, the result would be <em>Hello,Amira!</em>.</p>
+
+<h3>Template Literals</h3>
+<p>Joining several strings and variables with <code>+</code> quickly becomes hard to read. A <strong>template literal</strong> is a string written in <strong>backticks</strong> (<code>`</code>) instead of quotes. Inside it, any value in <code>${ }</code> is inserted into the string:</p>
+<pre><code class="language-javascript">const firstName = "Amira";
+const course = "MSc Computing";
+const intro = `Hello, I am ${firstName} and I study ${course}.`;
+console.log(intro);   // Hello, I am Amira and I study MSc Computing.</code></pre>
+<div class="tip-box"><strong>💡 Tip:</strong> The backtick key is usually at the top left of the keyboard, below <kbd>Esc</kbd>, on the same key as <code>¬</code> on a UK keyboard. A template literal must start and end with a backtick: a normal quote at either end will not work.</div>
+
+<h3>String Properties and Methods</h3>
+<p>Strings come with built-in tools. A <strong>property</strong> is a value that belongs to something, and a <strong>method</strong> is an action it can perform, which is always followed by brackets. Both are written after a dot:</p>
+<ul>
+    <li><code>.length</code> is the number of characters in the string, including spaces.</li>
+    <li><code>.toUpperCase()</code> and <code>.toLowerCase()</code> return a copy of the string in capitals or lowercase.</li>
+    <li><code>.trim()</code> returns a copy with any spaces removed from the start and end, which is useful for tidying text a user has typed.</li>
+    <li><code>.includes("text")</code> returns <code>true</code> if the string contains that text, and <code>false</code> if not.</li>
+</ul>
+<pre><code class="language-javascript">const city = "Leeds";
+console.log(city.length);            // 5
+console.log(city.toUpperCase());     // LEEDS
+console.log(city.includes("ee"));    // true</code></pre>
+<div class="info-box"><strong>ℹ️ Info:</strong> String methods never change the original string. <code>city.toUpperCase()</code> gives you a new, uppercase copy, and <code>city</code> is still <code>"Leeds"</code>. To keep the result, store it in a variable.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Using a template literal, create a <code>const</code> called <code>summary</code> containing: <code>I am [your name], a year [year] student on the [course] course.</code>, with your variables inserted.</li>
+    <li>Put <code>summary</code> onto the profile card, in the element with the ID <code>#student-summary</code>.</li>
+    <li>Change the code that displays your name, so that it displays <code>studentName.toUpperCase()</code> instead. Check the original variable is unchanged by logging it.</li>
+    <li>Log the number of characters in your <code>summary</code>.</li>
+</ol>
+<br>
+
+<h2>Working With Numbers</h2>
+<h3>Arithmetic</h3>
+<ul>
+    <li><code>+</code> addition, <code>-</code> subtraction, <code>*</code> multiplication and <code>/</code> division.</li>
+    <li><code>**</code> raises to a power: <code>2 ** 3</code> is 8.</li>
+    <li><code>%</code> gives the <strong>remainder</strong> after division: <code>10 % 3</code> is 1. This is useful for checking whether a number is even (<code>number % 2</code> is 0).</li>
+</ul>
+<p>JavaScript follows the same order of operations as maths, so multiplication and division happen before addition and subtraction. Use brackets to make the order clear: <code>(2 + 3) * 4</code> is 20, while <code>2 + 3 * 4</code> is 14.</p>
+
+<h3>Updating a Value</h3>
+<p>Changing a number based on its current value is so common that there are shorter ways to write it:</p>
+<pre><code class="language-javascript">let credits = 60;
+credits = credits + 20;   // credits is now 80
+credits += 20;            // the same thing, shorter: credits is now 100
+credits++;                // add 1: credits is now 101
+credits--;                // subtract 1: credits is now 100</code></pre>
+<p>These only work on <code>let</code> variables, since they replace the value.</p>
+
+<h3>Rounding</h3>
+<p>Decimals sometimes give long results, such as <code>10 / 3</code>, which is <code>3.3333333333333335</code>. Two common ways to tidy them are:</p>
+<ul>
+    <li><code>Math.round(number)</code> rounds to the nearest whole number.</li>
+    <li><code>number.toFixed(2)</code> rounds to 2 decimal places, which is ideal for prices. It returns a <strong>string</strong>, ready to display.</li>
+</ul>
+<div class="info-box"><strong>ℹ️ Info:</strong> Computers store decimals in binary, which cannot represent some decimal numbers exactly, in the same way that one third cannot be written exactly in decimal. This is why <code>0.1 + 0.2</code> gives <code>0.30000000000000004</code> in almost every programming language. Round results before displaying them.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Declare a <code>let</code> called <code>credits</code> with the value <code>60</code>. Add 120 more using <code>+=</code>, and log the result.</li>
+    <li>The starter HTML has an element with the ID <code>#student-credits</code>. Use a template literal to display <code>Credits: 180 of 180</code> in it, using your variable.</li>
+    <li>Calculate the percentage of the course completed as <code>credits / 180 * 100</code>, and log it. You should see <code>100</code>.</li>
+    <li>Now log the percentage for a student with 100 credits: <code>100 / 180 * 100</code>. The result has many decimal places. Log it again inside <code>Math.round()</code> to get <code>56</code>.</li>
+</ol>
+<br>
+
+<h2>Mixing Types</h2>
+<p>When an operator is given values of different types, JavaScript converts one of them automatically. This is called <strong>type coercion</strong>, and it is behind some of the most confusing results in JavaScript:</p>
+<pre><code class="language-javascript">console.log("5" + 5);    // "55": + joins strings, so the 5 becomes text
+console.log("5" * 2);    // 10:   * only works on numbers, so "5" becomes 5
+console.log("5" - 2);    // 3</code></pre>
+<p>The <code>+</code> operator is the problem: it means addition for numbers, but concatenation for strings, and if either value is a string, it joins them.</p>
+<p>To avoid surprises, convert values yourself before using them:</p>
+<ul>
+    <li><code>Number("5")</code> converts a string to a number. If the string is not a number, such as <code>Number("hello")</code>, the result is <code>NaN</code>, meaning <strong>Not a Number</strong>.</li>
+    <li><code>String(5)</code> converts a number to a string.</li>
+</ul>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Everything a user types into a web page, whether in a text box or any other form field, reaches JavaScript as a <strong>string</strong>, even if it looks like a number. If you add <code>"20"</code> typed by a user to the number <code>10</code>, you get <code>"2010"</code>, not 30. Always convert user input with <code>Number()</code> before doing maths with it. You will see this in practice in Lesson 6.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Log <code>"5" + 5</code>, <code>"5" * 2</code> and <code>Number("5") + 5</code>, and compare the results.</li>
+    <li>Declare <code>const extraCredits = "20";</code> (a string). Log <code>credits + extraCredits</code>, then fix it using <code>Number()</code> so that the result is a proper total.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your JavaScript should be similar to this, with your own details:</p>
+<pre><code class="language-javascript">const studentName = "Sam";
+const course = "MSc Computing";
+const year = 1;
+let isEnrolled = true;
+
+const summary = `I am ${studentName}, a year ${year} student on the ${course} course.`;
+
+let credits = 60;
+credits += 120;
+
+document.querySelector("#student-name").textContent = studentName.toUpperCase();
+document.querySelector("#student-course").textContent = course;
+document.querySelector("#student-summary").textContent = summary;
+document.querySelector("#student-credits").textContent = `Credits: ${credits} of 180`;</code></pre>
+<p>Check that every part of the profile card is filled in.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the difference between <code>let</code> and <code>const</code>, and which should you use by default?</li>
+    <li>Why does <code>console.log(studentName)</code> show a different result from <code>console.log("studentName")</code>?</li>
+    <li>Name the five data types in this lesson, with an example of each.</li>
+    <li>How do you insert a variable into a template literal?</li>
+    <li>Why does <code>"5" + 5</code> give <code>"55"</code>, and how do you fix it?</li>
+</ul>
+<p>In the next lesson, you will learn how to compare values and make decisions in your code.</p>

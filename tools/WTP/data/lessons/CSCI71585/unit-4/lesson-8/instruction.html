@@ -1,0 +1,168 @@
+<h1>Tutorial</h1> <!--Lesson 8: Objects-->
+<p>An array is ideal for a list of similar things, but many things in the real world have several different pieces of information that belong together. A workshop session has a title, a time, a level and a speaker. A product has a name, a price and a description. In this lesson you will learn how JavaScript groups related values into a single <strong>object</strong>, and how to work with <strong>arrays of objects</strong>, which is how almost all real data is organised, including the data you will fetch from the web in the next unit.</p>
+<p>The starter code contains a schedule page for the Beginners' Web Workshop. As before, keep the console open, and complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Why Objects?</h2>
+<p>Imagine storing the details of one workshop session in separate variables:</p>
+<pre><code class="language-javascript">const sessionTitle = "Your First HTML Page";
+const sessionTime = "10:30";
+const sessionLevel = "beginner";</code></pre>
+<p>This works for one session, but the variables are only connected by their names. With ten sessions, you would need thirty variables, and no easy way to keep each session's details together. An object solves this.</p>
+<br>
+
+<h2>Creating an Object</h2>
+<p>An <strong>object</strong> is a collection of <strong>properties</strong>. Each property has a <strong>name</strong> (also called a <strong>key</strong>) and a <strong>value</strong>. An object is written in curly braces, with each property as <code>name: value</code>, separated by commas:</p>
+<pre><code class="language-javascript">const session = {
+    title: "Your First HTML Page",
+    time: "10:30",
+    level: "beginner",
+    durationMinutes: 90,
+    isFull: false
+};</code></pre>
+<ul>
+    <li>Property names follow the same rules as variable names, and use camelCase.</li>
+    <li>Values can be of any type: strings, numbers, booleans, arrays and even other objects.</li>
+    <li>Each property ends with a comma, except the last one. A comma after the last property is allowed, but not needed.</li>
+</ul>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Do not confuse the curly braces of an object with the curly braces of a block, such as in an <code>if</code> statement or function. Inside an object, properties are separated by <strong>commas</strong>, not semicolons, and each one uses a <strong>colon</strong>, not an equals sign.</div>
+<br>
+
+<h2>Reading and Changing Properties</h2>
+<h3>Dot Notation</h3>
+<p>The usual way to get a property is <strong>dot notation</strong>: the object's name, a full stop, and the property's name:</p>
+<pre><code class="language-javascript">console.log(session.title);   // "Your First HTML Page"
+console.log(session.time);    // "10:30"</code></pre>
+<p>You have been using dot notation since Lesson 1. <code>console.log</code> is the <code>log</code> property of the built-in <code>console</code> object, and <code>topics.length</code> is the <code>length</code> property of an array.</p>
+<p>You can change a property, or add a new one, by assigning to it:</p>
+<pre><code class="language-javascript">session.isFull = true;          // changes an existing property
+session.room = "2.04";          // adds a new property</code></pre>
+<p>As with arrays, an object declared with <code>const</code> can still have its properties changed.</p>
+<p>If you read a property that does not exist, the result is <code>undefined</code>. This often means the property name has been misspelt: <code>session.tittle</code> gives <code>undefined</code>, with no other warning.</p>
+
+<h3>Bracket Notation</h3>
+<p>Properties can also be read with <strong>bracket notation</strong>, with the property name as a string:</p>
+<pre><code class="language-javascript">console.log(session["title"]);   // the same as session.title</code></pre>
+<p>Bracket notation is needed when the property name is stored in a <strong>variable</strong>, since dot notation would look for a property called, literally, the variable's name:</p>
+<pre><code class="language-javascript">const detail = "level";
+console.log(session[detail]);   // "beginner"
+console.log(session.detail);    // undefined: there is no property called "detail"</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, create the <code>session</code> object from the example above, and log it. Click the arrow beside it in the console to see all of its properties.</li>
+    <li>Display the session's title in the <code>#session-title</code> element, and <code>[time], [durationMinutes] minutes, [level] level</code> in <code>#session-details</code>, using a template literal and dot notation.</li>
+    <li>Add a <code>room</code> property with the value <code>"2.04"</code>, and add it to the details you display.</li>
+    <li>Log <code>session.tittle</code>, with the extra <em>t</em>, and notice the result.</li>
+</ol>
+<br>
+
+<h2>Objects Inside Objects</h2>
+<p>A property's value can be an array, or another object. This lets you represent more complex information:</p>
+<pre><code class="language-javascript">const session = {
+    title: "Your First HTML Page",
+    speaker: {
+        name: "Amara Kofi",
+        role: "Lead Developer"
+    },
+    topics: ["Elements", "Headings", "Links"]
+};
+
+console.log(session.speaker.name);   // "Amara Kofi"
+console.log(session.topics[0]);      // "Elements"
+console.log(session.topics.length);  // 3</code></pre>
+<p>Read <code>session.speaker.name</code> from left to right: in <code>session</code>, get <code>speaker</code>, and in that, get <code>name</code>.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>speaker</code> object and the <code>topics</code> array from the example above to your <code>session</code> object.</li>
+    <li>Display <code>[speaker name], [speaker role]</code> in the <code>#session-speaker</code> element.</li>
+    <li>Display the topics in <code>#session-topics</code>, joined with <code>", "</code>.</li>
+</ol>
+<br>
+
+<h2>Methods</h2>
+<p>A property's value can also be a <strong>function</strong>. A function stored in an object is called a <strong>method</strong>, and it describes something the object can do. Inside a method, the keyword <code>this</code> refers to the object the method belongs to:</p>
+<pre><code class="language-javascript">const session = {
+    title: "Your First HTML Page",
+    time: "10:30",
+    describe() {
+        return `${this.title} starts at ${this.time}.`;
+    }
+};
+
+console.log(session.describe());   // "Your First HTML Page starts at 10:30."</code></pre>
+<p>You have used many built-in methods already: <code>toUpperCase()</code> is a method of strings, <code>push()</code> is a method of arrays, and <code>querySelector()</code> is a method of the <code>document</code> object.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> <code>this</code> behaves differently inside arrow functions, so write methods using the short form above, <code>describe() { ... }</code>, rather than as arrow functions.</div>
+<br>
+
+<h2>Arrays of Objects</h2>
+<p>The real power of objects comes when you put several of them in an array. Each object describes one item, and the array holds the whole collection:</p>
+<pre><code class="language-javascript">const sessions = [
+    { id: 1, title: "How the Web Works", time: "10:00", level: "beginner" },
+    { id: 2, title: "Your First HTML Page", time: "10:30", level: "beginner" },
+    { id: 3, title: "Styling With CSS", time: "13:30", level: "intermediate" }
+];</code></pre>
+<p>Short objects can be written on one line, like these. To get a value, first choose the object by its index, then the property with dot notation: <code>sessions[1].title</code> is <code>"Your First HTML Page"</code>.</p>
+<p>Everything you learned about arrays in the last lesson works with arrays of objects. In each callback, the parameter is a whole object, so you use dot notation on it:</p>
+<pre><code class="language-javascript">// Loop through every session
+for (const session of sessions) {
+    console.log(`${session.time} ${session.title}`);
+}
+
+// Only the beginner sessions
+const beginnerSessions = sessions.filter((session) =&gt; session.level === "beginner");
+
+// Just the titles
+const titles = sessions.map((session) =&gt; session.title);
+
+// The session with a particular id
+const chosen = sessions.find((session) =&gt; session.id === 3);</code></pre>
+<div class="tip-box"><strong>💡 Tip:</strong> Giving each object a unique <code>id</code> property, as above, is a very common pattern. It gives you a reliable way to find one particular item, even if two items have the same title.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>The starter code already contains a <code>sessions</code> array, with six sessions. Log <code>sessions[0].title</code> and <code>sessions.length</code>.</li>
+    <li>Using a <code>for...of</code> loop, build a string of every session, in the form <code>10:00 – How the Web Works (beginner)</code>, with each on a new line using <code>\n</code>. Display it in the <code>#session-list</code> element.</li>
+    <li>Use <code>filter</code> to find the beginner sessions, and display <code>[number] sessions are suitable for beginners.</code> in <code>#beginner-count</code>.</li>
+    <li>Use <code>find</code> to find the session with an <code>id</code> of <code>4</code>, and display its title and speaker's name in <code>#featured-session</code>.</li>
+    <li>Add a seventh session to the end of the array with <code>push</code>, and check that every result on the page updates. Make sure you add it <strong>before</strong> the code that displays the results.</li>
+</ol>
+<br>
+
+<h2>Objects and JSON</h2>
+<p>In the next unit, you will fetch data from <strong>APIs</strong>: services on the web that send data to your page. Almost all of them send it in a format called <strong>JSON</strong> (JavaScript Object Notation), which is based on exactly the objects and arrays you have learned in this lesson:</p>
+<pre><code class="language-javascript">[
+    { "id": 1, "title": "How the Web Works", "time": "10:00", "level": "beginner" },
+    { "id": 2, "title": "Your First HTML Page", "time": "10:30", "level": "beginner" }
+]</code></pre>
+<p>JSON looks almost identical to a JavaScript array of objects. The main differences are that property names must be in <strong>double quotes</strong>, strings must use double quotes, and JSON cannot contain functions. Once JSON data has been loaded into your page, it becomes ordinary JavaScript arrays and objects, and you work with it using exactly the loops and methods you have used today.</p>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your session list code should be similar to this:</p>
+<pre><code class="language-javascript">let list = "";
+
+for (const session of sessions) {
+    list += `${session.time} – ${session.title} (${session.level})\n`;
+}
+
+document.querySelector("#session-list").textContent = list;
+
+const beginnerSessions = sessions.filter((session) =&gt; session.level === "beginner");
+document.querySelector("#beginner-count").textContent =
+    `${beginnerSessions.length} sessions are suitable for beginners.`;
+
+const featured = sessions.find((session) =&gt; session.id === 4);
+document.querySelector("#featured-session").textContent =
+    `${featured.title} with ${featured.speaker.name}`;</code></pre>
+<p>Also check that the single session at the top of the page shows its title, details, speaker and topics.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the difference between an array and an object, and when would you use each?</li>
+    <li>When must you use bracket notation instead of dot notation?</li>
+    <li>What do you get if you read a property that does not exist?</li>
+    <li>How would you get the speaker's name of the third session in the <code>sessions</code> array?</li>
+    <li>How is JSON similar to, and different from, a JavaScript array of objects?</li>
+</ul>
+<p>In the next lesson, you will use arrays of objects to build page content.</p>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Session Browser | Beginners' Web Workshop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">Beginners' Web Workshop</p>
+
+        <div class="header-buttons">
+            <button type="button" id="theme-button" aria-pressed="false">Dark mode</button>
+            <button type="button" class="menu-button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+        </div>
+
+        <nav class="site-nav" id="site-nav">
+            <ul>
+                <li><a href="#sessions">Sessions</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Session Browser</h1>
+        <p>Find the workshop sessions that are right for you. Filter by level, or search by title or speaker.</p>
+
+        <section class="controls" aria-label="Filter sessions">
+            <div class="filter-buttons">
+                <button type="button" class="filter-button" data-level="all" aria-pressed="true">All</button>
+                <button type="button" class="filter-button" data-level="beginner" aria-pressed="false">Beginner</button>
+                <button type="button" class="filter-button" data-level="intermediate" aria-pressed="false">Intermediate</button>
+                <button type="button" class="filter-button" data-level="advanced" aria-pressed="false">Advanced</button>
+            </div>
+
+            <div class="search">
+                <label for="session-search">Search sessions</label>
+                <input type="search" id="session-search">
+            </div>
+        </section>
+
+        <section id="sessions">
+            <h2>Sessions</h2>
+            <p class="session-count" id="session-count" aria-live="polite"></p>
+            <p class="empty-message" id="empty-message" hidden>No sessions match your search. Try a different level or search term.</p>
+            <div class="session-list" id="session-list"></div>
+        </section>
+
+        <section id="about">
+            <h2>About the Workshop</h2>
+            <p>The Beginners' Web Workshop is a friendly, hands-on day for anyone who wants to start building websites. No experience is needed.</p>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>Questions? Email <a href="mailto:hello@example.com">hello@example.com</a>.</p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

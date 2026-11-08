@@ -1,0 +1,177 @@
+<h1>Tutorial</h1> <!--Lesson 5: The DOM: Selecting and Changing Elements-->
+<p>Since Lesson 1, you have been using one line of code you were asked to copy: <code>document.querySelector("#output").textContent = ...</code>. In this lesson you will find out exactly how it works. You will learn how the browser represents a page so that JavaScript can work with it, how to find any element on the page, and how to change its text, its classes, its styles and its attributes. This is what makes JavaScript so useful on the web.</p>
+<p>The starter code contains a product page for a pair of headphones. As before, keep the console open, and complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>What Is the DOM?</h2>
+<p>When the browser loads an HTML page, it does not keep the HTML as text. It builds a model of the page in memory, called the <strong>Document Object Model</strong>, or <strong>DOM</strong>. In the DOM, every element is an <strong>object</strong>: a bundle of information and actions that JavaScript can read and change.</p>
+<p>The DOM is arranged as a <strong>tree</strong>, following the nesting of the HTML. You met these family-tree terms in the HTML unit and in CSS selectors:</p>
+<pre><code>document
+└── html
+    ├── head
+    │   └── title
+    └── body
+        ├── h1
+        └── main
+            ├── p
+            └── ul
+                ├── li
+                └── li</code></pre>
+<p>The key thing to understand is that the preview shows the <strong>DOM</strong>, not your HTML. When JavaScript changes the DOM, the page on screen updates immediately, but the HTML in the editor stays exactly as you wrote it.</p>
+<p>The whole page is available in JavaScript through a variable called <code>document</code>, which is the starting point for everything in this lesson.</p>
+<br>
+
+<h2>Selecting Elements</h2>
+<p>Before you can change an element, you need to find it. The most useful tool for this is <code>document.querySelector()</code>, which takes a <strong>CSS selector</strong>, as a string, and returns the <strong>first</strong> element on the page that matches it:</p>
+<pre><code class="language-javascript">document.querySelector("#product-name");     // the element with this ID
+document.querySelector(".price");            // the first element with this class
+document.querySelector("h1");                // the first h1
+document.querySelector(".features li");      // the first li inside .features</code></pre>
+<p>Every selector you learned in the CSS unit works here, including combinators and pseudo-classes.</p>
+<p>If nothing on the page matches, <code>querySelector</code> returns <code>null</code>, meaning "nothing". This is what happened in Lesson 1, when the script ran before the page had been built.</p>
+
+<h3>Storing Elements in Variables</h3>
+<p>If you need to use an element more than once, select it once and store it in a <code>const</code>. This keeps your code shorter, easier to read, and faster, since the browser does not have to search the page every time:</p>
+<pre><code class="language-javascript">const productName = document.querySelector("#product-name");
+
+console.log(productName);   // shows the element in the console</code></pre>
+<div class="tip-box"><strong>💡 Tip:</strong> When you log an element, the console shows it as HTML. Click the small arrow beside it to see the elements inside it.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, select the element with the ID <code>product-name</code>, store it in a <code>const</code> called <code>productName</code>, and log it.</li>
+    <li>Select the element with the class <code>price</code>, store it in a <code>const</code> called <code>price</code>, and log it.</li>
+</ol>
+<br>
+
+<h2>Changing Text</h2>
+<p>The <code>textContent</code> property is the text inside an element. You can <strong>read</strong> it, to find out what the element says, or <strong>assign</strong> to it, to replace the text completely:</p>
+<pre><code class="language-javascript">console.log(productName.textContent);       // reads the current text
+productName.textContent = "Studio Headphones Pro";   // replaces it</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Log the current <code>textContent</code> of <code>productName</code>.</li>
+    <li>Change it to <code>Studio Headphones Pro</code>, and check that the preview updates. Look at the HTML tab: the original name is still there, because JavaScript changed the DOM, not your HTML.</li>
+    <li>The headphones are in a sale. Change the text of <code>price</code> to <code>£79.99</code>.</li>
+</ol>
+<br>
+
+<h3>textContent and innerHTML</h3>
+<p>There is a second property, <code>innerHTML</code>, which reads and writes the HTML inside an element. The difference is in how the new value is treated:</p>
+<ul>
+    <li><code>textContent</code> treats the value as <strong>plain text</strong>. Any tags in it are displayed as text, exactly as typed.</li>
+    <li><code>innerHTML</code> treats the value as <strong>HTML</strong>. The browser reads any tags in it and creates real elements.</li>
+</ul>
+<pre><code class="language-javascript">const note = document.querySelector(".delivery-note");
+
+note.textContent = "Free delivery &lt;strong&gt;today&lt;/strong&gt;";   // shows the tags as text
+note.innerHTML = "Free delivery &lt;strong&gt;today&lt;/strong&gt;";     // shows today in bold</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Never put anything a user has typed, or any data from outside your own code, into <code>innerHTML</code>. Because <code>innerHTML</code> turns text into real HTML, someone could type HTML that runs their own JavaScript on your page, for example to steal other users' information. This attack is called <strong>cross-site scripting</strong> (XSS), and it is one of the most common security problems on the web. You will learn more about it in the next unit. <code>textContent</code> is always safe, because it never creates elements, so use it unless you specifically need HTML.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Select the <code>.delivery-note</code> paragraph, and set its <code>textContent</code> to the string from the example above. Notice the tags appear as text.</li>
+    <li>Change <code>textContent</code> to <code>innerHTML</code>. Now <em>today</em> is bold.</li>
+</ol>
+<br>
+
+<h2>Selecting Several Elements</h2>
+<p><code>querySelector</code> only ever returns the first match. To get <strong>every</strong> matching element, use <code>document.querySelectorAll()</code>:</p>
+<pre><code class="language-javascript">const features = document.querySelectorAll(".features li");
+console.log(features.length);   // the number of elements found</code></pre>
+<p><code>querySelectorAll</code> returns a <strong>list</strong> of elements, called a NodeList. You cannot change the whole list at once, so to change each element, you go through the list one item at a time with <code>forEach</code>:</p>
+<pre><code class="language-javascript">features.forEach((feature) =&gt; {
+    feature.classList.add("highlight");
+});</code></pre>
+<p><code>forEach</code> takes a callback, like <code>setTimeout</code> in the last lesson, and calls it once for every item in the list. Each time, the current item is passed in as the parameter, here called <code>feature</code>. You will learn about lists, and <code>forEach</code>, properly in Lesson 7.</p>
+<p>If nothing matches, <code>querySelectorAll</code> returns an empty list, with a length of 0.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Select all of the <code>.features li</code> elements, and log how many were found.</li>
+    <li>Use <code>forEach</code> to log the <code>textContent</code> of each one.</li>
+</ol>
+<br>
+
+<h2>Changing Classes</h2>
+<p>The best way to change how an element looks is to add or remove a <strong>class</strong>, and let the CSS decide what the class looks like. This keeps the presentation in your CSS, where it belongs. Every element has a <code>classList</code> with four useful methods:</p>
+<ul>
+    <li><code>classList.add("name")</code> adds a class.</li>
+    <li><code>classList.remove("name")</code> removes a class.</li>
+    <li><code>classList.toggle("name")</code> adds the class if the element does not have it, and removes it if it does.</li>
+    <li><code>classList.contains("name")</code> returns <code>true</code> if the element has the class, and <code>false</code> if not.</li>
+</ul>
+<pre><code class="language-javascript">price.classList.add("on-sale");</code></pre>
+<p>Notice there is no full stop before the class name. A full stop is only needed in a <strong>selector</strong>, such as in <code>querySelector(".price")</code>, to say "this is a class". <code>classList</code> already knows it is working with classes.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The starter CSS has an <code>.on-sale</code> class, which makes text red and bold. Add it to <code>price</code>.</li>
+    <li>Use your <code>forEach</code> loop to add the <code>highlight</code> class to every feature.</li>
+    <li>The page has a paragraph with the class <code>stock-warning</code>, which is hidden by the CSS class <code>hidden</code>. Remove the <code>hidden</code> class, to show it.</li>
+</ol>
+<br>
+
+<h2>Changing Styles Directly</h2>
+<p>Every element also has a <code>style</code> property, which sets inline styles on it:</p>
+<pre><code class="language-javascript">productName.style.color = "darkslateblue";
+productName.style.backgroundColor = "lightyellow";</code></pre>
+<p>CSS property names that contain a hyphen are written in camelCase in JavaScript, since a hyphen would mean subtraction: <code>background-color</code> becomes <code>backgroundColor</code>, and <code>font-size</code> becomes <code>fontSize</code>. The values are always strings, including units, such as <code>"20px"</code>.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Styles set with <code>style</code> are inline styles, which, as you learned in the CSS unit, beat almost every rule in your stylesheet and are hard to override. Prefer adding and removing classes. Use <code>style</code> only for values that genuinely have to be calculated by JavaScript, such as the position of something being dragged.</div>
+<br>
+
+<h2>Changing Attributes</h2>
+<p>JavaScript can read and change any HTML attribute:</p>
+<ul>
+    <li><code>getAttribute("name")</code> returns the attribute's value.</li>
+    <li><code>setAttribute("name", "value")</code> sets it, adding the attribute if it is not there.</li>
+    <li><code>removeAttribute("name")</code> removes it.</li>
+</ul>
+<p>Many common attributes can also be used directly as properties, which is shorter:</p>
+<pre><code class="language-javascript">const productImage = document.querySelector(".product-image");
+
+productImage.src = "https://placehold.co/400x300?text=Black";
+productImage.alt = "Studio Headphones Pro in black";</code></pre>
+<div class="tip-box"><strong>💡 Tip:</strong> Whenever you change an image's <code>src</code>, update its <code>alt</code> text too, so that it still describes the image that is now shown.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Select the <code>.product-image</code>, and change its <code>src</code> and <code>alt</code> to show the black version, as in the example above.</li>
+    <li>Select the <code>.buy-link</code>, and use <code>setAttribute</code> to change its <code>href</code> to <code>#basket</code>. Log <code>getAttribute("href")</code> to check it has changed.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your JavaScript should be similar to this:</p>
+<pre><code class="language-javascript">const productName = document.querySelector("#product-name");
+const price = document.querySelector(".price");
+const note = document.querySelector(".delivery-note");
+const features = document.querySelectorAll(".features li");
+const productImage = document.querySelector(".product-image");
+const buyLink = document.querySelector(".buy-link");
+
+productName.textContent = "Studio Headphones Pro";
+price.textContent = "£79.99";
+price.classList.add("on-sale");
+note.innerHTML = "Free delivery &lt;strong&gt;today&lt;/strong&gt;";
+
+features.forEach((feature) =&gt; {
+    feature.classList.add("highlight");
+});
+
+document.querySelector(".stock-warning").classList.remove("hidden");
+
+productImage.src = "https://placehold.co/400x300?text=Black";
+productImage.alt = "Studio Headphones Pro in black";
+buyLink.setAttribute("href", "#basket");</code></pre>
+<p>Also check that the price is red, every feature is highlighted, the stock warning is visible, and the black headphones image is shown.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the DOM, and why does the HTML in the editor not change when JavaScript changes the page?</li>
+    <li>What is the difference between <code>querySelector</code> and <code>querySelectorAll</code>?</li>
+    <li>Why is <code>textContent</code> safer than <code>innerHTML</code>?</li>
+    <li>Why is adding a class usually better than changing <code>style</code>?</li>
+    <li>Why do you not write a full stop before the class name in <code>classList.add()</code>?</li>
+</ul>
+<p>In the next lesson, you will make the page respond to the user, using events.</p>

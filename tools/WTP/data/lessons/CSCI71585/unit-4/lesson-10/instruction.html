@@ -1,0 +1,170 @@
+<h1>Tutorial</h1> <!--Lesson 10: Interactive Components-->
+<p>Some interactive patterns appear on website after website: sections of a page that open and close, tabs that switch between panels of content, and search boxes that filter a list as you type. In this lesson you will build all three, using the skills from the last four lessons. Just as importantly, you will make sure each one works for keyboard and screen reader users, which is where many real-world components fall short.</p>
+<p>The starter code contains a help page for students, with frequently asked questions, information about each campus and a glossary of terms. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>The Principles</h2>
+<p>Every component in this lesson follows the same three principles:</p>
+<ul>
+    <li><strong>Keep the state in JavaScript.</strong> Store what is open, selected or typed in variables or on the elements themselves, and update the page from it, as you did in Lessons 6 and 9.</li>
+    <li><strong>Let CSS handle the look.</strong> JavaScript adds and removes classes and attributes, and the stylesheet decides what they look like.</li>
+    <li><strong>Tell assistive technology what is happening.</strong> A sighted user can see that a section has opened. A screen reader user needs to be told, using HTML attributes designed for exactly this.</li>
+</ul>
+<br>
+
+<h3>ARIA Attributes</h3>
+<p><strong>ARIA</strong> (Accessible Rich Internet Applications) is a set of HTML attributes that describe the state of interactive components to assistive technology. You met one in the CSS unit, <code>aria-current</code>, on the current page's navigation link. This lesson uses two more:</p>
+<ul>
+    <li><code>aria-expanded</code> is set on a button that opens and closes something. Its value is <code>"true"</code> when the content is open, and <code>"false"</code> when it is closed. Screen readers announce it, for example as <em>"Delivery times, button, collapsed"</em>.</li>
+    <li><code>aria-controls</code> gives the ID of the element that the button opens and closes, connecting the two.</li>
+</ul>
+<div class="warning-box"><strong>⚠️ Warning:</strong> ARIA only describes the state: it does not change it. If you set <code>aria-expanded="true"</code> but do not actually show the content, the screen reader gives users wrong information, which is worse than giving none. Whenever your JavaScript changes what is shown, it must update the ARIA attributes at the same time.</div>
+<br>
+
+<h3>Showing and Hiding: the hidden Attribute</h3>
+<p>The HTML <code>hidden</code> attribute hides an element completely, just like <code>display: none</code>. It is a Boolean attribute, and JavaScript can turn it on and off with the element's <code>hidden</code> property:</p>
+<pre><code class="language-javascript">panel.hidden = true;    // hide it
+panel.hidden = false;   // show it</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> The <code>hidden</code> attribute works through one of the browser's default styles, which sets <code>display: none</code>. Any CSS rule of your own that sets <code>display</code> on the same element, such as <code>display: flex</code>, overrides it and the element stays visible. If <code>hidden</code> does not seem to work, check the element's <code>display</code> in your CSS.</div>
+<br>
+
+<h2>Accordions</h2>
+<p>An <strong>accordion</strong> is a list of headings, each of which opens and closes a section of content below it. Accordions are often used for frequently asked questions, since they let users scan the questions and open only the ones they need.</p>
+<p>Each question in the starter HTML is built like this:</p>
+<pre><code class="language-html">&lt;h3&gt;
+    &lt;button type="button" class="accordion-button" aria-expanded="false" aria-controls="answer-1"&gt;
+        When does term start?
+    &lt;/button&gt;
+&lt;/h3&gt;
+&lt;div class="accordion-panel" id="answer-1" hidden&gt;
+    &lt;p&gt;Term starts on Monday 21 September.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+<ul>
+    <li>The question is a real <code>&lt;button&gt;</code>, so it can be reached with <kbd>Tab</kbd> and pressed with <kbd>Enter</kbd> or <kbd>Space</kbd>.</li>
+    <li>The button is inside a heading, so screen reader users can still jump between the questions using headings.</li>
+    <li><code>aria-controls</code> connects the button to its answer, and each answer starts <code>hidden</code>.</li>
+</ul>
+<p>To open or close one answer, the JavaScript needs to do three things when its button is clicked: work out whether it is currently open, find its panel, and flip both the panel and the ARIA attribute:</p>
+<pre><code class="language-javascript">function toggleAccordion(button) {
+    const isOpen = button.getAttribute("aria-expanded") === "true";
+    const panel = document.querySelector(`#${button.getAttribute("aria-controls")}`);
+
+    button.setAttribute("aria-expanded", String(!isOpen));
+    panel.hidden = isOpen;
+}</code></pre>
+<ul>
+    <li>ARIA attribute values are always the <strong>strings</strong> <code>"true"</code> and <code>"false"</code>, not booleans, so the code compares with the string <code>"true"</code>, and converts back with <code>String()</code>.</li>
+    <li>The panel's ID is read from <code>aria-controls</code>, and a <code>#</code> is added in front to make a selector.</li>
+    <li>If the section was open, the panel is now hidden, and if it was closed, the panel is now shown, so <code>panel.hidden</code> is simply set to <code>isOpen</code>.</li>
+</ul>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, add the <code>toggleAccordion</code> function from the example above.</li>
+    <li>Select every <code>.accordion-button</code> with <code>querySelectorAll</code>, and use <code>forEach</code> to add a click listener to each one that calls <code>toggleAccordion(button)</code>.</li>
+    <li>Open and close each question in the preview. The starter CSS rotates the arrow on each button whenever its <code>aria-expanded</code> is <code>"true"</code>, so the visual style always matches the ARIA state.</li>
+    <li>Press <kbd>Tab</kbd> to reach a question, then press <kbd>Enter</kbd> to open it, to check that the accordion works with a keyboard.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> Styling with an attribute selector, such as <code>.accordion-button[aria-expanded="true"]</code>, rather than a separate class, means the visual state and the accessible state can never disagree: if one is right, the other is too.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> HTML also has a built-in accordion: the <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> elements, which open and close with no JavaScript at all. For a simple list of questions, it is often the best choice. Building one yourself, as here, teaches the pattern that many other components use, and gives you full control over how it behaves.</div>
+<br>
+
+<h2>Tabs</h2>
+<p><strong>Tabs</strong> show one panel of content at a time, with a row of buttons to switch between them. Unlike an accordion, exactly one panel is always open.</p>
+<p>Tabs use a few more ARIA attributes, which are already written in the starter HTML:</p>
+<ul>
+    <li><code>role="tablist"</code> on the element containing the buttons, <code>role="tab"</code> on each button, and <code>role="tabpanel"</code> on each panel. A <code>role</code> tells assistive technology what kind of component an element is part of.</li>
+    <li><code>aria-selected</code> on each tab: <code>"true"</code> for the current tab, and <code>"false"</code> for the others.</li>
+    <li><code>aria-controls</code> on each tab, giving the ID of its panel.</li>
+</ul>
+<p>Tabs are a good example of keeping the state in one variable, and updating everything from it:</p>
+<pre><code class="language-javascript">const tabs = document.querySelectorAll('[role="tab"]');
+
+function selectTab(selectedTab) {
+    tabs.forEach((tab) =&gt; {
+        const isSelected = tab === selectedTab;
+        const panel = document.querySelector(`#${tab.getAttribute("aria-controls")}`);
+
+        tab.setAttribute("aria-selected", String(isSelected));
+        panel.hidden = !isSelected;
+    });
+}</code></pre>
+<p>Rather than working out which tab to close, this goes through <strong>every</strong> tab, and sets each one to selected or not, depending on whether it is the one that was clicked. This is simpler and more reliable: however the tabs were set before, they always end up correct.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>selectTab</code> function from the example above, and a click listener on each tab that calls <code>selectTab(tab)</code>.</li>
+    <li>Click each campus tab, and check that exactly one panel is shown at a time, and the selected tab is highlighted.</li>
+</ol>
+<div class="info-box"><strong>ℹ️ Info:</strong> The full accessible pattern for tabs also lets users move between tabs with the left and right arrow keys. You can add this with a <code>keydown</code> listener, as an extension: when <code>event.key</code> is <code>"ArrowRight"</code>, select the next tab and move focus to it with <code>.focus()</code>.</div>
+<br>
+
+<h2>Live Filtering</h2>
+<p>A search box that filters a list <strong>as the user types</strong> makes long lists far easier to use. It combines the <code>input</code> event from Lesson 6 with the string methods from Lesson 2:</p>
+<ol>
+    <li>Each time the search text changes, read it.</li>
+    <li>For every item in the list, check whether its text includes the search text.</li>
+    <li>Show the items that match, and hide the rest.</li>
+</ol>
+<p>To make the search ignore capital letters, convert <strong>both</strong> the search text and each item's text to lowercase before comparing them, so that <em>html</em>, <em>HTML</em> and <em>Html</em> all match:</p>
+<pre><code class="language-javascript">const searchInput = document.querySelector("#glossary-search");
+const terms = document.querySelectorAll(".glossary li");
+
+searchInput.addEventListener("input", () =&gt; {
+    const searchText = searchInput.value.trim().toLowerCase();
+
+    terms.forEach((term) =&gt; {
+        const matches = term.textContent.toLowerCase().includes(searchText);
+        term.hidden = !matches;
+    });
+});</code></pre>
+<p>Every string includes the empty string, so when the search box is empty, every item matches and the full list is shown.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the live filter from the example above, and type into the glossary search box in the preview.</li>
+    <li>Inside the listener, count the matching terms. Declare <code>let count = 0;</code> before the <code>forEach</code>, and add 1 to it whenever a term matches.</li>
+    <li>After the <code>forEach</code>, display <code>Showing [count] of [total] terms</code> in the <code>#glossary-count</code> element, using <code>terms.length</code> for the total.</li>
+    <li>When the count is 0, show the hidden <code>#no-results</code> message, by setting its <code>hidden</code> property to <code>false</code>. Hide it again otherwise.</li>
+</ol>
+<br>
+
+<h3>Announcing Changes</h3>
+<p>When the list changes as the user types, a sighted user can see the results changing. A screen reader user cannot. The <code>aria-live</code> attribute fixes this: when the text inside an element with <code>aria-live="polite"</code> changes, screen readers announce the new text as soon as the user pauses, without moving their focus away from the search box.</p>
+<p>The <code>#glossary-count</code> element in the starter HTML already has <code>aria-live="polite"</code>, so every time your code updates the count, a screen reader user hears <em>"Showing 3 of 12 terms"</em>.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Use <code>aria-live</code> sparingly, only for short messages that the user needs to know about, such as a count of results or a confirmation. Announcing every small change quickly becomes overwhelming.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your filter should be similar to this:</p>
+<pre><code class="language-javascript">searchInput.addEventListener("input", () =&gt; {
+    const searchText = searchInput.value.trim().toLowerCase();
+    let count = 0;
+
+    terms.forEach((term) =&gt; {
+        const matches = term.textContent.toLowerCase().includes(searchText);
+        term.hidden = !matches;
+
+        if (matches) {
+            count++;
+        }
+    });
+
+    document.querySelector("#glossary-count").textContent = `Showing ${count} of ${terms.length} terms`;
+    document.querySelector("#no-results").hidden = count !== 0;
+});</code></pre>
+<p>Also check that:</p>
+<ul>
+    <li>Each question opens and closes, and its arrow rotates, using both the mouse and the keyboard.</li>
+    <li>Exactly one campus panel is shown at a time.</li>
+    <li>The glossary search ignores capital letters, and shows the no-results message when nothing matches.</li>
+</ul>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What does <code>aria-expanded</code> tell a screen reader user, and why must it be updated whenever a section opens or closes?</li>
+    <li>Why are ARIA values compared with the string <code>"true"</code> rather than the boolean <code>true</code>?</li>
+    <li>Why does <code>selectTab</code> update every tab, rather than only the one that was clicked?</li>
+    <li>Why must both the search text and the item text be converted to lowercase?</li>
+    <li>What does <code>aria-live="polite"</code> do?</li>
+</ul>
+<p>In the next lesson, you will learn how JavaScript works with responsive design.</p>

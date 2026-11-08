@@ -1,0 +1,182 @@
+<h1>Tutorial</h1> <!--Lesson 3: Operators and Conditionals-->
+<p>So far, your code has run every statement in order, from top to bottom. Real programs need to make <strong>decisions</strong>: show a warning only if a password is too short, charge a lower price only if the user is a student, open a menu only if it is closed. In this lesson you will learn how to compare values, and how to use the result to choose which code runs.</p>
+<p>The starter code contains a page for a cinema's ticket prices, and a results checker for a university module. As before, keep the console open, and complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Comparison Operators</h2>
+<p>A <strong>comparison operator</strong> compares two values and gives a boolean result: <code>true</code> or <code>false</code>.</p>
+<ul>
+    <li><code>===</code> equal to</li>
+    <li><code>!==</code> not equal to</li>
+    <li><code>&gt;</code> greater than, and <code>&lt;</code> less than</li>
+    <li><code>&gt;=</code> greater than or equal to, and <code>&lt;=</code> less than or equal to</li>
+</ul>
+<pre><code class="language-javascript">const age = 20;
+console.log(age &gt;= 18);         // true
+console.log(age === 16);        // false
+console.log("Leeds" === "leeds");   // false: strings are case-sensitive</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Do not confuse <code>=</code> and <code>===</code>. A single <code>=</code> <strong>assigns</strong> a value, as you learned in the last lesson. Three equals signs, <code>===</code>, <strong>compares</strong> two values. Writing <code>=</code> where you meant <code>===</code> is one of the most common mistakes in JavaScript.</div>
+
+<h3>Why Three Equals Signs?</h3>
+<p>JavaScript also has <code>==</code> and <code>!=</code>, with two equals signs. These convert the values to the same type before comparing them, using the type coercion you met in the last lesson. This leads to some confusing results:</p>
+<pre><code class="language-javascript">console.log(5 == "5");    // true: "5" is converted to 5 first
+console.log(5 === "5");   // false: a number is not a string
+console.log(0 == "");     // true
+console.log(0 === "");    // false</code></pre>
+<p><code>===</code> and <code>!==</code> are called <strong>strict</strong> equality: they only say two values are equal if they have the same type <em>and</em> the same value.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Always use <code>===</code> and <code>!==</code>. If you need to compare values of different types, such as a number typed by the user, convert them yourself first with <code>Number()</code>, so that the comparison does exactly what you expect.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, the starter code declares a <code>const</code> called <code>age</code>. Log the result of comparing <code>age</code> with <code>18</code> using <code>&gt;=</code>.</li>
+    <li>Log <code>5 == "5"</code> and <code>5 === "5"</code>, and compare the results.</li>
+</ol>
+<br>
+
+<h2>Logical Operators</h2>
+<p><strong>Logical operators</strong> combine or reverse booleans:</p>
+<ul>
+    <li><code>&amp;&amp;</code> (<strong>and</strong>) is <code>true</code> only if <strong>both</strong> sides are true.</li>
+    <li><code>||</code> (<strong>or</strong>) is <code>true</code> if <strong>at least one</strong> side is true.</li>
+    <li><code>!</code> (<strong>not</strong>) reverses a boolean: <code>!true</code> is <code>false</code>.</li>
+</ul>
+<pre><code class="language-javascript">const age = 20;
+const isStudent = true;
+
+console.log(age &gt;= 18 &amp;&amp; isStudent);   // true: both are true
+console.log(age &lt; 16 || isStudent);     // true: one is true
+console.log(!isStudent);                // false</code></pre>
+<div class="info-box"><strong>ℹ️ Info:</strong> The <code>|</code> character is usually on the key to the left of <kbd>Z</kbd> on a UK keyboard, typed with <kbd>Shift</kbd>.</div>
+<br>
+
+<h2>if Statements</h2>
+<p>An <strong>if statement</strong> runs a block of code only if a condition is true:</p>
+<pre><code class="language-javascript">if (age &gt;= 18) {
+    console.log("You can watch this film.");
+}</code></pre>
+<ul>
+    <li>The <strong>condition</strong> goes in round brackets after <code>if</code>.</li>
+    <li>The code to run goes in curly braces <code>{ }</code>. This is called a <strong>block</strong>.</li>
+    <li>The code in the block is indented, so it is easy to see that it belongs to the <code>if</code>.</li>
+    <li>There is no semicolon after the closing brace.</li>
+</ul>
+
+<h3>else</h3>
+<p>An <code>else</code> block runs when the condition is <strong>false</strong>. Exactly one of the two blocks always runs:</p>
+<pre><code class="language-javascript">if (age &gt;= 18) {
+    console.log("You can watch this film.");
+} else {
+    console.log("Sorry, this film is for adults only.");
+}</code></pre>
+
+<h3>else if</h3>
+<p>To choose between more than two options, add <code>else if</code> blocks. JavaScript checks each condition in order, runs the block for the <strong>first</strong> one that is true, and skips the rest. If none are true, the final <code>else</code> runs:</p>
+<pre><code class="language-javascript">let price;
+
+if (age &lt; 16) {
+    price = 6;
+} else if (age &gt;= 65) {
+    price = 7;
+} else {
+    price = 10;
+}</code></pre>
+<p>Notice that <code>price</code> is declared before the <code>if</code> statement with <code>let</code>, and given a value inside it. If it were declared inside one of the blocks, it would only exist inside that block. You will learn more about this in the next lesson.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> The order of <code>else if</code> conditions matters. Once one condition is true, the rest are skipped completely, even if they would also be true. Put the most specific conditions first.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Using the <code>age</code> variable, write an <code>if</code>, <code>else if</code> and <code>else</code> statement that sets a <code>let</code> variable called <code>price</code>: <code>6</code> for under 16s, <code>7</code> for people aged 65 or over, and <code>10</code> for everyone else.</li>
+    <li>Display the price on the page in the element with the ID <code>#ticket-price</code>, using a template literal: <code>Your ticket costs £10.</code></li>
+    <li>Change <code>age</code> to <code>12</code>, then <code>70</code>, and check that the price changes each time.</li>
+    <li>The starter code also declares <code>isStudent</code>. Add another <code>else if</code> so that students pay <code>8</code>, unless a cheaper price already applies. Think about where in the chain it needs to go.</li>
+</ol>
+<br>
+
+<h3>Combining Conditions</h3>
+<p>The cinema has a special offer: on Tuesdays, every ticket is half price. You can test this with a second, separate <code>if</code> statement after the first one:</p>
+<pre><code class="language-javascript">if (day === "Tuesday") {
+    price = price / 2;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>After your price chain, add the Tuesday offer, using the <code>day</code> variable from the starter code. Check that the displayed price halves when <code>day</code> is <code>"Tuesday"</code>.</li>
+    <li>The cinema only runs late showings for adults. Using <code>&amp;&amp;</code>, write an <code>if</code> statement that displays <code>Late showings are available.</code> in the <code>#late-showing</code> element if <code>age</code> is 18 or over <strong>and</strong> <code>time</code> is <code>"evening"</code>, and <code>Late showings are not available.</code> otherwise.</li>
+</ol>
+<br>
+
+<h2>The Ternary Operator</h2>
+<p>When an <code>if</code> and <code>else</code> only choose between two values, the <strong>ternary operator</strong> does the same job in one line:</p>
+<pre><code class="language-javascript">// condition ? value if true : value if false
+const message = age &gt;= 18 ? "Adult ticket" : "Child ticket";</code></pre>
+<p>Read it as a question: "Is the age 18 or over? If so, use <em>Adult ticket</em>; otherwise, use <em>Child ticket</em>."</p>
+<div class="tip-box"><strong>💡 Tip:</strong> The ternary operator is ideal for choosing between two short values. For anything longer, or with more than two options, a normal <code>if</code> statement is much easier to read.</div>
+<br>
+
+<h2>Truthy and Falsy Values</h2>
+<p>A condition does not have to be a boolean. JavaScript can treat <strong>any</strong> value as true or false. Six values are <strong>falsy</strong>, meaning they count as false in a condition:</p>
+<ul>
+    <li><code>false</code></li>
+    <li><code>0</code></li>
+    <li><code>""</code> (an empty string)</li>
+    <li><code>null</code></li>
+    <li><code>undefined</code></li>
+    <li><code>NaN</code></li>
+</ul>
+<p>Every other value is <strong>truthy</strong>, including any non-empty string and any number other than zero. This gives a short way to check whether something has a value:</p>
+<pre><code class="language-javascript">const nickname = "";
+
+if (nickname) {
+    console.log(`Welcome back, ${nickname}!`);
+} else {
+    console.log("Welcome back!");
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Be careful when <code>0</code> is a valid value. If a user's score is <code>0</code>, then <code>if (score)</code> treats it as false, as if there were no score at all. In that case, compare it directly instead: <code>if (score !== undefined)</code>.</div>
+<br>
+
+<h2>Putting It Together: A Results Checker</h2>
+<p>On most MSc courses in the UK, a module mark is classified like this:</p>
+<ul>
+    <li>70 or above: <strong>Distinction</strong></li>
+    <li>60 to 69: <strong>Merit</strong></li>
+    <li>50 to 59: <strong>Pass</strong></li>
+    <li>Below 50: <strong>Fail</strong></li>
+</ul>
+
+<h3>Try It</h3>
+<ol>
+    <li>The starter code declares a <code>const</code> called <code>mark</code>. Write an <code>if</code> and <code>else if</code> chain that sets a <code>let</code> variable called <code>result</code> to the correct classification.</li>
+    <li>Display it in the <code>#module-result</code> element, as <code>A mark of 65 is a Merit.</code></li>
+    <li>Test your chain with the marks <code>70</code>, <code>69</code>, <code>50</code>, <code>49</code> and <code>0</code>. Testing the values on either side of each boundary, like this, is the best way to check conditions are correct.</li>
+    <li>Using the ternary operator, create a <code>const</code> called <code>passed</code> that is <code>"Yes"</code> if the mark is 50 or over and <code>"No"</code> otherwise, and display it in <code>#module-passed</code>.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your results checker should be similar to this:</p>
+<pre><code class="language-javascript">let result;
+
+if (mark &gt;= 70) {
+    result = "Distinction";
+} else if (mark &gt;= 60) {
+    result = "Merit";
+} else if (mark &gt;= 50) {
+    result = "Pass";
+} else {
+    result = "Fail";
+}
+
+document.querySelector("#module-result").textContent = `A mark of ${mark} is a ${result}.`;
+
+const passed = mark &gt;= 50 ? "Yes" : "No";
+document.querySelector("#module-passed").textContent = passed;</code></pre>
+<p>Also check that the ticket price is correct for children, older people, students and everyone else, and halves on Tuesdays.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the difference between <code>=</code>, <code>==</code> and <code>===</code>?</li>
+    <li>When is <code>a &amp;&amp; b</code> true, and when is <code>a || b</code> true?</li>
+    <li>Why does the order of <code>else if</code> conditions matter?</li>
+    <li>Name three falsy values.</li>
+    <li>Why is it important to test the values on either side of a boundary?</li>
+</ul>
+<p>In the next lesson, you will learn how to group code into reusable functions.</p>

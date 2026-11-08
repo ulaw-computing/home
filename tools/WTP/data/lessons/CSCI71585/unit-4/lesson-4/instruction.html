@@ -1,0 +1,194 @@
+<h1>Tutorial</h1> <!--Lesson 4: Functions-->
+<p>As programs grow, the same tasks come up again and again: converting a value, formatting a price, updating part of the page. Rather than writing the same code each time, you can write it once as a <strong>function</strong>, give it a name, and run it whenever you need it. Functions are one of the most important ideas in programming, and almost everything you build from now on will use them.</p>
+<p>The starter code contains a page of study tools, including a unit converter. As before, keep the console open, and complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>What Is a Function?</h2>
+<p>A <strong>function</strong> is a named, reusable block of code that performs one task. You have already been using functions that are built into JavaScript: <code>console.log()</code>, <code>Number()</code> and <code>Math.round()</code> are all functions. The brackets after the name are what make them run.</p>
+<p>Writing your own functions has several benefits:</p>
+<ul>
+    <li><strong>Reuse:</strong> write the code once, and run it as many times as you like.</li>
+    <li><strong>Easier changes:</strong> if the task changes, you only need to update it in one place.</li>
+    <li><strong>Readability:</strong> a well-named function, such as <code>calculateTotal()</code>, tells the reader what the code does without them having to read every line of it.</li>
+</ul>
+<br>
+
+<h2>Declaring and Calling a Function</h2>
+<p>A function is created with the <code>function</code> keyword, a name, a pair of brackets, and a block of code in curly braces:</p>
+<pre><code class="language-javascript">function showWelcome() {
+    document.querySelector("#greeting").textContent = "Welcome to your study tools!";
+}</code></pre>
+<p>This is called <strong>declaring</strong> (or defining) a function. On its own, it does nothing: it only tells JavaScript what to do <em>when</em> the function is used. To run the code inside it, you <strong>call</strong> the function, by writing its name followed by brackets:</p>
+<pre><code class="language-javascript">showWelcome();</code></pre>
+<div class="tip-box"><strong>💡 Tip:</strong> Name functions after what they <strong>do</strong>, starting with a verb: <code>showWelcome</code>, <code>calculateTotal</code>, <code>convertToMiles</code>. Like variables, function names use camelCase.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the JS tab, declare the <code>showWelcome</code> function from the example above. Check the preview: nothing has changed yet, because the function has not been called.</li>
+    <li>Below the function, call it with <code>showWelcome();</code>. The welcome message now appears.</li>
+</ol>
+<br>
+
+<h2>Parameters and Arguments</h2>
+<p>Most functions need some information to work with. A <strong>parameter</strong> is a variable listed in the function's brackets, which receives a value each time the function is called. The value you pass in when calling the function is called an <strong>argument</strong>:</p>
+<pre><code class="language-javascript">function greetStudent(name) {          // name is a parameter
+    console.log(`Hello, ${name}!`);
+}
+
+greetStudent("Amira");   // "Amira" is an argument: logs Hello, Amira!
+greetStudent("Ben");     // logs Hello, Ben!</code></pre>
+<p>A function can have several parameters, separated by commas. The arguments are matched to the parameters in order:</p>
+<pre><code class="language-javascript">function describeModule(code, title) {
+    console.log(`${code}: ${title}`);
+}
+
+describeModule("CSCI71585", "Web Technologies");</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Change your <code>showWelcome</code> function so that it takes a parameter called <code>name</code>, and displays <code>Welcome to your study tools, [name]!</code> using a template literal.</li>
+    <li>Change the call to pass your own name as the argument.</li>
+</ol>
+<br>
+
+<h2>Returning a Value</h2>
+<p>So far, your functions have done something, such as logging or changing the page. Many functions instead work something out and give the answer back. The <code>return</code> keyword sends a value back to wherever the function was called:</p>
+<pre><code class="language-javascript">function convertToMiles(km) {
+    return km * 0.621371;
+}
+
+const miles = convertToMiles(10);
+console.log(miles);   // 6.21371</code></pre>
+<p>When <code>convertToMiles(10)</code> runs, the whole call is replaced by the value it returns, so <code>miles</code> becomes <code>6.21371</code>. Because the function returns a value instead of displaying it, you can use the result however you like: display it, round it, or pass it to another function.</p>
+<ul>
+    <li><code>return</code> <strong>stops</strong> the function immediately. Any code after it in the function does not run.</li>
+    <li>A function with no <code>return</code> gives back <code>undefined</code>.</li>
+</ul>
+<div class="tip-box"><strong>💡 Tip:</strong> Functions that return a value, rather than changing the page themselves, are much easier to reuse. <code>convertToMiles</code> can be used anywhere, while a function that also writes to one particular element can only ever be used with that element.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Declare the <code>convertToMiles</code> function from the example above.</li>
+    <li>The starter code declares a <code>const</code> called <code>distance</code>. Call <code>convertToMiles(distance)</code> and store the result in a <code>const</code> called <code>miles</code>.</li>
+    <li>Display <code>[distance] km is [miles] miles.</code> in the <code>#km-result</code> element, rounding <code>miles</code> to one decimal place with <code>.toFixed(1)</code>.</li>
+    <li>Declare a second function, <code>convertToFahrenheit(celsius)</code>, that returns <code>celsius * 9 / 5 + 32</code>. Use it with the <code>temperature</code> variable to display <code>[temperature]°C is [result]°F.</code> in <code>#temp-result</code>.</li>
+</ol>
+<br>
+
+<h2>Default Parameters</h2>
+<p>A parameter can have a <strong>default value</strong>, which is used if no argument is passed in for it:</p>
+<pre><code class="language-javascript">function calculateStudyTime(sessions, minutesPerSession = 25) {
+    return sessions * minutesPerSession;
+}
+
+console.log(calculateStudyTime(4));       // 100: uses the default of 25
+console.log(calculateStudyTime(4, 50));   // 200</code></pre>
+<p>Parameters with defaults should come after the parameters without them, so that the arguments still line up in order.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Declare the <code>calculateStudyTime</code> function from the example above.</li>
+    <li>Use it to display <code>4 study sessions take 100 minutes.</code> in the <code>#study-time</code> element.</li>
+    <li>Change your code to use sessions of 50 minutes, and check the result.</li>
+</ol>
+<br>
+
+<h2>Scope</h2>
+<p>A variable's <strong>scope</strong> is the part of the code where it can be used. Variables declared with <code>let</code> or <code>const</code> only exist inside the block, the curly braces, where they are declared:</p>
+<pre><code class="language-javascript">const siteName = "Study Tools";   // declared outside: can be used anywhere
+
+function showTotal() {
+    const total = 100;             // declared inside: only exists in this function
+    console.log(siteName);         // works
+    console.log(total);            // works
+}
+
+// Out here, total does not exist.</code></pre>
+<ul>
+    <li>A variable declared <strong>outside</strong> every function and block is in the <strong>global</strong> scope, and can be used anywhere in the script.</li>
+    <li>A variable declared <strong>inside</strong> a function, or any other block such as an <code>if</code> statement, can only be used inside it.</li>
+</ul>
+<p>Scope is a good thing. It means each function can use simple variable names, such as <code>total</code> or <code>result</code>, without worrying that another part of the program is using the same name for something else.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> If a value needs to get <em>out</em> of a function, <code>return</code> it. If a value needs to get <em>in</em>, pass it as an argument. This keeps each function self-contained, and much easier to understand.</div>
+<br>
+
+<h2>Arrow Functions</h2>
+<p><strong>Arrow functions</strong> are a shorter way to write functions, using <code>=&gt;</code>. They are usually stored in a <code>const</code>:</p>
+<pre><code class="language-javascript">// A normal function declaration
+function double(number) {
+    return number * 2;
+}
+
+// The same function as an arrow function
+const double = (number) =&gt; {
+    return number * 2;
+};
+
+// Shorter still: with only one expression, the braces and return can be left out
+const double = (number) =&gt; number * 2;</code></pre>
+<p>In the shortest form, the value after the arrow is returned automatically. With exactly one parameter, the brackets around it are optional too, so you may see <code>number =&gt; number * 2</code>.</p>
+<p>Arrow functions are called in exactly the same way: <code>double(5)</code> returns <code>10</code>. You will see them everywhere in modern JavaScript, especially in the next few lessons, where short functions are passed to other functions.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> The three versions of <code>double</code> above show the same function written three ways. In a real script, you could only declare the name <code>double</code> once.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li><strong>Replace</strong> your <code>convertToFahrenheit</code> function declaration with an arrow function in its shortest form, stored in a <code>const</code> with the same name. Delete the old version completely, since a name can only be declared once. Check that the temperature result is unchanged.</li>
+</ol>
+<div class="warning-box"><strong>⚠️ Warning:</strong> A function declared with the <code>function</code> keyword can be called from anywhere in the script, even above the line where it is declared. An arrow function stored in a <code>const</code> cannot: it only exists from the line where it is declared onwards. Make sure the arrow function comes <strong>before</strong> the code that calls it, or your results will stop appearing.</div>
+<br>
+
+<h2>Functions as Values</h2>
+<p>In JavaScript, a function is a value, just like a number or a string. This means a function can be passed <strong>into another function</strong> as an argument. A function passed in like this is called a <strong>callback</strong>, because the other function "calls it back" when the time is right.</p>
+<p>A simple example is the built-in <code>setTimeout</code> function, which waits a number of milliseconds and then calls the function you give it:</p>
+<pre><code class="language-javascript">function showReminder() {
+    document.querySelector("#timer-message").textContent = "Time for a break!";
+}
+
+setTimeout(showReminder, 3000);   // calls showReminder after 3000 ms (3 seconds)</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Notice that there are <strong>no brackets</strong> after <code>showReminder</code> when it is passed to <code>setTimeout</code>. <code>showReminder</code> means "this function", while <code>showReminder()</code> means "run this function now". With brackets, the reminder would appear straight away, and <code>setTimeout</code> would be given the result instead of the function.</div>
+<p>You can also pass an arrow function directly, without giving it a name first:</p>
+<pre><code class="language-javascript">setTimeout(() =&gt; {
+    console.log("Three seconds have passed.");
+}, 3000);</code></pre>
+<p>Callbacks are the key to the rest of this unit. In Lesson 6, you will pass functions to run when the user clicks a button, and in Lesson 7, you will pass functions to run for every item in a list.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Declare the <code>showReminder</code> function, and pass it to <code>setTimeout</code> with a delay of 3000. Wait three seconds after your last change: the message appears.</li>
+    <li>Add brackets after <code>showReminder</code> in the <code>setTimeout</code> call. The message now appears immediately. Remove the brackets again.</li>
+</ol>
+<div class="info-box"><strong>ℹ️ Info:</strong> The preview runs your code again every time you change it, so the three-second wait starts again after each change.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your functions should be similar to these:</p>
+<pre><code class="language-javascript">function showWelcome(name) {
+    document.querySelector("#greeting").textContent = `Welcome to your study tools, ${name}!`;
+}
+
+function convertToMiles(km) {
+    return km * 0.621371;
+}
+
+const convertToFahrenheit = (celsius) =&gt; celsius * 9 / 5 + 32;
+
+function calculateStudyTime(sessions, minutesPerSession = 25) {
+    return sessions * minutesPerSession;
+}
+
+function showReminder() {
+    document.querySelector("#timer-message").textContent = "Time for a break!";
+}
+
+showWelcome("Sam");
+setTimeout(showReminder, 3000);</code></pre>
+<p>Also check that every result on the page is filled in correctly.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the difference between declaring a function and calling it?</li>
+    <li>What is the difference between a parameter and an argument?</li>
+    <li>What does <code>return</code> do, and what does a function return if it has no <code>return</code>?</li>
+    <li>Why can a variable declared inside a function not be used outside it?</li>
+    <li>What is the difference between passing <code>showReminder</code> and <code>showReminder()</code> to another function?</li>
+</ul>
+<p>In the next lesson, you will learn how JavaScript finds and changes the elements on a page.</p>
