@@ -132,7 +132,7 @@ const data = await response.json();</code></pre>
     <li>Add the loading message, the <code>response.ok</code> check and the <code>try...catch</code> from the example above to your <code>loadSessions</code> function, keeping your code that displays the data.</li>
     <li>Add a click listener to the <code>#retry-button</code> that calls <code>loadSessions</code> again.</li>
     <li>Test the failure state: change the file name in the <code>fetch</code> call to <code>workshop-session.json</code>, without the final <em>s</em>, and click the button. The friendly message and the <strong>Try again</strong> button appear, and the console shows the 404 status.</li>
-    <li>Change the file name back, and click <strong>Try again</strong>. The sessions load, and the button disappears.</li>
+    <li>Change the file name back. Because you changed the code, the preview reloads and the <strong>Try again</strong> button disappears. Click <strong>Load sessions</strong> again, and the sessions load. On a published page, <strong>Try again</strong> does the same job when a failure is temporary, such as a dropped connection.</li>
 </ol>
 <div class="tip-box"><strong>💡 Tip:</strong> Always test your failure state by deliberately breaking the address, as you have just done. A failure message that has never been seen is a failure message that might not work.</div>
 <br>
@@ -174,7 +174,7 @@ const data = await response.json();</code></pre>
         console.log(problem.message);
     }
 }</code></pre>
-<p>Also check that the failure state appears when the file name is wrong, and that <strong>Try again</strong> loads the sessions once it is fixed.</p>
+<p>Also check that the failure state, with the <strong>Try again</strong> button, appears when the file name is wrong, and that the sessions load again once it is fixed.</p>
 <p>Before moving on, make sure you can answer these questions:</p>
 <ul>
     <li>What do the status codes 200, 404 and 500 mean?</li>
