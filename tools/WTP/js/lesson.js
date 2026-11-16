@@ -270,7 +270,7 @@ const PREVIEW_HELPER =
         'else if(h&&typeof h.reportPreviewLink==="function"){h.reportPreviewLink(href);}' +
     '});' +
     'document.addEventListener("submit",function(e){' +
-        'e.preventDefault();var d=[];' +
+        'if(e.defaultPrevented)return;e.preventDefault();var d=[];' +
         'try{new FormData(e.target).forEach(function(v,k){d.push([k,typeof v==="string"?v:v.name]);});}catch(x){}' +
         'if(h&&typeof h.reportFormSubmit==="function"){h.reportFormSubmit(d);}' +
     '});' +
@@ -356,6 +356,88 @@ function reportPreviewLink(href) {
     showToast(`This lesson only has one page, so the link to "${escapePreviewText(href)}" has nothing to open.`, 'info');
 }
 
+// Runs inside the preview, before any other script on the page.
+// Gives each lesson its own private localStorage and sessionStorage, kept under
+// a prefix in the real storage, so student code can never read, change or
+// clear the platform's own saved data (progress, code, theme).
+function isolatePreviewStorage(prefix) {
+    function makeStore(realStore) {
+        // The student's keys, without the prefix
+        function ownKeys() {
+            const keys = [];
+            for (let i = 0; i < realStore.length; i++) {
+                const key = realStore.key(i);
+                if (key !== null && key.indexOf(prefix) === 0) {
+                    keys.push(key.slice(prefix.length));
+                }
+            }
+            return keys;
+        }
+
+        const api = {
+            getItem(key) { return realStore.getItem(prefix + String(key)); },
+            setItem(key, value) { realStore.setItem(prefix + String(key), String(value)); },
+            removeItem(key) { realStore.removeItem(prefix + String(key)); },
+            clear() { ownKeys().forEach(key => realStore.removeItem(prefix + key)); },
+            key(index) {
+                const keys = ownKeys();
+                return index >= 0 && index < keys.length ? keys[index] : null;
+            }
+        };
+
+        // Also supports the property style: localStorage.name = 'value'
+        return new Proxy(api, {
+            get(target, prop) {
+                if (prop === 'length') return ownKeys().length;
+                if (typeof prop === 'symbol' || prop in target) return target[prop];
+                const value = target.getItem(prop);
+                return value === null ? undefined : value;
+            },
+            set(target, prop, value) {
+                target.setItem(prop, value);
+                return true;
+            },
+            deleteProperty(target, prop) {
+                target.removeItem(prop);
+                return true;
+            },
+            has(target, prop) {
+                return prop in target || target.getItem(prop) !== null;
+            },
+            ownKeys() {
+                return ownKeys();
+            },
+            getOwnPropertyDescriptor(target, prop) {
+                const value = target.getItem(prop);
+                if (value === null) return undefined;
+                return { value, writable: true, enumerable: true, configurable: true };
+            }
+        });
+    }
+
+    ['localStorage', 'sessionStorage'].forEach(name => {
+        try {
+            const realStore = window[name];
+            Object.defineProperty(window, name, { value: makeStore(realStore), configurable: true });
+        } catch (e) {
+            // Storage unavailable (e.g. blocked by browser settings): leave it as it is
+        }
+    });
+}
+
+// Insert a snippet so it runs before anything else on the page,
+// without moving it in front of the doctype (which would cause quirks mode)
+function insertAtDocumentStart(html, snippet) {
+    const tags = [/<head(\s[^>]*)?>/i, /<html(\s[^>]*)?>/i, /<!doctype[^>]*>/i];
+
+    for (const tag of tags) {
+        if (tag.test(html)) {
+            return html.replace(tag, match => match + snippet);
+        }
+    }
+    return snippet + html;
+}
+
 function buildPreviewDocument() {
     let htmlCode = htmlEditorCM.getValue();
     const cssCode = cssEditorCM.getValue();
@@ -416,6 +498,12 @@ function buildPreviewDocument() {
             htmlCode = htmlCode + '<script>' + safeJs + '<\/script>';
         }
     }
+
+    // Private storage for this lesson, set up before any student code runs
+    const storagePrefix = `wtp-preview:${moduleId}:${unitId}:${lessonId}:`;
+    const storageScript = '<script>(' + isolatePreviewStorage.toString() + ')(' +
+        JSON.stringify(storagePrefix) + ');<\/script>';
+    htmlCode = insertAtDocumentStart(htmlCode, storageScript);
 
     // Helper goes last, on the same line, so student line numbers are unchanged
     if (/<\/body>/i.test(htmlCode)) {

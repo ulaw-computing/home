@@ -1,0 +1,221 @@
+<h1>Tutorial</h1> <!--Lesson 12: Consolidation: Build an API-Powered Page-->
+<p>In this final lesson, you will bring together everything from this unit to build a complete page powered by a live API: the <strong>UK Weather Explorer</strong>, which shows the current weather and a three-day forecast for places around the UK, lets users sort and filter them, shows details in a dialog, and lets users add places of their own.</p>
+<p>The HTML is complete, and most of the CSS is written, along with the list of places and the weather descriptions. Your job is the JavaScript, and a few finishing touches to the CSS. As in the consolidation lessons of the previous units, there are no step-by-step instructions: you have a brief, a plan and a checklist. If you are unsure how to do something, look back at the relevant lesson.</p>
+<br>
+
+<h2>The Brief</h2>
+<p>The page must include the following features.</p>
+
+<h3>Loading the Forecast (Lessons 5, 6 and 7)</h3>
+<ul>
+    <li>Clicking <strong>Load forecast</strong> requests the weather for <strong>every</strong> place in a <strong>single</strong> request to Open-Meteo, built with <code>URLSearchParams</code> (see the plan below).</li>
+    <li>The request asks for the current temperature, weather code and wind speed, and the daily maximum and minimum temperature and maximum chance of rain, for three days, in UK time.</li>
+    <li>While loading, the spinner is shown, the status says <em>Loading the forecast…</em>, and the button is disabled. After loading, the spinner is hidden and the button is re-enabled with the text <em>Refresh forecast</em>.</li>
+    <li>If the request fails, or the data is not in the shape you expect, the user sees a plain message asking them to try again. The button stays available, so they can.</li>
+</ul>
+
+<h3>Displaying the Places (Lessons 6, 7 and 8)</h3>
+<ul>
+    <li>Each place is displayed as a card in <code>#place-list</code>, with the class <code>place-card</code>, showing its name in an <code>&lt;h3&gt;</code>, the current temperature in a paragraph with the class <code>temperature</code>, a description of the weather, and paragraphs with the class <code>detail</code> for the wind speed, today's highest and lowest temperatures, and today's chance of rain.</li>
+    <li>Units come from the response's units objects, and any missing value shows a sensible fallback rather than <em>undefined</em>.</li>
+    <li>Each card has a <strong>Details</strong> button.</li>
+    <li>Cards are created with <code>createElement</code> and <code>textContent</code>, never <code>innerHTML</code>.</li>
+</ul>
+
+<h3>Sorting and Filtering (Lesson 8)</h3>
+<ul>
+    <li>The <strong>Sort by</strong> menu sorts the cards in the order the places were added, by name from A to Z, or by current temperature, warmest or coldest first, without changing the original order.</li>
+    <li>The rain checkbox shows only places where today's chance of rain is 50% or more.</li>
+    <li>Sorting and filtering work together, update instantly, and never send a new request.</li>
+    <li>The count says, for example, <em>Showing 4 of 6 places</em>, and says <em>No places match your filter.</em> when nothing matches.</li>
+</ul>
+
+<h3>Details Dialog (Lesson 10)</h3>
+<ul>
+    <li>Clicking a card's <strong>Details</strong> button opens <code>#details-dialog</code> as a modal, showing the place's name, its current weather, and a list item in <code>#details-days</code> for each of the three days, with the day's name, such as <em>Monday</em>, its description, its highest and lowest temperatures, and its chance of rain.</li>
+    <li>The dialog closes with its <strong>Close</strong> button, with <kbd>Escape</kbd>, and by clicking the backdrop.</li>
+</ul>
+
+<h3>Adding a Place (Lessons 4, 7 and 9)</h3>
+<ul>
+    <li>The <strong>Add a UK Place</strong> form is validated before any request is sent: the name must not be empty, must be between 2 and 50 characters, may contain only letters, spaces, hyphens and apostrophes, and must not already be in the list. Each problem has a clear message, shown with <code>aria-invalid</code>, and focus returns to the field.</li>
+    <li>A valid name is looked up with Open-Meteo's geocoding API (see the plan below). If no UK place is found, the user is told so.</li>
+    <li>A place that is found is added to the list, and the forecast is loaded again so that it appears. While the place is being looked up, the <strong>Add place</strong> button is disabled.</li>
+    <li>Added places are saved in <code>localStorage</code>, and are still there after the page reloads.</li>
+</ul>
+
+<h3>Theme and Motion (Lessons 1, 2, 3 and 4)</h3>
+<ul>
+    <li>The theme button switches dark mode on and off, by adding a <code>dark</code> class to the body, with <code>aria-pressed</code> kept up to date. In the CSS, <code>body.dark</code> redefines the custom properties. The choice is saved, and restored when the page loads.</li>
+    <li>Cards lift slightly when hovered, or when their button has focus, using a transform and a transition.</li>
+    <li>The spinner spins, using <code>@keyframes</code>.</li>
+    <li>When the user prefers reduced motion, the cards do not move, and the spinner turns much more slowly.</li>
+</ul>
+<div class="tip-box"><strong>💡 Tip:</strong> These dark-mode colours all pass the WCAG contrast checks: background <code>#121212</code>, surface <code>#1e1e1e</code>, text <code>#eeeeee</code>, muted text <code>#bdbdbd</code>, primary <code>#90caf9</code>, primary dark <code>#bbdefb</code>, text on primary <code>#121212</code>, and error <code>#ef9a9a</code>.</div>
+<br>
+
+<h2>Plan Before You Build</h2>
+
+<h3>The State</h3>
+<p>This page has more state than any page so far. Store it in top-level <code>let</code> variables:</p>
+<pre><code class="language-javascript">let addedPlaces = loadSavedPlaces();                // places the user has added
+let places = [...defaultPlaces, ...addedPlaces];    // every place, in the order added
+let forecasts = [];                                 // one object per place, after loading</code></pre>
+<p><code>loadSavedPlaces()</code> is your own function, which reads the added places from <code>localStorage</code>, with <code>?? []</code> as a fallback. The spread syntax, from lesson 8, joins the two arrays into one. Save only <code>addedPlaces</code>, not the default places, so that the defaults can never be saved twice. When the user adds a place, push it onto both arrays.</p>
+<br>
+
+<h3>One Request for Many Places</h3>
+<p>Open-Meteo's documentation explains that a single request can include several locations, by giving comma-separated lists of latitudes and longitudes. The <code>map</code> and <code>join</code> methods build these lists:</p>
+<pre><code class="language-javascript">const params = new URLSearchParams({
+    latitude: places.map((place) =&gt; place.latitude).join(","),
+    longitude: places.map((place) =&gt; place.longitude).join(","),
+    current: "temperature_2m,weather_code,wind_speed_10m",
+    daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max",
+    timezone: "Europe/London",
+    forecast_days: 3
+});</code></pre>
+<p>One request for six places is much kinder to the API than six requests. The response is an <strong>array</strong>, with one object for each location, in the same order as your places. But if only one location is requested, the response is a single object, not an array. Code that handles both is safer:</p>
+<pre><code class="language-javascript">const locations = Array.isArray(data) ? data : [data];</code></pre>
+<p>Each location object has <code>current</code> and <code>current_units</code> objects, as in lesson 7, and <code>daily</code> and <code>daily_units</code> objects. Each property of <code>daily</code> is an <strong>array</strong> with one value per day: <code>daily.time[0]</code> is today's date, and <code>daily.temperature_2m_max[0]</code> is today's highest temperature. Log a response and explore it before you write the code to display it.</p>
+<p>Join each location to its place, so that every forecast knows its place's name:</p>
+<pre><code class="language-javascript">forecasts = locations.map((location, index) =&gt; ({
+    place: places[index],
+    current: location.current,
+    currentUnits: location.current_units,
+    daily: location.daily,
+    dailyUnits: location.daily_units
+}));</code></pre>
+<p>The second parameter of the function passed to <code>map</code> is the item's index. The extra round brackets around the curly braces tell JavaScript that the arrow function returns an object, rather than starting a block of code.</p>
+<br>
+
+<h3>Finding a Place</h3>
+<p>Open-Meteo's geocoding API finds a place's location from its name. Ask for one result, in the UK only:</p>
+<pre><code class="language-javascript">const params = new URLSearchParams({
+    name: placeName,
+    count: 1,
+    countryCode: "GB"
+});
+const url = `https://geocoding-api.open-meteo.com/v1/search?${params}`;</code></pre>
+<p>The response has a <code>results</code> array, and each result has a <code>name</code>, <code>latitude</code> and <code>longitude</code>. When nothing is found, the <code>results</code> property is <strong>missing altogether</strong>, so check for it with optional chaining: <code>data.results?.[0]</code> gives the first result, or <code>undefined</code> if there is none. Use the name from the result, rather than what the user typed, so that the capital letters are correct.</p>
+<br>
+
+<h3>Functions</h3>
+<p>Plan your code as small functions, each with one job. You might have:</p>
+<ul>
+    <li><code>loadSavedPlaces()</code> and <code>savePlaces()</code> for local storage.</li>
+    <li><code>buildForecastUrl()</code> and an <code>async</code> function <code>loadForecast()</code>, which handles the loading, success and failure states.</li>
+    <li><code>createPlaceCard(forecast, index)</code>, which builds and returns one card.</li>
+    <li><code>getVisibleForecasts()</code>, which returns a sorted and filtered <strong>copy</strong> of <code>forecasts</code>.</li>
+    <li><code>render()</code>, which clears the list, creates the visible cards, and updates the count.</li>
+    <li><code>openDetails(forecast)</code>, which fills in and opens the dialog.</li>
+    <li><code>validatePlaceName(name)</code>, which returns an error message or an empty string, and an <code>async</code> function <code>findPlace(name)</code>, which looks a place up.</li>
+    <li><code>setDarkMode(isDark)</code>, which applies a theme, updates the button and saves the choice.</li>
+</ul>
+<p>As in the last unit, every listener follows the same pattern: update the state, then call <code>render()</code>. To find a card's forecast from its <strong>Details</strong> button, give the button a <code>data-index</code> attribute holding the forecast's position in <code>forecasts</code>, not its position on screen, which changes with sorting and filtering. An array's <code>indexOf</code> method gives an item's position in it: <code>forecasts.indexOf(forecast)</code>.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> As in the rest of this unit, the forecast loads when the button is clicked, so that the preview does not send a request every time you type. On your own published site, you would call <code>loadForecast()</code> once when the page loads, instead of making the user click.</div>
+<br>
+
+<h2>Build in Stages</h2>
+<p>Build one feature at a time, and check that it works before starting the next.</p>
+<ol>
+    <li><strong>The request:</strong> build the address, open it in a new tab to check it, then fetch it and log the data.</li>
+    <li><strong>The forecasts:</strong> turn the response into the <code>forecasts</code> array, and log it.</li>
+    <li><strong>One card, then every card:</strong> write <code>createPlaceCard</code> and <code>render</code>.</li>
+    <li><strong>Loading and failure states:</strong> add the spinner, status messages and button changes. Test failure by misspelling a parameter, as in lesson 7.</li>
+    <li><strong>Sort and filter:</strong> write <code>getVisibleForecasts</code>, the count and the listeners.</li>
+    <li><strong>Details dialog.</strong></li>
+    <li><strong>Adding places:</strong> validation first, then the geocoding request, then saving.</li>
+    <li><strong>Theme and motion:</strong> the dark theme, its saved choice, the card transition and the spinner.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> While you work on stages 5 and 6, you do not need to click <strong>Load forecast</strong> after every change. Load the forecast once, then use the sort menu and filter: they only use the data already loaded. The preview does reset when you change your code, though, so keep your requests to when you need fresh data.</div>
+<br>
+
+<h2>Debugging Challenge</h2>
+<p>Each of the snippets below is from a weather page that does not work properly. The problem is described, but not the cause. For each one, find the bug by reading the code carefully. You can check your answer by revealing it.</p>
+
+<h3>1. Every temperature says undefined</h3>
+<p>The cards appear, with the right names and descriptions, but every temperature reads <em>undefined°C</em>.</p>
+<pre><code class="language-javascript">temperature.textContent = `${forecast.current.temperature}${forecast.currentUnits.temperature_2m}`;</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p>The property is called <code>temperature_2m</code>, not <code>temperature</code>. Reading a property that does not exist gives <code>undefined</code>. Always copy property names from the logged data or the documentation, rather than typing them from memory.</p>
+</details>
+
+<h3>2. The failure message always appears</h3>
+<p>The address works perfectly when opened in a tab, but the page always says the forecast could not be loaded.</p>
+<pre><code class="language-javascript">const response = await fetch(buildForecastUrl());
+
+if (response.ok) {
+    throw new Error(`The request failed with status ${response.status}.`);
+}</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p>The condition is the wrong way round: it throws an error when the response <strong>is</strong> OK. It should be <code>if (!response.ok)</code>.</p>
+</details>
+
+<h3>3. The data never arrives</h3>
+<p>The request succeeds, but the page shows the failure message, and logging <code>data</code> shows <em>Promise</em> rather than the forecast.</p>
+<pre><code class="language-javascript">const data = response.json();
+const locations = Array.isArray(data) ? data : [data];</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p><code>response.json()</code> returns a promise, because reading the body takes time. Without <code>await</code>, <code>data</code> is the promise itself, not the data, so reading its properties fails. It should be <code>const data = await response.json();</code>.</p>
+</details>
+
+<h3>4. Sorting changes the Details</h3>
+<p>After sorting by <strong>Warmest first</strong>, clicking the first card's <strong>Details</strong> button shows the details of a different place.</p>
+<pre><code class="language-javascript">getVisibleForecasts().forEach((forecast, index) =&gt; {
+    placeList.append(createPlaceCard(forecast, index));
+});</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p><code>index</code> here is the card's position in the <strong>sorted and filtered</strong> array, but the Details button looks the forecast up in the original <code>forecasts</code> array. The button needs the forecast's position in <code>forecasts</code>: <code>createPlaceCard(forecast, forecasts.indexOf(forecast))</code>.</p>
+</details>
+
+<h3>5. A place name appears in bold</h3>
+<p>A user added a place by typing <code>&lt;b&gt;York&lt;/b&gt;</code>. The validation should have rejected it, but it was changed to allow any characters, and now the card shows <strong>York</strong> in bold.</p>
+<pre><code class="language-javascript">heading.innerHTML = forecast.place.name;</code></pre>
+<details>
+    <summary>Reveal the answer</summary>
+    <p><code>innerHTML</code> treats the name as HTML, so the tags became a real element, and other tags could run code, as you saw in lesson 11. It should be <code>heading.textContent = forecast.place.name;</code>. Validation is a useful extra layer, but displaying data safely must never depend on it.</p>
+</details>
+<br>
+
+<h2>Extension Challenges</h2>
+<p>If you finish early, try one or more of these:</p>
+<ul>
+    <li><strong>Remove a place:</strong> add a <strong>Remove</strong> button to the cards of places the user added, with a confirmation dialog, as in lesson 10.</li>
+    <li><strong>Remember the forecast:</strong> save the forecast in <code>sessionStorage</code>, with the time it was loaded, and use it instead of a new request if it is less than ten minutes old.</li>
+    <li><strong>Hourly detail:</strong> read Open-Meteo's documentation, and add today's hourly temperatures to the dialog.</li>
+    <li><strong>Feels like:</strong> add the "apparent temperature" to each card, after finding its name in the documentation.</li>
+</ul>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your page is complete when:</p>
+<ul>
+    <li>Clicking <strong>Load forecast</strong> shows the spinner, then a card for each of the six places, using a single request.</li>
+    <li>Misspelling a parameter shows a plain failure message, and the button can be used to try again.</li>
+    <li>Each sort order and the rain filter work, together and separately, and the count is always correct.</li>
+    <li>Each <strong>Details</strong> button opens the right place's three-day forecast, even after sorting and filtering, and the dialog closes in all three ways.</li>
+    <li>Adding an empty name, a single letter, <code>York!</code>, <code>leeds</code> (already in the list) and <code>Nowhereville</code> each give the right message, and <code>York</code> is added and saved.</li>
+    <li>The theme switches and is remembered, the cards and spinner move, and they stop moving when reduced motion is turned on.</li>
+    <li>Every feature works with the keyboard only, and in a narrow pop-out preview.</li>
+    <li>No data from the API or the user is displayed with <code>innerHTML</code>, and the Open-Meteo credit is in the footer.</li>
+</ul>
+<p>Make sure you download your work using the <strong>Download</strong> button. When you test your downloaded page on your own computer, remember to use a local web server, such as Live Server, as you learned in lesson 6.</p>
+<br>
+
+<h2>Unit Summary</h2>
+<p>In this unit, you have learned to:</p>
+<ul>
+    <li>Store design values in CSS custom properties, and change a whole theme by redefining them.</li>
+    <li>Use transforms, transitions and keyframe animations where they genuinely help users, and respect their preference for reduced motion.</li>
+    <li>Convert data to and from JSON, and save it in the browser with web storage.</li>
+    <li>Write asynchronous code with promises, <code>async</code> and <code>await</code>, and handle loading, success and failure.</li>
+    <li>Load data with <code>fetch</code>, check responses, and handle both kinds of failed request.</li>
+    <li>Read API documentation, build request addresses, and choose APIs that are suitable for front-end use.</li>
+    <li>Display API data safely and robustly, handling missing values and empty results, and sort and filter it.</li>
+    <li>Validate forms with clear, accessible feedback, and use dialogs to show details and confirm actions.</li>
+    <li>Recognise and prevent common security problems, in the browser and on the server.</li>
+</ul>

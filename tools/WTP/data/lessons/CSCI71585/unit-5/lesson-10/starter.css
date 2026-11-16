@@ -1,0 +1,204 @@
+:root {
+    --colour-primary: #00695c;
+    --colour-primary-dark: #004d40;
+    --colour-error: #b71c1c;
+    --colour-background: #f5f5f5;
+    --colour-surface: #ffffff;
+    --space: 16px;
+    --radius: 8px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #222;
+    background-color: var(--colour-background);
+}
+
+.site-header {
+    padding: var(--space);
+    background-color: var(--colour-primary);
+    color: white;
+}
+
+.site-name {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: var(--space);
+}
+
+h1 {
+    color: var(--colour-primary-dark);
+}
+
+.page-status:not(:empty) {
+    padding: var(--space);
+    font-weight: bold;
+    color: var(--colour-primary-dark);
+    background-color: #e0f2f1;
+    border-left: 6px solid var(--colour-primary);
+}
+
+/* Session cards, created by JavaScript */
+.session-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space);
+}
+
+.session-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space);
+    background-color: var(--colour-surface);
+    border-top: 5px solid var(--colour-primary);
+    border-radius: var(--radius);
+}
+
+.session-card h2 {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+    color: var(--colour-primary-dark);
+}
+
+.session-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.session-card .spaces {
+    margin-top: 4px;
+    font-weight: bold;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 12px;
+}
+
+/* Buttons */
+.button {
+    padding: 8px var(--space);
+    font: inherit;
+    color: white;
+    background-color: var(--colour-primary);
+    border: 2px solid var(--colour-primary);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--colour-primary-dark);
+    border-color: var(--colour-primary-dark);
+}
+
+.button-secondary {
+    color: var(--colour-primary-dark);
+    background-color: var(--colour-surface);
+}
+
+.button-secondary:hover {
+    color: white;
+}
+
+.button-danger {
+    background-color: var(--colour-error);
+    border-color: var(--colour-error);
+}
+
+.button-danger:hover {
+    background-color: #7f0000;
+    border-color: #7f0000;
+}
+
+.button:disabled {
+    color: #555;
+    background-color: #e0e0e0;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+.button:focus-visible,
+input:focus-visible {
+    outline: 3px solid #ffb300;
+    outline-offset: 2px;
+}
+
+/* Dialogs */
+.dialog {
+    width: min(90vw, 480px);
+    padding: 0;
+    border: none;
+    border-radius: var(--radius);
+}
+
+.dialog-inner {
+    padding: calc(var(--space) * 1.5);
+}
+
+.dialog h2 {
+    margin-top: 0;
+    color: var(--colour-primary-dark);
+}
+
+.dialog-session {
+    font-weight: bold;
+}
+
+.dialog-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: var(--space);
+}
+
+/* Form fields */
+.field {
+    margin-bottom: var(--space);
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    font: inherit;
+    border: 1px solid #767676;
+    border-radius: 4px;
+}
+
+[aria-invalid="true"] {
+    border: 3px solid var(--colour-error);
+}
+
+.error-message,
+.dialog-error {
+    margin: 4px 0 0;
+    font-weight: bold;
+    color: var(--colour-error);
+}
+
+.error-message:empty,
+.dialog-error:empty {
+    display: none;
+}

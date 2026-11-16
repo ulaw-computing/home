@@ -1,0 +1,150 @@
+:root {
+    --colour-primary: #283593;
+    --colour-primary-dark: #1a237e;
+    --colour-background: #f5f5f5;
+    --colour-surface: #ffffff;
+    --space: 16px;
+    --radius: 8px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #222;
+    background-color: var(--colour-background);
+}
+
+/* Header */
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space);
+    background-color: var(--colour-primary);
+    color: white;
+}
+
+.site-name {
+    margin: 0;
+    font-weight: bold;
+}
+
+.site-header .button {
+    border: 2px solid white;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space);
+}
+
+/* Cards */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space);
+    margin-bottom: var(--space);
+}
+
+.module-card {
+    padding: var(--space);
+    background-color: var(--colour-surface);
+    border-top: 5px solid var(--colour-primary);
+    border-radius: var(--radius);
+}
+
+.module-card h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+a {
+    color: var(--colour-primary);
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid #ffb300;
+    outline-offset: 2px;
+}
+
+/* Buttons */
+.button {
+    padding: 8px var(--space);
+    font: inherit;
+    color: white;
+    background-color: var(--colour-primary);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--colour-primary-dark);
+}
+
+/* Accordion */
+.accordion-button {
+    width: 100%;
+    padding: 10px 0;
+    font: inherit;
+    font-weight: bold;
+    text-align: left;
+    color: var(--colour-primary);
+    background: none;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+h3 {
+    margin: 0;
+}
+
+/* Help panel: fixed to the right-hand side of the screen */
+.help-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(320px, 85vw);
+    height: 100%;
+    padding: var(--space);
+    background-color: var(--colour-surface);
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.2);
+    visibility: hidden;
+    /* When closing, wait until the panel has slid out before hiding it */
+    transition: visibility 0s var(--speed, 0.2s);
+}
+
+.help-panel.open {
+    visibility: visible;
+    /* When opening, show it straight away */
+    transition-delay: 0s;
+}
+
+/* Practice Area */
+.practice {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    padding: 40px 20px;
+}
+
+.box {
+    display: grid;
+    place-items: center;
+    width: 100px;
+    height: 100px;
+    background-color: #c5cae9;
+    border: 2px solid var(--colour-primary);
+}
+
+/* Write your CSS below */

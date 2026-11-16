@@ -1,0 +1,276 @@
+<h1>Tutorial</h1> <!--Lesson 10: Dialogs and Form Feedback-->
+<p>In the last lesson, you validated a form and showed a confirmation once it was correct. In this lesson you will use HTML's <code>&lt;dialog&gt;</code> element to show details, collect a booking and confirm an action, and give users clear feedback while a form is being sent and when it succeeds or fails.</p>
+<p>The starter code contains the workshop's sessions, displayed as cards by the <code>renderSessions()</code> function, along with a booking dialog and a confirmation dialog in the HTML. It also has a simulated booking server, <code>fakeSendBooking()</code>, which works like the <code>fakeFetchWeather</code> function from lesson 5. Complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Dialogs</h2>
+<p>A <strong>dialog</strong> is a box that appears on top of the page, to show some information or ask the user for something. A <strong>modal</strong> dialog blocks the rest of the page until it is closed: the user cannot click or tab to anything behind it. Modal dialogs are useful for short, focused tasks, such as confirming an action or filling in a small form, without leaving the page.</p>
+<p>Building an accessible modal dialog from <code>&lt;div&gt;</code> elements takes a lot of code. HTML's <code>&lt;dialog&gt;</code> element does most of the work for you:</p>
+<pre><code class="language-html">&lt;dialog id="details-dialog" aria-labelledby="details-title"&gt;
+    &lt;h2 id="details-title"&gt;Session title&lt;/h2&gt;
+    &lt;p&gt;Some information about the session.&lt;/p&gt;
+    &lt;button type="button" id="details-close"&gt;Close&lt;/button&gt;
+&lt;/dialog&gt;</code></pre>
+<p>A dialog is hidden until JavaScript opens it. <code>aria-labelledby</code> gives the dialog an accessible name from its heading, so a screen reader announces <em>"Session title, dialog"</em> when it opens. Two methods open and close it:</p>
+<pre><code class="language-javascript">detailsDialog.showModal();   // opens the dialog as a modal
+detailsDialog.close();       // closes it</code></pre>
+<p>When a dialog is opened with <code>showModal()</code>, the browser automatically:</p>
+<ul>
+    <li>Shows it on top of everything else on the page, in the centre, with a backdrop behind it.</li>
+    <li>Moves focus to the first focusable element inside it.</li>
+    <li>Makes the rest of the page <strong>inert</strong>: it cannot be clicked, focused or read by a screen reader until the dialog closes.</li>
+    <li>Closes it when the user presses <kbd>Escape</kbd>.</li>
+    <li>Returns focus, when it closes, to the element that was focused before it opened, which is usually the button that opened it.</li>
+</ul>
+<p>All of these are things that you had to write yourself for the menu in JavaScript lesson 11.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> A dialog can also be opened with <code>show()</code>, which shows it without a backdrop and leaves the rest of the page usable. This is a <strong>non-modal</strong> dialog. Use <code>showModal()</code> whenever the user must deal with the dialog before carrying on.</div>
+<br>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the HTML tab, before the booking dialog, add a details dialog with the class <code>dialog</code>, the id <code>details-dialog</code> and <code>aria-labelledby="details-title"</code>. Inside it, add a <code>&lt;div&gt;</code> with the class <code>dialog-inner</code>, containing:
+        <ul>
+            <li>An empty <code>&lt;h2&gt;</code> with the id <code>details-title</code>.</li>
+            <li>Two empty paragraphs, with the ids <code>details-meta</code> and <code>details-description</code>.</li>
+            <li>A <code>&lt;div&gt;</code> with the class <code>dialog-actions</code>, containing a button with the class <code>button</code>, the id <code>details-close</code> and the text <em>Close</em>.</li>
+        </ul>
+    </li>
+    <li>In the JS tab, select the dialog and its elements, and write a function called <code>openDetails(session)</code> that fills in the title, the time, speaker and room, and the description, then calls <code>showModal()</code>.</li>
+    <li>Make the Close button call <code>detailsDialog.close()</code>.</li>
+</ol>
+<br>
+
+<h3>Which Button Was Clicked?</h3>
+<p>The session cards are created by JavaScript, and are created again whenever a session changes, so it is easiest to use one listener on <code>#session-list</code>, with <strong>event delegation</strong> from JavaScript lesson 9. Each card's buttons have a <code>data-action</code> attribute saying what they do, and a <code>data-id</code> attribute with the session's id:</p>
+<pre><code class="language-javascript">sessionList.addEventListener("click", (event) =&gt; {
+    const button = event.target.closest("button");
+    if (!button) {
+        return;
+    }
+
+    const session = sessions.find((item) =&gt; item.id === Number(button.dataset.id));
+
+    if (button.dataset.action === "details") {
+        openDetails(session);
+    }
+});</code></pre>
+<p>Attribute values are always strings, so <code>Number()</code> converts the id before comparing it with the numbers in <code>sessions</code>.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the listener above, and click a session's <strong>Details</strong> button. The dialog opens with that session's details.</li>
+    <li>Test it with the keyboard only: tab to a Details button and press <kbd>Enter</kbd>. Focus moves into the dialog. Press <kbd>Tab</kbd> several times: focus moves between the dialog's controls, and never reaches the cards behind it.</li>
+    <li>Press <kbd>Escape</kbd>. The dialog closes, and focus returns to the Details button you used.</li>
+</ol>
+<br>
+
+<h2>Styling Dialogs</h2>
+<p>The starter CSS already styles the dialogs. The backdrop behind a modal dialog has its own pseudo-element, <code>::backdrop</code>, which you can style like any other element:</p>
+<pre><code class="language-css">.dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+}</code></pre>
+<p>A dialog that appears instantly can feel abrupt. A short animation, using <code>@keyframes</code> from lesson 3, eases it in. A dialog has the <code>open</code> attribute while it is open, so the animation runs every time it opens:</p>
+<pre><code class="language-css">@keyframes dialog-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dialog[open] {
+    animation: dialog-in 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dialog[open] {
+        animation: none;
+    }
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>::backdrop</code> rule and the animation above to the CSS tab, and open a dialog to see them.</li>
+</ol>
+<br>
+
+<h3>Closing by Clicking the Backdrop</h3>
+<p>Many users expect a dialog to close when they click the darkened area outside it. A click on the backdrop counts as a click on the dialog element itself, so you can check whether <code>event.target</code> is the dialog:</p>
+<pre><code class="language-javascript">detailsDialog.addEventListener("click", (event) =&gt; {
+    if (event.target === detailsDialog) {
+        detailsDialog.close();
+    }
+});</code></pre>
+<p>This is why the starter CSS gives each dialog no padding, and puts its content in an inner <code>&lt;div&gt;</code> with the padding instead. A click anywhere inside the visible box lands on the inner <code>&lt;div&gt;</code> or its contents, so only a click on the backdrop has the dialog itself as its target.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Only close a dialog on a backdrop click if nothing is lost by doing so. Closing a half-completed form because the user clicked slightly outside it would lose their work. The booking dialog below does not close on a backdrop click.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the listener above, and check that clicking the backdrop closes the details dialog, but clicking inside it does not.</li>
+</ol>
+<br>
+
+<h2>A Booking Dialog</h2>
+<p>The booking dialog in the starter HTML contains a short form. Opening it needs a little more work than the details dialog: the code must remember which session is being booked, and clear anything left over from the last time the form was used:</p>
+<pre><code class="language-javascript">let currentSession = null;
+
+function openBooking(session) {
+    currentSession = session;
+    bookingSession.textContent = `${session.time} ${session.title}`;
+    bookingForm.reset();
+    clearError(bookingName);
+    clearError(bookingEmail);
+    bookingError.textContent = "";
+    bookingDialog.showModal();
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Copy your <code>showError</code> and <code>clearError</code> functions from the last lesson into the JS tab. They work unchanged, because the error paragraphs follow the same naming pattern.</li>
+    <li>Select the booking dialog and its elements, and add the <code>currentSession</code> variable and <code>openBooking</code> function above.</li>
+    <li>In your click listener, call <code>openBooking(session)</code> when the button's action is <code>"book"</code>.</li>
+    <li>Make the dialog's <strong>Cancel</strong> button close it.</li>
+</ol>
+<br>
+
+<h2>Feedback While Sending</h2>
+<p>When a form is sent to a server, there is a delay before the reply. During that time, the user needs to know that something is happening, and must not be able to send the same form twice by clicking again. Disabling the submit button, and changing its text, does both:</p>
+<pre><code class="language-javascript">bookingSubmit.disabled = true;
+bookingSubmit.textContent = "Booking…";</code></pre>
+<p>Then, as in lesson 5, use <code>try...catch...finally</code>: show success in <code>try</code>, a helpful message in <code>catch</code>, and put the button back to normal in <code>finally</code>, so it is re-enabled whatever happens:</p>
+<pre><code class="language-javascript">bookingForm.addEventListener("submit", async (event) =&gt; {
+    event.preventDefault();
+    if (!validateBooking()) {
+        return;
+    }
+
+    bookingError.textContent = "";
+    bookingSubmit.disabled = true;
+    bookingSubmit.textContent = "Booking…";
+
+    try {
+        const result = await fakeSendBooking({
+            sessionId: currentSession.id,
+            name: bookingName.value.trim(),
+            email: bookingEmail.value.trim()
+        });
+
+        currentSession.booked = true;
+        currentSession.spacesLeft -= 1;
+        bookingDialog.close();
+        renderSessions();
+        pageStatus.textContent = `You are booked on "${currentSession.title}". Your reference is ${result.reference}.`;
+    } catch (problem) {
+        bookingError.textContent = problem.message;
+    } finally {
+        bookingSubmit.disabled = false;
+        bookingSubmit.textContent = "Confirm booking";
+    }
+});</code></pre>
+<p>On success, the dialog closes and the page updates. The confirmation appears in <code>#page-status</code>, which has <code>role="status"</code>, so screen reader users hear it. On failure, the dialog stays open so that the user does not lose what they typed, and the message appears in <code>#booking-error</code>, which has <code>role="alert"</code>. An alert is announced straight away, interrupting anything else, which suits a problem that the user must deal with.</p>
+<p>The function passed to <code>addEventListener</code> can be <code>async</code>, like any other function, so it can use <code>await</code> directly.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Write a function called <code>validateBooking()</code> that checks the name is not empty and the email address matches the email pattern from the last lesson, showing or clearing each field's error, moving focus to the first field with a problem, and returning <code>true</code> only if both are valid.</li>
+    <li>Add the submit listener above.</li>
+    <li>Book a place on <strong>Styling With CSS</strong>. The button changes while the booking is sent, then the dialog closes, the card updates, and the confirmation and reference appear.</li>
+    <li>Now try to book <strong>Your First Line of JavaScript</strong>, which says it has 2 spaces left. The simulated server says it is now full: the dialog stays open with the server's message, and the button is re-enabled.</li>
+</ol>
+<div class="info-box"><strong>ℹ️ Info:</strong> The last step shows why a server must always make the final decision. The page's data was correct when it loaded, but other people may have booked since. The page can show what was true, but only the server knows what is true now.</div>
+<br>
+
+<h3>Where Did the Focus Go?</h3>
+<p>After a successful booking, <code>renderSessions()</code> replaces every card, including the Book button that opened the dialog. When the dialog closes, the browser tries to return focus to that button, but it no longer exists, so focus is lost, and keyboard users are sent back to the top of the page.</p>
+<p>When you replace the element that opened a dialog, move focus yourself to something sensible. Here, that is the new <strong>Cancel booking</strong> button on the same card:</p>
+<pre><code class="language-javascript">const newButton = sessionList.querySelector(`[data-id="${currentSession.id}"][data-action="cancel"]`);
+newButton.focus();</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the two lines above after the confirmation message in your submit listener.</li>
+    <li>Book a session using only the keyboard, and check that focus lands on the new <strong>Cancel booking</strong> button.</li>
+</ol>
+<br>
+
+<h2>Confirming an Action</h2>
+<p>Actions that cannot easily be undone, such as cancelling a booking or deleting something, should be confirmed first. A good confirmation dialog:</p>
+<ul>
+    <li>Says exactly what will happen, such as <em>Your place on Styling With CSS will be given to someone else</em>.</li>
+    <li>Labels its buttons with what they do, such as <strong>Keep my booking</strong> and <strong>Cancel booking</strong>, rather than <em>OK</em> and <em>Cancel</em>, which are confusing when the action itself is called <em>cancel</em>.</li>
+    <li>Puts the safe choice first, so that it receives focus when the dialog opens, and a user who presses <kbd>Enter</kbd> straight away does nothing harmful.</li>
+</ul>
+<p>The <code>close()</code> method can be given a value, which is stored in the dialog's <code>returnValue</code> property. The dialog's <code>close</code> event then runs however the dialog was closed, and can check which button was used:</p>
+<pre><code class="language-javascript">function openConfirm(session) {
+    currentSession = session;
+    confirmMessage.textContent = `Your place on "${session.title}" will be given to someone else.`;
+    confirmDialog.returnValue = "";
+    confirmDialog.showModal();
+}
+
+confirmKeep.addEventListener("click", () =&gt; {
+    confirmDialog.close("keep");
+});
+
+confirmCancel.addEventListener("click", () =&gt; {
+    confirmDialog.close("cancel");
+});
+
+confirmDialog.addEventListener("close", () =&gt; {
+    if (confirmDialog.returnValue === "cancel") {
+        // Cancel the booking
+    }
+});</code></pre>
+<p>Pressing <kbd>Escape</kbd> closes the dialog without changing <code>returnValue</code>, so it would still hold the value from the last time. This is why <code>openConfirm</code> resets it to an empty string before opening, so that <kbd>Escape</kbd> always counts as keeping the booking.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> In other tutorials, you may see dialog buttons placed inside a <code>&lt;form method="dialog"&gt;</code>, which closes the dialog when a button is clicked and sets <code>returnValue</code> to the button's <code>value</code>, without any JavaScript. Calling <code>close()</code> with a value, as here, does the same job.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Select the confirmation dialog and its elements, and add the code above.</li>
+    <li>In your click listener, call <code>openConfirm(session)</code> when the button's action is <code>"cancel"</code>.</li>
+    <li>In the <code>close</code> listener, cancel the booking: set <code>booked</code> to <code>false</code>, add one to <code>spacesLeft</code>, call <code>renderSessions()</code>, show <em>Your booking for "…" has been cancelled.</em> in <code>pageStatus</code>, and move focus to the session's new <strong>Book</strong> button.</li>
+    <li>Book a session, then cancel it. Test all three ways of closing the dialog: <strong>Keep my booking</strong>, <kbd>Escape</kbd>, and <strong>Cancel booking</strong>. Only the last should cancel it.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your click listener on the session list should now be similar to this:</p>
+<pre><code class="language-javascript">sessionList.addEventListener("click", (event) =&gt; {
+    const button = event.target.closest("button");
+    if (!button) {
+        return;
+    }
+
+    const session = sessions.find((item) =&gt; item.id === Number(button.dataset.id));
+
+    if (button.dataset.action === "details") {
+        openDetails(session);
+    } else if (button.dataset.action === "book") {
+        openBooking(session);
+    } else if (button.dataset.action === "cancel") {
+        openConfirm(session);
+    }
+});</code></pre>
+<p>Also check that:</p>
+<ul>
+    <li>Every dialog can be opened, used and closed with the keyboard only.</li>
+    <li>The booking form shows errors for an empty name and an invalid email address.</li>
+    <li>The submit button cannot be clicked twice while a booking is being sent.</li>
+    <li>A failed booking keeps the dialog open with a helpful message.</li>
+    <li>Focus never ends up lost at the top of the page after a dialog closes.</li>
+</ul>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What does <code>showModal()</code> do for you automatically?</li>
+    <li>Why does a dialog need <code>aria-labelledby</code>?</li>
+    <li>How can code tell that a click landed on a dialog's backdrop, and when should that not close the dialog?</li>
+    <li>Why is the submit button disabled while a booking is sent?</li>
+    <li>What is the difference between <code>role="status"</code> and <code>role="alert"</code>?</li>
+    <li>Why can the server reject a booking that the page said had spaces?</li>
+    <li>Why must focus be moved by hand after the cards are re-rendered?</li>
+    <li>Why is <code>returnValue</code> reset before the confirmation dialog opens?</li>
+</ul>
+<p>In the next lesson, you will learn about the most common security problems on websites, and how to avoid them.</p>

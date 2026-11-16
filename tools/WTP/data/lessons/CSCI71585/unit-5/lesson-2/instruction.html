@@ -1,0 +1,231 @@
+<h1>Tutorial</h1> <!--Lesson 2: Transforms and Transitions-->
+<p>Movement on a web page can do a real job. A card that lifts slightly when you point at it tells you it can be clicked. A menu that slides in shows where it came from. A button that sinks when pressed confirms that it has been pressed. In this lesson you will learn the two CSS tools behind effects like these: <strong>transforms</strong>, which move, rotate and resize elements, and <strong>transitions</strong>, which animate a change smoothly instead of making it happen instantly.</p>
+<p>The starter code contains a page of course modules, with cards, buttons, an accordion and a slide-in panel. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Transforms</h2>
+<p>The <code>transform</code> property changes how an element is drawn: where it appears, its angle and its size. It takes one or more <strong>transform functions</strong>:</p>
+<ul>
+    <li><code>translate(x, y)</code> moves an element. <code>translateX()</code> and <code>translateY()</code> move it along one direction only.</li>
+    <li><code>rotate(angle)</code> turns it, with the angle in degrees, such as <code>rotate(45deg)</code>. Positive angles turn clockwise.</li>
+    <li><code>scale(amount)</code> resizes it. <code>scale(1.1)</code> makes it 10% larger, and <code>scale(0.9)</code> 10% smaller.</li>
+    <li><code>skew(angle)</code> slants it. This is rarely useful on its own, but you will see it in decorative effects.</li>
+</ul>
+<pre><code class="language-css">.card:hover {
+    transform: translateY(-4px);   /* move up by 4px */
+}</code></pre>
+
+<h3>Transforms Do Not Affect the Layout</h3>
+<p>A transformed element is drawn in its new position, size or angle, but the space it takes up in the layout does not change. The elements around it stay exactly where they were, as if nothing had happened. This is different from changing <code>margin</code>, <code>width</code> or <code>top</code>, which push the surrounding content around.</p>
+<p>This is what makes transforms so useful for effects: a card can grow or move on hover without shifting every other card on the page.</p>
+
+<h3>Combining Transforms</h3>
+<p>Several transform functions can go in one <code>transform</code> declaration, separated by spaces:</p>
+<pre><code class="language-css">.card:hover {
+    transform: translateY(-4px) scale(1.02);
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> An element only has one <code>transform</code> property. If a second rule sets <code>transform</code> on the same element, it replaces the first completely, rather than adding to it. To combine transforms, list them all in one declaration. The order matters too: functions are applied from right to left, so <code>rotate(45deg) translateX(50px)</code> and <code>translateX(50px) rotate(45deg)</code> end up in different places.</div>
+
+<h3>transform-origin</h3>
+<p>Rotating and scaling happen around a point called the <strong>transform origin</strong>, which is the centre of the element by default. The <code>transform-origin</code> property moves it, using keywords or lengths:</p>
+<pre><code class="language-css">.tilt {
+    transform-origin: top left;   /* rotate around the top-left corner */
+    transform: rotate(5deg);
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the <strong>Practice Area</strong> at the bottom of the page, there are four boxes. Give <code>.box-move</code> a <code>transform</code> of <code>translateX(40px)</code>, <code>.box-rotate</code> a <code>transform</code> of <code>rotate(15deg)</code>, and <code>.box-scale</code> a <code>transform</code> of <code>scale(1.2)</code>. Notice that the boxes around them do not move.</li>
+    <li>Give <code>.box-origin</code> a <code>transform</code> of <code>rotate(15deg)</code> and a <code>transform-origin</code> of <code>top left</code>. Compare how it turns with <code>.box-rotate</code>.</li>
+</ol>
+<br>
+
+<h2>Transitions</h2>
+<p>Without a transition, a change of style happens instantly. If a card moves up 4px on hover, it jumps there. A <strong>transition</strong> tells the browser to animate the change over a period of time instead. It has four parts:</p>
+<ul>
+    <li><code>transition-property</code>: which property to animate, such as <code>transform</code> or <code>background-color</code>.</li>
+    <li><code>transition-duration</code>: how long the change takes, in seconds (<code>0.2s</code>) or milliseconds (<code>200ms</code>).</li>
+    <li><code>transition-timing-function</code>: how the speed changes during the transition. <code>ease</code>, the default, starts quickly and slows down at the end. <code>linear</code> keeps a constant speed, <code>ease-in</code> starts slowly, and <code>ease-out</code> slows down at the end.</li>
+    <li><code>transition-delay</code>: how long to wait before starting.</li>
+</ul>
+<p>They are usually written together with the <code>transition</code> shorthand:</p>
+<pre><code class="language-css">.card {
+    transition: transform 0.2s ease-out;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}</code></pre>
+<p>Several properties can be transitioned at once, separated by commas: <code>transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;</code>.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Put the <code>transition</code> on the element's <strong>normal</strong> state, not on <code>:hover</code>. A transition applies whenever the property changes, in either direction, so this makes the card animate up when the mouse arrives <em>and</em> back down when it leaves. If the transition were only on <code>:hover</code>, the card would snap back instantly.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> You will often see <code>transition: all 0.3s</code>, which animates every property that changes. It is quick to write, but it can animate things you did not intend, such as a colour change when the theme switches, and makes the browser do extra work. Name the properties you want to animate.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>.module-card</code> elements a <code>transition</code> of <code>transform 0.2s ease-out, box-shadow 0.2s ease-out</code>.</li>
+    <li>Add a <code>.module-card:hover</code> rule with a <code>transform</code> of <code>translateY(-4px)</code> and a <code>box-shadow</code> of <code>0 8px 16px rgba(0, 0, 0, 0.15)</code>. Point at each card in the preview.</li>
+    <li>Move the <code>transition</code> declaration into the <code>:hover</code> rule instead. Notice that the card now snaps back down when the mouse leaves. Move it back.</li>
+</ol>
+<br>
+
+<h2>Keyboard Users and Touchscreens</h2>
+<p>A <code>:hover</code> effect only appears for mouse users. Keyboard users never hover, and touchscreens do not hover in the same way. Wherever a hover effect tells the user something, such as "this can be clicked", give keyboard users the same feedback when the element has focus.</p>
+<p>The cards on this page contain a link. The <code>:focus-within</code> pseudo-class matches an element when anything <em>inside</em> it has focus, so the whole card can respond when its link is focused:</p>
+<pre><code class="language-css">.module-card:hover,
+.module-card:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add <code>.module-card:focus-within</code> to your hover rule, as in the example above.</li>
+    <li>Click on the preview, then press <kbd>Tab</kbd> to move through the card links. Each card lifts as its link receives focus.</li>
+</ol>
+<br>
+
+<h2>Button Feedback</h2>
+<p>Small transforms make buttons feel responsive. Scaling a button down slightly while it is being pressed, with the <code>:active</code> pseudo-class, gives the impression of pressing a physical button:</p>
+<pre><code class="language-css">.button {
+    transition: background-color 0.15s ease-out, transform 0.1s ease-out;
+}
+
+.button:active {
+    transform: scale(0.96);
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Give the <code>.button</code> elements the transition and <code>:active</code> rule from the example above. Click and hold a button to see it sink.</li>
+</ol>
+<br>
+
+<h2>Using Custom Properties for Timing</h2>
+<p>As you learned in the last lesson, values that are used throughout a site belong in custom properties. Transition durations are a good example: a site where every transition uses the same speed feels consistent.</p>
+<pre><code class="language-css">:root {
+    --speed: 0.2s;
+}
+
+.module-card {
+    transition: transform var(--speed) ease-out, box-shadow var(--speed) ease-out;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add <code>--speed: 0.2s;</code> to the <code>:root</code> rule in the starter CSS, and use <code>var(--speed)</code> in your card and button transitions.</li>
+    <li>Change <code>--speed</code> to <code>1s</code> to see every transition slow down at once, then change it back.</li>
+</ol>
+<br>
+
+<h2>Transitions Triggered by JavaScript</h2>
+<p>A transition runs whenever a property changes, not only on hover. This means JavaScript can trigger one simply by adding or removing a class, in exactly the same way you toggled classes in the JavaScript unit. CSS handles the animation, and JavaScript only changes the state.</p>
+
+<h3>A Rotating Arrow</h3>
+<p>The page's accordion buttons already open and close their sections, using the JavaScript in the starter code, which updates <code>aria-expanded</code>. An arrow that rotates as the section opens shows the change of state clearly:</p>
+<pre><code class="language-css">.accordion-arrow {
+    display: inline-block;   /* transforms do not work on inline elements */
+    transition: transform var(--speed) ease-out;
+}
+
+.accordion-button[aria-expanded="true"] .accordion-arrow {
+    transform: rotate(90deg);
+}</code></pre>
+
+<h3>A Slide-In Panel</h3>
+<p>The starter page has a <strong>Help</strong> panel, which is fixed to the right-hand side of the screen. To hide it off-screen, move it its own full width to the right with <code>translateX(100%)</code>. A percentage in <code>translate</code> is a percentage of the element's own size, so this always moves it exactly out of view, however wide it is. When JavaScript adds the <code>open</code> class, the panel slides back to <code>translateX(0)</code>:</p>
+<pre><code class="language-css">.help-panel {
+    transform: translateX(100%);
+    transition: transform var(--speed) ease-out;
+}
+
+.help-panel.open {
+    transform: translateX(0);
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> A panel moved off-screen with a transform is still part of the page. Keyboard users can still tab to the links inside it, and screen readers can still read it, even though it cannot be seen. The starter CSS also sets <code>visibility: hidden</code> on the closed panel, which removes it from the keyboard order and from screen readers, and switches it to <code>visible</code> when the panel opens. The starter CSS includes <code>visibility</code> in the transition list with a duration of <code>0s</code> and a <strong>delay</strong> of <code>var(--speed)</code>, so that when the panel closes, it stays visible until it has finished sliding out, then disappears. The <code>.open</code> rule sets <code>transition-delay: 0s</code>, so that when the panel opens, it becomes visible straight away, and focus can move into it.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the two accordion arrow rules from the example above. Open and close each section, and check the arrow turns smoothly.</li>
+    <li>The starter CSS already positions the help panel. Add <code>transform: translateX(100%);</code> to the <code>.help-panel</code> rule, and add <code>transform</code> to its <code>transition</code> list, which already contains <code>visibility</code>, so that it reads <code>transition: transform var(--speed) ease-out, visibility 0s var(--speed);</code>.</li>
+    <li>Add the <code>.help-panel.open</code> rule with a <code>transform</code> of <code>translateX(0)</code>.</li>
+    <li>Click <strong>Help</strong>. The starter JavaScript adds the <code>open</code> class, and the panel slides in. Click <strong>Close</strong> to slide it out.</li>
+</ol>
+<br>
+
+<h2>Performance: What to Animate</h2>
+<p>Every time a property changes, the browser may have to do three kinds of work: work out the <strong>layout</strong> (where everything goes), <strong>paint</strong> the pixels, and <strong>composite</strong> the painted layers together on screen. During an animation, this happens many times a second.</p>
+<ul>
+    <li>Animating <code>width</code>, <code>height</code>, <code>margin</code> or <code>top</code> changes the layout, so the browser has to recalculate the position of everything around the element on every frame. On slower devices, this makes animations stutter.</li>
+    <li>Animating <code>transform</code> and <code>opacity</code> does not change the layout, so the browser can usually move the element without recalculating anything else. These animations stay smooth, even on phones.</li>
+</ul>
+<div class="tip-box"><strong>💡 Tip:</strong> Whenever possible, animate <code>transform</code> and <code>opacity</code> only. To make something grow, use <code>scale()</code> rather than changing its <code>width</code>. To move it, use <code>translate()</code> rather than changing <code>top</code> or <code>left</code>.</div>
+<br>
+
+<h2>Motion With a Purpose</h2>
+<p>Every transition on this page does a job:</p>
+<ul>
+    <li>The lifting cards show that they can be clicked.</li>
+    <li>The sinking buttons confirm a press.</li>
+    <li>The rotating arrows show whether a section is open.</li>
+    <li>The sliding panel shows where the help came from and where it went.</li>
+</ul>
+<p>Motion that does not do a job is decoration, and too much of it is distracting, slows the user down, and can make some people feel unwell. Keep transitions short, usually between 0.1 and 0.3 seconds, so that the page never feels slow to respond.</p>
+
+<h3>Reduced Motion</h3>
+<p>As you learned in JavaScript lesson 11, some people turn on a setting to reduce motion on their device, because movement on screen can cause dizziness or nausea. In CSS, the same setting is checked with a media query. Because the duration is a custom property, turning off every transition takes one rule:</p>
+<pre><code class="language-css">@media (prefers-reduced-motion: reduce) {
+    :root {
+        --speed: 0s;
+    }
+}</code></pre>
+<p>The changes still happen, so the arrows still point the right way and the panel still opens, but instantly, without movement.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the reduced motion media query from the example above, at the end of your CSS.</li>
+    <li>If you can, turn on your device's reduced motion setting (on Windows, <strong>Settings &gt; Accessibility &gt; Visual effects &gt; Animation effects</strong>; on a Mac, <strong>System Settings &gt; Accessibility &gt; Display &gt; Reduce motion</strong>), and check that every change now happens instantly. Then turn it off again.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your main rules should be similar to these:</p>
+<pre><code class="language-css">:root {
+    --speed: 0.2s;
+}
+
+/* Cards lift to show they can be clicked, for mouse and keyboard users */
+.module-card {
+    transition: transform var(--speed) ease-out, box-shadow var(--speed) ease-out;
+}
+
+.module-card:hover,
+.module-card:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* The panel slides in from the right; visibility keeps it out of the tab order when closed */
+.help-panel {
+    transform: translateX(100%);
+    transition: transform var(--speed) ease-out, visibility 0s var(--speed);
+}
+
+.help-panel.open {
+    transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --speed: 0s;
+    }
+}</code></pre>
+<p>Also check that the buttons sink when pressed, and the accordion arrows rotate as each section opens.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>Why does a transformed element not push the elements around it?</li>
+    <li>Why should the <code>transition</code> go on the element's normal state rather than on <code>:hover</code>?</li>
+    <li>Why are <code>transform</code> and <code>opacity</code> the best properties to animate?</li>
+    <li>How can JavaScript trigger a transition?</li>
+    <li>How does a custom property make it easy to respect the reduced motion setting?</li>
+</ul>
+<p>In the next lesson, you will create more complex animations with keyframes.</p>

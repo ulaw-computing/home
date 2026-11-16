@@ -1,0 +1,279 @@
+<h1>Tutorial</h1> <!--Lesson 9: Form Handling and Validation-->
+<p>In HTML lesson 10, you used attributes such as <code>required</code> and <code>type="email"</code> to let the browser check a form before sending it. In this lesson you will take control of that checking with JavaScript, known as <strong>validation</strong>, so that you can write your own rules, and give users clear, consistent and accessible feedback about exactly what needs fixing.</p>
+<p>The starter code contains a booking form for the Beginners' Web Workshop. Complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Why Validate With JavaScript?</h2>
+<p>The browser's built-in validation is a useful start, but it has limits:</p>
+<ul>
+    <li>Its messages look different in every browser, cannot be styled, and disappear after a few seconds.</li>
+    <li>It shows only one problem at a time, so a user with three mistakes must submit the form three times to find them all.</li>
+    <li>It can only check the rules that HTML attributes describe. Rules such as <em>a student number is exactly eight digits</em>, or <em>this field cannot be only spaces</em>, need code.</li>
+</ul>
+<p>With JavaScript, you decide what the rules are, when they are checked, and how each problem is shown.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Validation in the browser is there to <strong>help users</strong>, not to protect your data. Anyone can turn off JavaScript, or send data to a server without using your form at all. A website that stores form data must check it all again on the server. You will learn more about this in lesson 11.</div>
+<br>
+
+<h2>Taking Over From the Browser</h2>
+<p>Adding the <code>novalidate</code> attribute to a <code>&lt;form&gt;</code> turns off the browser's own validation messages, so that they do not appear alongside yours:</p>
+<pre><code class="language-html">&lt;form id="booking-form" novalidate&gt;</code></pre>
+<p>Keep the <code>required</code> and <code>type</code> attributes on the inputs, though. They still describe the fields correctly to assistive technology, mobile devices still show the right keyboard for each type, and they are a fallback if your JavaScript fails to load.</p>
+<p>Then, as in JavaScript lesson 6, listen for the form's <code>submit</code> event, and call <code>preventDefault()</code> so that you can check the data before anything is sent:</p>
+<pre><code class="language-javascript">bookingForm.addEventListener("submit", (event) =&gt; {
+    event.preventDefault();
+    // Validate the form here
+});</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the HTML tab, add <code>novalidate</code> to the form.</li>
+    <li>In the JS tab, add the submit listener above.</li>
+    <li>Submit the empty form. Nothing happens, because the browser's messages are off and you have not written your own yet.</li>
+</ol>
+<br>
+
+<h2>Accessible Error Messages</h2>
+<p>Look at the starter HTML for the name field:</p>
+<pre><code class="language-html">&lt;label for="full-name"&gt;Full name&lt;/label&gt;
+&lt;input type="text" id="full-name" required aria-describedby="full-name-error"&gt;
+&lt;p class="error-message" id="full-name-error"&gt;&lt;/p&gt;</code></pre>
+<p>Each field has an empty paragraph for its error message, placed straight after it, so that the message appears right next to the problem. Two ARIA attributes make the message accessible:</p>
+<ul>
+    <li><code>aria-describedby</code> links the input to the message. When a screen reader user moves to the input, they hear its label and then the text of the message, so they know what is wrong with it. The starter HTML already includes this. The student number field lists two ids, separated by a space, so its hint is read as well as its error.</li>
+    <li><code>aria-invalid="true"</code> tells assistive technology that the field's value is not valid. Your code will add it when a field has a problem, and remove it when the problem is fixed.</li>
+</ul>
+<p>Because every error paragraph's id is its input's id followed by <code>-error</code>, one pair of functions can show or clear the message for any field:</p>
+<pre><code class="language-javascript">function showError(field, message) {
+    const error = document.querySelector(`#${field.id}-error`);
+    error.textContent = message;
+    field.setAttribute("aria-invalid", "true");
+}
+
+function clearError(field) {
+    const error = document.querySelector(`#${field.id}-error`);
+    error.textContent = "";
+    field.removeAttribute("aria-invalid");
+}</code></pre>
+<p>The starter CSS styles any input with <code>aria-invalid="true"</code> with a thick red border. Using the ARIA attribute as the CSS selector, rather than a separate class, means the visual style and the information for screen readers can never disagree.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> Never show an error with colour alone. Some users cannot tell red from other colours. Each error here has a written message as well as the red border.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>showError</code> and <code>clearError</code> functions above.</li>
+    <li>Test them at the bottom of your code with <code>showError(fullNameInput, "Enter your full name");</code>, and check the message and border appear. Then remove the test.</li>
+</ol>
+<br>
+
+<h2>Writing the Rules</h2>
+<p>A tidy way to organise validation is a function that takes one field, checks its rules, and <strong>returns</strong> an error message, or an empty string if the field is valid. Before checking text, always <code>trim()</code> it, so that a value of only spaces counts as empty:</p>
+<pre><code class="language-javascript">function validateField(field) {
+    const value = field.value.trim();
+
+    if (field === fullNameInput) {
+        if (value === "") {
+            return "Enter your full name";
+        }
+        if (value.length &lt; 2) {
+            return "Your name must be at least 2 characters";
+        }
+    }
+
+    // ...rules for the other fields...
+
+    return "";
+}</code></pre>
+<p>Good error messages say exactly what to do, in plain words, without blaming the user. Compare <em>Invalid input</em> with <em>Enter your email address in the correct format, like name@example.com</em>. The second tells the user how to fix the problem.</p>
+<br>
+
+<h3>Patterns With Regular Expressions</h3>
+<p>Some rules are about the <strong>shape</strong> of a value, such as <em>exactly eight digits</em>. JavaScript describes shapes with <strong>regular expressions</strong>: patterns written between two forward slashes. Their <code>test()</code> method returns <code>true</code> if a string matches:</p>
+<pre><code class="language-javascript">const studentNumberPattern = /^\d{8}$/;
+
+studentNumberPattern.test("12345678");   // true
+studentNumberPattern.test("1234");       // false
+studentNumberPattern.test("1234567a");   // false</code></pre>
+<p>Read the pattern one piece at a time:</p>
+<ul>
+    <li><code>^</code> means the start of the string.</li>
+    <li><code>\d</code> means any digit, from 0 to 9.</li>
+    <li><code>{8}</code> means exactly eight of the thing before it.</li>
+    <li><code>$</code> means the end of the string.</li>
+</ul>
+<p>Without <code>^</code> and <code>$</code>, the pattern would match eight digits <strong>anywhere</strong> in the string, so <code>"abc12345678xyz"</code> would pass.</p>
+<p>A simple pattern for the shape of an email address is:</p>
+<pre><code class="language-javascript">const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;</code></pre>
+<p><code>[^\s@]+</code> means one or more characters that are not a space or an <code>@</code>. So the whole pattern means: some characters, an <code>@</code>, some more characters, a dot, and some more characters, with no spaces anywhere.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Do not try to write a perfect email pattern. Real email addresses can take surprising forms, and an over-strict pattern rejects real users. A pattern can only check the shape: the only way to know an address really works is to send an email to it.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the two patterns above, and write the <code>validateField</code> function with these rules, in this order, using the messages given:
+        <ul>
+            <li><strong>Full name:</strong> empty: <em>Enter your full name</em>. Fewer than 2 characters: <em>Your name must be at least 2 characters</em>. More than 60: <em>Your name must be 60 characters or fewer</em>.</li>
+            <li><strong>Email:</strong> empty: <em>Enter your email address</em>. Not matching the pattern: <em>Enter your email address in the correct format, like name@example.com</em>.</li>
+            <li><strong>Student number:</strong> empty: <em>Enter your student number</em>. Not matching the pattern: <em>Your student number must be 8 digits</em>.</li>
+            <li><strong>Session:</strong> the first option has an empty value, so an empty value means nothing is chosen: <em>Choose a session</em>.</li>
+            <li><strong>Access requirements:</strong> optional, but more than 300 characters: <em>Your access requirements must be 300 characters or fewer</em>.</li>
+            <li><strong>Consent:</strong> a checkbox has no useful <code>value</code> to check, so use its <code>checked</code> property instead: <em>Tick the box to agree to how your details will be used</em>.</li>
+        </ul>
+    </li>
+</ol>
+<br>
+
+<h2>Validating the Whole Form</h2>
+<p>With a function for one field, checking the whole form is a loop. The starter JavaScript has an array, <code>fields</code>, containing every field in the form. This function checks each one, shows or clears its message, and returns a list of the fields with problems:</p>
+<pre><code class="language-javascript">function validateForm() {
+    const invalidFields = [];
+
+    fields.forEach((field) =&gt; {
+        const message = validateField(field);
+        if (message) {
+            showError(field, message);
+            invalidFields.push(field);
+        } else {
+            clearError(field);
+        }
+    });
+
+    return invalidFields;
+}</code></pre>
+<p>When the form is submitted with problems, two more things help users:</p>
+<ul>
+    <li>An <strong>error summary</strong> at the top of the form, saying how many problems there are. On a long form, this means users cannot miss that something is wrong.</li>
+    <li>Moving focus to the <strong>first field with a problem</strong>, with <code>focus()</code>. Keyboard users are taken straight to it, and screen reader users hear its label and its error message.</li>
+</ul>
+<pre><code class="language-javascript">bookingForm.addEventListener("submit", (event) =&gt; {
+    event.preventDefault();
+    const invalidFields = validateForm();
+
+    if (invalidFields.length &gt; 0) {
+        const count = invalidFields.length;
+        errorSummary.textContent = count === 1
+            ? "There is 1 problem with your booking. Please check the field marked below."
+            : `There are ${count} problems with your booking. Please check the fields marked below.`;
+        errorSummary.hidden = false;
+        invalidFields[0].focus();
+        return;
+    }
+
+    errorSummary.hidden = true;
+    // The form is valid
+});</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>validateForm</code> function, and update your submit listener as above.</li>
+    <li>Submit the empty form. Every required field shows its message, the summary appears, and focus moves to the name field.</li>
+    <li>Fill in the name only, and submit again. The name's message disappears, the count goes down, and focus moves to the email field.</li>
+    <li>Test the edge cases: a name of only spaces; an email without a dot after the <code>@</code>; a student number of seven digits, and of eight characters including a letter. Each should be rejected with the right message.</li>
+</ol>
+<br>
+
+<h2>Checking as the User Types</h2>
+<p>Once a user has tried to submit, it helps to update each message <strong>as they fix it</strong>, so that they can see straight away when a field is right. Do not do this before they first submit, though: being told that an email address is wrong while you are still typing the first letter of it is annoying.</p>
+<p>Instead of a listener on every field, one listener on the form can catch the <code>input</code> event from all of them, because events <strong>bubble up</strong> from an element to its parents. <code>event.target</code> is the field that changed:</p>
+<pre><code class="language-javascript">let hasSubmitted = false;
+
+bookingForm.addEventListener("input", (event) =&gt; {
+    if (!hasSubmitted) {
+        return;
+    }
+    const message = validateField(event.target);
+    if (message) {
+        showError(event.target, message);
+    } else {
+        clearError(event.target);
+    }
+});</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>hasSubmitted</code> variable and the input listener above. In your submit listener, set <code>hasSubmitted</code> to <code>true</code>.</li>
+    <li>Type in the email field before submitting. No message appears.</li>
+    <li>Submit the form, then type a valid email address. The message disappears as soon as the address is valid.</li>
+</ol>
+<br>
+
+<h3>A Character Counter</h3>
+<p>For a field with a length limit, a counter shows users how much space they have left before they reach it, which is friendlier than an error afterwards:</p>
+<pre><code class="language-javascript">needsInput.addEventListener("input", () =&gt; {
+    needsCount.textContent = `${needsInput.value.length} of 300 characters`;
+});</code></pre>
+<div class="info-box"><strong>ℹ️ Info:</strong> The counter does not have <code>aria-live</code>, because a screen reader announcing a new number after every key press would be overwhelming. It is part of the field's description through <code>aria-describedby</code>, so screen reader users hear it when they move to the field.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the character counter above, and check it updates as you type in the access requirements box.</li>
+</ol>
+<br>
+
+<h2>When the Form Is Valid</h2>
+<p>On a real website, a valid form's data would now be sent to a server. You will simulate this in the next lesson. For now, show a confirmation, then clear the form with the form's <code>reset()</code> method, which returns every field to its starting value:</p>
+<pre><code class="language-javascript">const name = fullNameInput.value.trim();
+const session = sessionSelect.options[sessionSelect.selectedIndex].text;
+
+formStatus.textContent = `Thank you, ${name}. Your place on "${session}" is booked.`;
+bookingForm.reset();
+needsCount.textContent = "0 of 300 characters";
+hasSubmitted = false;</code></pre>
+<p><code>sessionSelect.value</code> would give the option's value, which is a short id. <code>options[selectedIndex].text</code> gives the text the user saw in the menu.</p>
+<p>The confirmation uses <code>textContent</code>, so whatever the user typed is shown as plain text. If someone typed HTML tags into the name field, they would appear as text on the page, rather than being treated as HTML. You will see why this matters in lesson 11.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the code above to your submit listener, after the summary is hidden.</li>
+    <li>Fill in the form correctly and submit it. The confirmation appears, and the form is cleared.</li>
+    <li>Type <code>&lt;b&gt;Sam&lt;/b&gt;</code> as the name, and submit. The tags appear as text, and nothing is made bold.</li>
+</ol>
+<br>
+
+<h2>The Constraint Validation API</h2>
+<p>Browsers also give JavaScript access to their own validation results through the <strong>Constraint Validation API</strong>. Every input has a <code>validity</code> object, describing which of its HTML rules it breaks, and a <code>checkValidity()</code> method that returns <code>true</code> if it breaks none:</p>
+<pre><code class="language-javascript">emailInput.validity.valueMissing;   // true if required and empty
+emailInput.validity.typeMismatch;   // true if not shaped like an email
+emailInput.checkValidity();         // true if every HTML rule passes</code></pre>
+<p>This lets you keep simple rules in HTML attributes, such as <code>required</code>, <code>minlength</code> and <code>pattern</code>, while still writing your own messages and choosing how they are shown. Both approaches are fine. Writing the rules in JavaScript, as you have done, makes them easier to see and change in one place.</p>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your submit listener should be similar to this:</p>
+<pre><code class="language-javascript">bookingForm.addEventListener("submit", (event) =&gt; {
+    event.preventDefault();
+    hasSubmitted = true;
+    formStatus.textContent = "";
+
+    const invalidFields = validateForm();
+
+    if (invalidFields.length &gt; 0) {
+        const count = invalidFields.length;
+        errorSummary.textContent = count === 1
+            ? "There is 1 problem with your booking. Please check the field marked below."
+            : `There are ${count} problems with your booking. Please check the fields marked below.`;
+        errorSummary.hidden = false;
+        invalidFields[0].focus();
+        return;
+    }
+
+    errorSummary.hidden = true;
+
+    const name = fullNameInput.value.trim();
+    const session = sessionSelect.options[sessionSelect.selectedIndex].text;
+    formStatus.textContent = `Thank you, ${name}. Your place on "${session}" is booked.`;
+
+    bookingForm.reset();
+    needsCount.textContent = "0 of 300 characters";
+    hasSubmitted = false;
+});</code></pre>
+<p>Also check that every field shows the right message for each of its rules, that messages clear as fields are fixed after the first submit, and that you can complete the whole form using only the keyboard.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What are the limits of the browser's built-in validation?</li>
+    <li>Why keep the <code>required</code> and <code>type</code> attributes when using <code>novalidate</code>?</li>
+    <li>What do <code>aria-describedby</code> and <code>aria-invalid</code> each do?</li>
+    <li>Why should text be trimmed before it is checked?</li>
+    <li>What do <code>^</code>, <code>\d</code>, <code>{8}</code> and <code>$</code> mean in a regular expression?</li>
+    <li>Why is focus moved to the first field with a problem?</li>
+    <li>Why are fields only checked as the user types after the first submit?</li>
+    <li>Why must a server check form data again, even when the browser has validated it?</li>
+</ul>
+<p>In the next lesson, you will use dialogs to show details and confirm actions, and give feedback while a form is being sent.</p>

@@ -1,0 +1,226 @@
+<h1>Tutorial</h1> <!--Lesson 3: CSS Animations-->
+<p>A transition animates a change between two states, such as normal and hovered, and only runs when something changes. Some movement needs more than that: a loading spinner that turns continuously while data is fetched, cards that fade in one after another as a page loads, or a form field that shakes when its input is rejected. These use <strong>CSS animations</strong>, which can have any number of steps, run on their own, and repeat.</p>
+<p>The starter code contains a dashboard for a student portal. As before, complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Keyframes</h2>
+<p>An animation is defined in two parts. First, an <code>@keyframes</code> rule describes what happens: the styles at different points, or <strong>keyframes</strong>, during the animation. It is given a name of your choice:</p>
+<pre><code class="language-css">@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}</code></pre>
+<p><code>from</code> is the start of the animation and <code>to</code> is the end. For more steps, use percentages instead, where <code>0%</code> is the start and <code>100%</code> is the end:</p>
+<pre><code class="language-css">@keyframes pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}</code></pre>
+<p>The browser works out every frame in between, just as it does for a transition.</p>
+<br>
+
+<h2>Applying an Animation</h2>
+<p>Second, the animation is applied to an element with the <code>animation</code> properties:</p>
+<ul>
+    <li><code>animation-name</code>: the name of the <code>@keyframes</code> rule to use.</li>
+    <li><code>animation-duration</code>: how long one run of the animation takes.</li>
+    <li><code>animation-timing-function</code>: how the speed changes, using the same values as transitions, such as <code>ease</code> or <code>linear</code>.</li>
+    <li><code>animation-delay</code>: how long to wait before starting.</li>
+    <li><code>animation-iteration-count</code>: how many times to run, or <code>infinite</code> to run forever.</li>
+    <li><code>animation-direction</code>: <code>normal</code>, <code>reverse</code>, or <code>alternate</code>, which runs forwards then backwards.</li>
+    <li><code>animation-fill-mode</code>: which styles apply before the animation starts and after it ends. <code>forwards</code> keeps the final keyframe's styles, <code>backwards</code> applies the first keyframe's styles during any delay, and <code>both</code> does both.</li>
+</ul>
+<p>They are usually written together with the <code>animation</code> shorthand. The name and duration are needed, and the rest are optional:</p>
+<pre><code class="language-css">.spinner {
+    animation: spin 1s linear infinite;
+}</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> The name in <code>animation</code> must match the name after <code>@keyframes</code> exactly, including capital letters. If they do not match, nothing happens, and the browser gives no warning.</div>
+<br>
+
+<h2>A Loading Spinner</h2>
+<p>When a page is waiting for something, such as data from an API, the user needs to know that something is happening. A <strong>loading spinner</strong> is a common way to show this. It can be made from a single element: a circle with a border, where one side of the border is a different colour, spinning continuously.</p>
+<pre><code class="language-css">.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #c5cae9;
+    border-top-color: var(--colour-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}</code></pre>
+<p><code>linear</code> keeps the speed constant, so the spinner turns smoothly instead of speeding up and slowing down on every turn.</p>
+<p>A spinner is only a picture, so screen reader users need the same information in words. The starter HTML places the spinner inside an element with <code>role="status"</code>, which, like <code>aria-live="polite"</code>, announces its content when it changes, and includes visually hidden text that says <em>Loading</em>.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> The starter CSS has a <code>.visually-hidden</code> class, which hides text on screen while keeping it available to screen readers. This is a common pattern, used whenever information is shown visually, as with an icon or spinner, but also needs to be available as text.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>In the CSS tab, add the <code>spin</code> keyframes from the first example.</li>
+    <li>Add the <code>.spinner</code> rule from the example above. The spinner in the <strong>Your Timetable</strong> section starts turning.</li>
+    <li>Change the timing function to <code>ease-in-out</code>, and notice the uneven movement, then change it back to <code>linear</code>.</li>
+</ol>
+<br>
+
+<h2>Entrance Animations</h2>
+<p>A subtle animation as content appears can draw the eye to it, and make a page feel more polished. A common entrance is a <strong>fade-in-up</strong>: the content starts slightly lower and transparent, then moves up into place as it becomes solid.</p>
+<pre><code class="language-css">@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.news-card {
+    animation: fade-in-up 0.4s ease-out both;
+}</code></pre>
+<p>The <code>both</code> fill mode matters here. During any delay, it applies the <code>from</code> keyframe, so the card is invisible until its animation starts, rather than appearing, disappearing and fading back in.</p>
+
+<h3>Staggering With a Custom Property</h3>
+<p>Cards that fade in one after another look smoother than cards that all appear at once. The delay for each card can be calculated from a custom property, set on each card in the HTML with a <code>style</code> attribute:</p>
+<pre><code class="language-html">&lt;article class="news-card" style="--i: 0"&gt;...&lt;/article&gt;
+&lt;article class="news-card" style="--i: 1"&gt;...&lt;/article&gt;
+&lt;article class="news-card" style="--i: 2"&gt;...&lt;/article&gt;</code></pre>
+<pre><code class="language-css">.news-card {
+    animation: fade-in-up 0.4s ease-out both;
+    animation-delay: calc(var(--i) * 0.1s);
+}</code></pre>
+<p>The first card waits 0s, the second 0.1s, and the third 0.2s. This is a rare case where a <code>style</code> attribute is appropriate: it does not set the card's appearance, only a number describing the card's position in the list, which the stylesheet then uses.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>fade-in-up</code> keyframes and the <code>.news-card</code> rule, including the staggered delay. The starter HTML already gives each news card its <code>--i</code> value.</li>
+    <li>Make any small change in the editor to run the page again, and watch the cards appear one after another.</li>
+</ol>
+<br>
+
+<h2>Triggering Animations With JavaScript</h2>
+<p>Like transitions, animations can be triggered by adding a class with JavaScript. A common use is a <strong>shake</strong>, which draws attention to a form field whose input has been rejected:</p>
+<pre><code class="language-css">@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+}
+
+.shake {
+    animation: shake 0.4s ease-in-out;
+}</code></pre>
+<p>Several keyframe selectors can share styles by separating them with commas, as with <code>0%, 100%</code>.</p>
+<p>There is one complication. An animation only runs when the class is <strong>added</strong>. If the class is still on the element from the last time, adding it again changes nothing, so the field would only ever shake once. The fix is to remove the class when the animation finishes, using the <code>animationend</code> event:</p>
+<pre><code class="language-javascript">function shake(element) {
+    element.classList.add("shake");
+    element.addEventListener("animationend", () =&gt; {
+        element.classList.remove("shake");
+    }, { once: true });
+}</code></pre>
+<p>The <code>{ once: true }</code> option removes the listener automatically after it has run once, so a new listener is not added every time the field shakes.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> A shake on its own is not enough to tell users what is wrong. It cannot be seen by screen reader users, and does not explain the problem to anyone. Always show a clear error message as well. You will build accessible error messages properly in Lesson 9.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>shake</code> keyframes and the <code>.shake</code> rule.</li>
+    <li>The starter JavaScript already shows an error message when the <strong>Quick search</strong> box is empty. Add the <code>shake</code> function from the example above to the JS tab, and call <code>shake(searchInput)</code> inside the <code>if</code> statement where the error message is shown.</li>
+    <li>Click <strong>Search</strong> with the box empty several times, and check the field shakes every time.</li>
+</ol>
+<br>
+
+<h2>Letting Users Pause Animations</h2>
+<p>Continuous movement is distracting, and can make it very hard to concentrate for some people, including many with attention-related conditions. Accessibility guidelines require that any movement which starts automatically and lasts more than five seconds can be paused, stopped or hidden, unless it is essential, such as a loading spinner that only shows while something is loading.</p>
+<p>The <code>animation-play-state</code> property pauses and resumes an animation: <code>paused</code> freezes it where it is, and <code>running</code> continues it.</p>
+<pre><code class="language-css">.badge {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+body.paused .badge {
+    animation-play-state: paused;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>pulse</code> keyframes from the beginning of the lesson, and give the <code>.badge</code> on the <strong>Messages</strong> heading the pulsing animation from the example above.</li>
+    <li>Add the <code>body.paused .badge</code> rule.</li>
+    <li>In the JS tab, add a click listener to the <code>#pause-button</code> that toggles the <code>paused</code> class on <code>document.body</code>, and updates the button's <code>aria-pressed</code> attribute. Check that the button pauses and restarts the badge.</li>
+</ol>
+<br>
+
+<h2>Reduced Motion</h2>
+<p>As with transitions, animations should respect the reduced motion setting. For most animations, the right response is to turn them off completely:</p>
+<pre><code class="language-css">@media (prefers-reduced-motion: reduce) {
+    .news-card,
+    .badge,
+    .shake {
+        animation: none;
+    }
+}</code></pre>
+<p>With <code>animation: none</code>, the news cards simply appear, the badge stays still, and the field does not shake, but the error message still shows.</p>
+<p>A loading spinner is different, because the movement itself tells the user that something is happening. A gentler alternative is to slow it down rather than stop it, or to replace it with a text message such as <em>Loading…</em>.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> If an animation is removed with <code>animation: none</code>, the <code>animationend</code> event never fires, so a class added by JavaScript is never removed. For the shake, this does no harm, because the field does not move either way. If your JavaScript waits for <code>animationend</code> before doing something important, such as showing the next step, make sure it still happens when animations are turned off.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the reduced motion media query from the example above, at the end of your CSS.</li>
+    <li>Inside it, add a rule that slows the <code>.spinner</code> down, with an <code>animation-duration</code> of <code>3s</code>.</li>
+</ol>
+<br>
+
+<h2>Animations or Transitions?</h2>
+<ul>
+    <li>Use a <strong>transition</strong> when an element changes between two states because of something the user does, such as hovering, focusing or opening a panel.</li>
+    <li>Use an <strong>animation</strong> when the movement needs more than two steps, needs to repeat, or needs to run without the user doing anything, such as a spinner or an entrance.</li>
+</ul>
+<p>The same principles from the last lesson apply to both: animate <code>transform</code> and <code>opacity</code> for smooth performance, keep the movement purposeful and short, and respect the reduced motion setting.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Before adding an animation to your own projects, ask what job it does for the user. "It shows the data is loading", "it draws attention to new messages" and "it shows the input was rejected" are good reasons. "It looks nice" on its own is not, and a page with too many moving parts is tiring to use. Write the reason in a comment beside the animation.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your animation rules should be similar to these:</p>
+<pre><code class="language-css">/* Spinner: shows that the timetable is loading */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #c5cae9;
+    border-top-color: var(--colour-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* News cards fade in one after another, to draw the eye to new content */
+.news-card {
+    animation: fade-in-up 0.4s ease-out both;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+body.paused .badge {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .news-card,
+    .badge,
+    .shake {
+        animation: none;
+    }
+
+    .spinner {
+        animation-duration: 3s;
+    }
+}</code></pre>
+<p>Also check that the badge pulses until paused, and the search field shakes every time it is submitted empty.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What are the two parts needed to create a CSS animation?</li>
+    <li>What does <code>animation-fill-mode: both</code> do, and why does a delayed entrance animation need it?</li>
+    <li>Why does the <code>shake</code> class need to be removed after the animation ends?</li>
+    <li>Why must users be able to pause animations that last more than five seconds?</li>
+    <li>When should you use an animation rather than a transition?</li>
+</ul>
+<p>In the next lesson, you will learn how to save data in the browser, so that it is remembered between visits.</p>

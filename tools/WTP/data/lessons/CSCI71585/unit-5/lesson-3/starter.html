@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | Student Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">Student Portal</p>
+        <button type="button" class="button" id="pause-button" aria-pressed="false">Pause animations</button>
+    </header>
+
+    <main>
+        <h1>Dashboard</h1>
+
+        <section class="panel">
+            <h2>Quick Search</h2>
+            <div class="search-row">
+                <label for="search-input">Search the portal</label>
+                <input type="search" id="search-input">
+                <button type="button" class="button" id="search-button">Search</button>
+            </div>
+            <p class="error" id="search-error" hidden>Please type something to search for.</p>
+        </section>
+
+        <section class="panel">
+            <h2>Your Timetable</h2>
+            <div class="loading" role="status">
+                <div class="spinner"></div>
+                <span class="visually-hidden">Loading</span>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Messages <span class="badge">3 new</span></h2>
+            <p>You have new messages from your module leaders.</p>
+        </section>
+
+        <h2>Latest News</h2>
+        <section class="news">
+            <article class="news-card" style="--i: 0">
+                <h3>Library Opening Hours</h3>
+                <p>The library is now open until 10pm on weekdays during the assessment period.</p>
+            </article>
+            <article class="news-card" style="--i: 1">
+                <h3>Careers Fair</h3>
+                <p>Meet employers from across the region at the careers fair next Wednesday.</p>
+            </article>
+            <article class="news-card" style="--i: 2">
+                <h3>New Study Spaces</h3>
+                <p>Twenty new quiet study spaces have opened on the second floor.</p>
+            </article>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

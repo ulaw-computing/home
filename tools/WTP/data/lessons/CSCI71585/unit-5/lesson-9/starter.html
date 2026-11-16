@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Book a Session | Beginners' Web Workshop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">Beginners' Web Workshop</p>
+    </header>
+
+    <main>
+        <h1>Book a Session</h1>
+        <p>All fields are required unless marked optional.</p>
+
+        <p class="error-summary" id="error-summary" hidden></p>
+        <p class="form-status" id="form-status" role="status"></p>
+
+        <form id="booking-form">
+            <div class="field">
+                <label for="full-name">Full name</label>
+                <input type="text" id="full-name" autocomplete="name" required aria-describedby="full-name-error">
+                <p class="error-message" id="full-name-error"></p>
+            </div>
+
+            <div class="field">
+                <label for="email">Email address</label>
+                <input type="email" id="email" autocomplete="email" required aria-describedby="email-error">
+                <p class="error-message" id="email-error"></p>
+            </div>
+
+            <div class="field">
+                <label for="student-number">Student number</label>
+                <p class="hint" id="student-number-hint">8 digits, shown on your student card</p>
+                <input type="text" id="student-number" inputmode="numeric" required aria-describedby="student-number-hint student-number-error">
+                <p class="error-message" id="student-number-error"></p>
+            </div>
+
+            <div class="field">
+                <label for="session">Session</label>
+                <select id="session" required aria-describedby="session-error">
+                    <option value="">Choose a session</option>
+                    <option value="s1">10:00 How the Web Works</option>
+                    <option value="s2">10:30 Your First HTML Page</option>
+                    <option value="s4">13:30 Styling With CSS</option>
+                    <option value="s5">14:15 Layouts With Flexbox and Grid</option>
+                    <option value="s6">15:00 Your First Line of JavaScript</option>
+                    <option value="s7">15:45 Testing With a Screen Reader</option>
+                    <option value="s8">16:30 Publishing Your Site</option>
+                </select>
+                <p class="error-message" id="session-error"></p>
+            </div>
+
+            <div class="field">
+                <label for="needs">Access requirements (optional)</label>
+                <textarea id="needs" rows="4" aria-describedby="needs-count needs-error"></textarea>
+                <p class="hint" id="needs-count">0 of 300 characters</p>
+                <p class="error-message" id="needs-error"></p>
+            </div>
+
+            <div class="field">
+                <div class="checkbox">
+                    <input type="checkbox" id="consent" required aria-describedby="consent-error">
+                    <label for="consent">I agree to my details being used to manage this booking</label>
+                </div>
+                <p class="error-message" id="consent-error"></p>
+            </div>
+
+            <button type="submit" class="button">Book my place</button>
+        </form>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

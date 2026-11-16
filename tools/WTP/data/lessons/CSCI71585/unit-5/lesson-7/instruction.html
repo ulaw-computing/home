@@ -1,0 +1,221 @@
+<h1>Tutorial</h1> <!--Lesson 7: Working With APIs-->
+<p>In the last lesson, you used <code>fetch</code> to load a JSON file from this platform's server. In this lesson you will request <strong>live</strong> data from a public API on the web: the current weather for UK cities, from a free service called Open-Meteo. Along the way, you will learn how APIs are organised, how to read their documentation, and how to judge whether an API is suitable for a front-end project.</p>
+<p>The starter code contains a weather page with a city menu and space for the results. Complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>What Is an API?</h2>
+<p>An <strong>API</strong> (Application Programming Interface) is a way for one program to ask another for data or to do something. A <strong>web API</strong> does this over HTTP: your page sends a request to an address, and the server sends back data, usually as JSON, rather than a web page.</p>
+<p>Each address that an API offers is called an <strong>endpoint</strong>. For example, Open-Meteo has one endpoint for weather forecasts and another for searching place names:</p>
+<pre><code class="language-javascript">https://api.open-meteo.com/v1/forecast
+https://geocoding-api.open-meteo.com/v1/search</code></pre>
+<p>The <code>v1</code> in each address is a <strong>version number</strong>. If the API's creators change how it works in the future, they can release a <code>v2</code>, and pages that use <code>v1</code> carry on working.</p>
+<br>
+
+<h3>HTTP Methods</h3>
+<p>Every request has a <strong>method</strong>, which says what the request wants to do. Most web APIs follow a style called <strong>REST</strong>, where the methods have these meanings:</p>
+<ul>
+    <li><strong>GET</strong>: read some data. This is what <code>fetch</code> sends unless you say otherwise.</li>
+    <li><strong>POST</strong>: create something new, such as a new comment.</li>
+    <li><strong>PUT</strong> or <strong>PATCH</strong>: update something that already exists.</li>
+    <li><strong>DELETE</strong>: remove something.</li>
+</ul>
+<p>Public APIs that need no account usually only allow GET requests, because anyone could use them. In this unit, you will only send GET requests.</p>
+<br>
+
+<h3>More Status Codes</h3>
+<p>In the last lesson, you met the status codes 200, 404 and 500. APIs use some others, which are worth recognising:</p>
+<ul>
+    <li><strong>400 Bad Request</strong>: the request itself was wrong, such as a missing or misspelt option.</li>
+    <li><strong>401 Unauthorized</strong> or <strong>403 Forbidden</strong>: the request needs a key or permission that it did not have.</li>
+    <li><strong>429 Too Many Requests</strong>: the page has sent too many requests in a short time, and must wait before sending more.</li>
+</ul>
+<br>
+
+<h2>Reading the Documentation</h2>
+<p>Every API has <strong>documentation</strong>: a guide, written by its creators, explaining its endpoints, the options each one accepts, and the shape of the data it sends back. You should always read the documentation before using an API, rather than guessing. Open-Meteo's documentation is at <a href="https://open-meteo.com/en/docs" target="_blank" rel="noopener">open-meteo.com/en/docs</a>, and lets you build an address by choosing options and see the data it returns.</p>
+<p>From the documentation, a forecast request needs at least these options, which are added to the address as a <strong>query string</strong> after a <code>?</code>, separated by <code>&amp;</code>:</p>
+<ul>
+    <li><code>latitude</code> and <code>longitude</code>: the location, in decimal degrees.</li>
+    <li><code>current</code>: a comma-separated list of the current conditions you want, such as <code>temperature_2m</code> (the temperature two metres above the ground).</li>
+</ul>
+<pre><code class="language-javascript">https://api.open-meteo.com/v1/forecast?latitude=53.80&amp;longitude=-1.55&amp;current=temperature_2m</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Open the address above in a new browser tab. The browser shows the JSON that the API sends back for Leeds.</li>
+    <li>Find the current temperature in the data. Notice that it sits inside a <code>current</code> object, and that a separate <code>current_units</code> object says which unit it is measured in.</li>
+    <li>Change <code>temperature_2m</code> in the address to <code>temperature_2m,wind_speed_10m</code>, and reload the tab. The wind speed is now included too.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> Opening an API's address in a browser tab is a quick way to see its data before writing any code. Many browsers display JSON with collapsible sections, and some have a <strong>Pretty-print</strong> option.</div>
+<br>
+
+<h2>Building the Address</h2>
+<p>You could build the address with a template literal, but it quickly becomes long and hard to read. JavaScript's <code>URLSearchParams</code> object builds a query string for you from an object, and safely encodes any characters that are not allowed in addresses, such as spaces:</p>
+<pre><code class="language-javascript">const params = new URLSearchParams({
+    latitude: 53.80,
+    longitude: -1.55,
+    current: "temperature_2m,wind_speed_10m,weather_code",
+    timezone: "Europe/London"
+});
+
+const url = `https://api.open-meteo.com/v1/forecast?${params}`;</code></pre>
+<p>The <code>timezone</code> option asks for times in UK time rather than the default, which is Greenwich Mean Time all year round.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Look at the starter JavaScript. The <code>cities</code> object holds the latitude and longitude of each city in the menu, using the city's name as the key.</li>
+    <li>Write a function called <code>buildWeatherUrl(city)</code> that looks up the city's location in <code>cities</code>, and returns the address for its current temperature, wind speed and weather code, using <code>URLSearchParams</code> as in the example above.</li>
+    <li>Test it with <code>console.log(buildWeatherUrl("Cardiff"))</code>, then open the logged address in a new tab to check it works.</li>
+</ol>
+<br>
+
+<h2>Requesting the Weather</h2>
+<p>Requesting data from an API uses exactly the same code as in the last lesson. Only the address is different:</p>
+<pre><code class="language-javascript">async function showWeather() {
+    const city = citySelect.value;
+    statusMessage.textContent = `Loading the weather for ${city}…`;
+
+    try {
+        const response = await fetch(buildWeatherUrl(city));
+
+        if (!response.ok) {
+            throw new Error(`The request failed with status ${response.status}.`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+        statusMessage.textContent = "";
+    } catch (problem) {
+        statusMessage.textContent = "Sorry, the weather could not be loaded. Please try again later.";
+        console.log(problem.message);
+    }
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>showWeather</code> function above, and make the <code>#weather-form</code> call it when it is submitted. Remember to call <code>preventDefault()</code> on the submit event first.</li>
+    <li>Choose a city and click <strong>Show weather</strong>. Explore the logged data in the console.</li>
+    <li>Display the city's name in <code>#weather-city</code>, and the temperature in <code>#weather-temperature</code>, followed by the unit from <code>current_units</code>, such as <code>11.4°C</code>.</li>
+    <li>Display the wind speed in <code>#weather-wind</code> in the same way.</li>
+</ol>
+<div class="info-box"><strong>ℹ️ Info:</strong> The request is sent when the form is submitted, rather than whenever the menu changes. Each request uses a little of the API's free service, and sending one only when the user asks for it keeps the number of requests low.</div>
+<br>
+
+<h2>Turning Codes Into Words</h2>
+<p>APIs often send <strong>codes</strong> rather than descriptions, because codes are shorter and do not depend on language. Open-Meteo's <code>weather_code</code> is a number from an international standard, which the documentation lists in full. To show it to users, you can look it up in an object:</p>
+<pre><code class="language-javascript">const weatherDescriptions = {
+    0: "Clear sky",
+    1: "Mainly clear",
+    2: "Partly cloudy",
+    3: "Overcast",
+    45: "Fog",
+    61: "Light rain"
+};
+
+const description = weatherDescriptions[data.current.weather_code] ?? "Unknown conditions";</code></pre>
+<p>The <code>??</code> operator, from lesson 4, provides a fallback if the code is not in the object, so the page never shows <code>undefined</code>.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The starter JavaScript includes a <code>weatherDescriptions</code> object with all of the codes from the documentation. Use it to display a description of the weather in <code>#weather-summary</code>, with a fallback.</li>
+</ol>
+<br>
+
+<h2>When the API Reports a Problem</h2>
+<p>When a request is wrong, many APIs send a JSON response that explains why, alongside the error status. Open-Meteo sends a status of 400, and an object with a <code>reason</code> property, similar to this:</p>
+<pre><code class="language-javascript">{
+    "error": true,
+    "reason": "Cannot initialize WeatherVariable from invalid String value temprature_2m"
+}</code></pre>
+<p>This reason is meant for developers, not users. You can read it before throwing your error, so that it appears in the console where you can see it:</p>
+<pre><code class="language-javascript">if (!response.ok) {
+    const problem = await response.json();
+    throw new Error(`Status ${response.status}: ${problem.reason}`);
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Update your <code>response.ok</code> check to read and include the reason, as in the example above.</li>
+    <li>Test it: in <code>buildWeatherUrl</code>, misspell <code>temperature_2m</code> as <code>temprature_2m</code>, and submit the form. The user sees your friendly message, and the console shows the API's reason.</li>
+    <li>Correct the spelling, and check the weather loads again.</li>
+</ol>
+<br>
+
+<h2>Choosing an API</h2>
+<p>There are thousands of free public APIs, covering everything from books and films to space and sport, and you will choose one for your own projects. Not every API is suitable for a front-end page. Before choosing one, check that it:</p>
+<ul>
+    <li><strong>Needs no key or account.</strong> Many APIs need an <strong>API key</strong>: a secret code that identifies who is making the request. Anything in front-end code can be read by anyone who visits the page, so a key in your JavaScript is not secret, and could be copied and misused. Keys belong on a server, which is beyond this unit. For a front-end page, choose an API that needs no key.</li>
+    <li><strong>Uses HTTPS.</strong> Pages served over HTTPS, as GitHub Pages is, cannot request data over plain HTTP.</li>
+    <li><strong>Supports CORS.</strong> By default, browsers only let a page read responses from its own website. <strong>CORS</strong> (Cross-Origin Resource Sharing) is how a server gives other websites permission to read its responses. An API without CORS support works when you open its address in a tab, but not from <code>fetch</code> on another website. The documentation, or a quick test, will tell you.</li>
+    <li><strong>Has clear documentation</strong>, so you know what it returns and what its limits are.</li>
+    <li><strong>Has fair limits for your use.</strong> Most free APIs have a <strong>rate limit</strong>: a maximum number of requests in a minute, hour or day. Going over it results in a 429 status.</li>
+    <li><strong>Has terms you can follow.</strong> Many free APIs ask you to credit them on your page. Open-Meteo's terms ask for a credit with a link to its website, which is why the starter page already has one in its footer.</li>
+</ul>
+<p>Lists such as the <a href="https://github.com/public-apis/public-apis" target="_blank" rel="noopener">public-apis</a> collection on GitHub show whether each API needs a key, uses HTTPS and supports CORS. Look for <strong>No</strong> under <em>Auth</em>, and <strong>Yes</strong> under <em>HTTPS</em> and <em>CORS</em>.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Never put an API key, password or any other secret in front-end code or in a public repository on GitHub. Anyone can read it, and automated programs search GitHub for keys to misuse.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Browse the public-apis list, and find two APIs that meet all of the criteria above and that interest you.</li>
+    <li>For each one, open its documentation, and find one endpoint and an example of the data it returns. You will be able to use one of them in your own work.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your JavaScript should now include functions similar to these:</p>
+<pre><code class="language-javascript">function buildWeatherUrl(city) {
+    const location = cities[city];
+    const params = new URLSearchParams({
+        latitude: location.latitude,
+        longitude: location.longitude,
+        current: "temperature_2m,wind_speed_10m,weather_code",
+        timezone: "Europe/London"
+    });
+    return `https://api.open-meteo.com/v1/forecast?${params}`;
+}
+
+async function showWeather() {
+    const city = citySelect.value;
+    statusMessage.textContent = `Loading the weather for ${city}…`;
+
+    try {
+        const response = await fetch(buildWeatherUrl(city));
+
+        if (!response.ok) {
+            const problem = await response.json();
+            throw new Error(`Status ${response.status}: ${problem.reason}`);
+        }
+
+        const data = await response.json();
+        const units = data.current_units;
+
+        document.querySelector("#weather-city").textContent = city;
+        document.querySelector("#weather-temperature").textContent =
+            `${data.current.temperature_2m}${units.temperature_2m}`;
+        document.querySelector("#weather-wind").textContent =
+            `${data.current.wind_speed_10m} ${units.wind_speed_10m}`;
+        document.querySelector("#weather-summary").textContent =
+            weatherDescriptions[data.current.weather_code] ?? "Unknown conditions";
+
+        statusMessage.textContent = "";
+    } catch (problem) {
+        statusMessage.textContent = "Sorry, the weather could not be loaded. Please try again later.";
+        console.log(problem.message);
+    }
+}
+
+weatherForm.addEventListener("submit", (event) =&gt; {
+    event.preventDefault();
+    showWeather();
+});</code></pre>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is an API, and what is an endpoint?</li>
+    <li>What do the GET, POST, PUT and DELETE methods each do?</li>
+    <li>What do the status codes 400 and 429 mean?</li>
+    <li>Why is <code>URLSearchParams</code> better than building a query string by hand?</li>
+    <li>Why is the request sent when the form is submitted, rather than whenever the menu changes?</li>
+    <li>Why should front-end pages only use APIs that need no key?</li>
+    <li>What is CORS, and why does it matter when choosing an API?</li>
+</ul>
+<p>In the next lesson, you will display a list of results from an API as cards, and let users sort and filter them.</p>

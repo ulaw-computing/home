@@ -1,0 +1,154 @@
+:root {
+    --colour-primary: #00695c;
+    --colour-primary-dark: #004d40;
+    --colour-background: #f5f5f5;
+    --colour-surface: #ffffff;
+    --colour-text: #222222;
+    --colour-on-primary: #ffffff;
+    --space: 16px;
+    --radius: 8px;
+}
+
+body.dark {
+    --colour-primary: #4db6ac;
+    --colour-primary-dark: #80cbc4;
+    --colour-background: #121212;
+    --colour-surface: #1e1e1e;
+    --colour-text: #eeeeee;
+    --colour-on-primary: #121212;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--colour-text);
+    background-color: var(--colour-background);
+}
+
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space);
+    background-color: var(--colour-primary);
+    color: var(--colour-on-primary);
+}
+
+.site-name {
+    margin: 0;
+    font-weight: bold;
+}
+
+.site-header .button {
+    border: 2px solid var(--colour-on-primary);
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space);
+}
+
+.panel {
+    margin-bottom: var(--space);
+    padding: var(--space);
+    background-color: var(--colour-surface);
+    border-radius: var(--radius);
+}
+
+.panel h2 {
+    margin-top: 0;
+}
+
+.button {
+    padding: 8px var(--space);
+    font: inherit;
+    color: var(--colour-on-primary);
+    background-color: var(--colour-primary);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--colour-primary-dark);
+}
+
+.button-secondary {
+    color: var(--colour-text);
+    background-color: transparent;
+    border: 2px solid var(--colour-primary);
+}
+
+.button-secondary:hover {
+    color: var(--colour-on-primary);
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #ffb300;
+    outline-offset: 2px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 8px;
+    font: inherit;
+    color: var(--colour-text);
+    background-color: var(--colour-surface);
+    border: 1px solid #767676;
+    border-radius: var(--radius);
+}
+
+textarea {
+    font-family: monospace;
+}
+
+.note-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.note-row label {
+    width: 100%;
+}
+
+.note-row input {
+    flex: 1;
+    width: auto;
+    min-width: 200px;
+}
+
+.count {
+    font-weight: bold;
+}
+
+.notes-list li {
+    padding: 4px 0;
+}
+
+.json-output {
+    padding: var(--space);
+    overflow-x: auto;
+    background-color: var(--colour-background);
+    border-left: 4px solid var(--colour-primary);
+}
+
+.result {
+    font-weight: bold;
+}

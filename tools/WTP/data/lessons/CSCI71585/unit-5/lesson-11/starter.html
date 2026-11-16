@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Comments | Beginners' Web Workshop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">Beginners' Web Workshop</p>
+    </header>
+
+    <main>
+        <h1>Comment Wall</h1>
+        <p>Say hello to everyone coming to the workshop.</p>
+
+        <form class="comment-form" id="comment-form">
+            <div class="field">
+                <label for="comment-name">Your name</label>
+                <input type="text" id="comment-name" maxlength="40" required>
+            </div>
+            <div class="field">
+                <label for="comment-website">Your website (optional)</label>
+                <input type="text" id="comment-website" placeholder="https://">
+                <p class="error-message" id="comment-website-error"></p>
+            </div>
+            <div class="field">
+                <label for="comment-message">Message</label>
+                <textarea id="comment-message" rows="3" maxlength="200" required></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="button">Post comment</button>
+                <button type="button" class="button button-secondary" id="clear-comments">Reset comments</button>
+            </div>
+        </form>
+
+        <h2>Comments</h2>
+        <ul class="comment-list" id="comment-list"></ul>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

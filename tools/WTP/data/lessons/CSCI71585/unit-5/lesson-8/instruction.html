@@ -1,0 +1,208 @@
+<h1>Tutorial</h1> <!--Lesson 8: Displaying API Data-->
+<p>In the last lesson, you requested a single set of values from an API. Many APIs send back a <strong>list</strong> of results instead, such as search results, and real data is rarely tidy: some results have missing values, and some searches find nothing at all. In this lesson you will build a book search page using the Open Library API, display its results as cards, handle missing and empty data, and let users sort and filter the results.</p>
+<p>The starter code contains the search page and its styles. Complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>The Open Library Search API</h2>
+<p>Open Library is a free online catalogue of books, run by the Internet Archive. Its search endpoint needs no key, uses HTTPS and supports CORS. Its documentation is at <a href="https://openlibrary.org/dev/docs/api/search" target="_blank" rel="noopener">openlibrary.org/dev/docs/api/search</a>. A request uses these options:</p>
+<ul>
+    <li><code>q</code>: the words to search for.</li>
+    <li><code>fields</code>: a comma-separated list of the information you want about each book. Asking only for what you need keeps the response small and fast.</li>
+    <li><code>limit</code>: the maximum number of results.</li>
+</ul>
+<pre><code class="language-javascript">function buildSearchUrl(searchTerm) {
+    const params = new URLSearchParams({
+        q: searchTerm,
+        fields: "key,title,author_name,first_publish_year,cover_i",
+        limit: 20
+    });
+    return `https://openlibrary.org/search.json?${params}`;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>buildSearchUrl</code> function above to the JS tab.</li>
+    <li>Write an <code>async</code> function called <code>searchBooks()</code> that reads and trims the value of <code>searchInput</code>, fetches the address for it, checks <code>response.ok</code>, and logs the data. Use the same <code>try...catch</code> pattern as in the last two lessons, with a loading message in <code>statusMessage</code> and a friendly failure message.</li>
+    <li>Make the <code>#search-form</code> call <code>searchBooks</code> when it is submitted, remembering <code>preventDefault()</code>.</li>
+    <li>Search for <code>web design</code>, and explore the logged data. The books are in an array called <code>docs</code>.</li>
+</ol>
+<br>
+
+<h2>Exploring the Results</h2>
+<p>Look carefully at a few of the objects in <code>docs</code>. They do not all have the same properties. Here are two results from a typical search:</p>
+<pre><code class="language-javascript">{
+    "key": "/works/OL1234567W",
+    "title": "Learning Web Design",
+    "author_name": ["Jennifer Niederst Robbins"],
+    "first_publish_year": 2001,
+    "cover_i": 1234567
+}
+
+{
+    "key": "/works/OL7654321W",
+    "title": "Web Design Notes"
+}</code></pre>
+<p>When Open Library has no information for a field, it leaves the property out altogether. Reading a missing property gives <code>undefined</code>, and if your code displays it, users see the word <em>undefined</em> on the page. Worse, if your code calls a method on it, such as <code>book.author_name.join(", ")</code>, the code stops with an error, and the rest of the results never appear.</p>
+<p>Notice too that <code>author_name</code> is an <strong>array</strong>, because a book can have several authors, and that the cover is a number rather than an image address.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> Never assume that every item from an API has every property. Check the documentation, and look at several results, not just the first one, before you write code that displays them.</div>
+<br>
+
+<h2>Handling Missing Values</h2>
+<p>JavaScript has two operators that make missing values easy to handle. You met the <strong>nullish coalescing operator</strong>, <code>??</code>, in lesson 4: it gives a fallback when a value is <code>null</code> or <code>undefined</code>. The <strong>optional chaining operator</strong>, <code>?.</code>, is its partner: it reads a property or calls a method only if the value before it exists, and gives <code>undefined</code> instead of stopping with an error if it does not:</p>
+<pre><code class="language-javascript">// Works whether or not the book has an author_name array
+const authors = book.author_name?.join(", ") ?? "Unknown author";
+
+const year = book.first_publish_year ?? "Year unknown";</code></pre>
+<p>Read the first line as: if there is an <code>author_name</code> array, join it into a string; if there is not, use <em>Unknown author</em>.</p>
+<br>
+
+<h3>Cover Images</h3>
+<p>Open Library's documentation explains that the <code>cover_i</code> number is used to build an image address, with a letter for the size: <code>S</code>, <code>M</code> or <code>L</code>:</p>
+<pre><code class="language-javascript">https://covers.openlibrary.org/b/id/1234567-M.jpg</code></pre>
+<p>A book without a <code>cover_i</code> needs something else in its place. The starter CSS has a <code>.no-cover</code> class for a plain placeholder.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Write a function called <code>createBookCard(book)</code> that returns an <code>&lt;article&gt;</code> with the class <code>book-card</code>, containing:
+        <ul>
+            <li>If the book has a <code>cover_i</code>, an <code>&lt;img&gt;</code> with the class <code>cover</code>, its <code>src</code> set to the medium cover address, an empty <code>alt</code>, and <code>loading</code> set to <code>"lazy"</code>. If it does not, a <code>&lt;div&gt;</code> with the classes <code>cover no-cover</code> and the text <em>No cover</em>.</li>
+            <li>An <code>&lt;h3&gt;</code> containing a link to the book's page, which is <code>https://openlibrary.org</code> followed by its <code>key</code>.</li>
+            <li>A <code>&lt;p&gt;</code> with the authors, and another with the year, using the fallbacks above.</li>
+        </ul>
+    </li>
+    <li>In <code>searchBooks</code>, clear <code>bookList</code>, then append a card for every book in <code>data.docs</code>. Remove the <code>console.log</code>.</li>
+    <li>Search for a few different subjects, and check that books without covers, authors or years display neatly.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> The covers have an empty <code>alt</code> because the book's title is right next to each one. Alt text such as <em>Cover of Learning Web Design</em> would only repeat it for screen reader users. Setting <code>loading="lazy"</code> means the browser only downloads a cover when it is about to scroll into view.</div>
+<br>
+
+<h2>When Nothing Is Found</h2>
+<p>A search that finds nothing is not a failure: the request works, and the API sends back an empty <code>docs</code> array. Without extra code, the page simply shows nothing, and the user cannot tell whether the search finished. Always check for an empty result, and say so:</p>
+<pre><code class="language-javascript">if (books.length === 0) {
+    statusMessage.textContent = `No books were found for "${searchTerm}". Try different words.`;
+} else {
+    statusMessage.textContent = `${books.length} books found.`;
+}</code></pre>
+<p>It is also wise to protect your code against data that is not the shape you expect. If <code>data.docs</code> were missing, <code>data.docs.forEach</code> would stop with an error. The <code>??</code> operator can provide an empty array instead:</p>
+<pre><code class="language-javascript">const books = data.docs ?? [];</code></pre>
+<p>Finally, do not send a request for an empty search. Check the search term first, and ask the user to type something.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Store the results in a variable using <code>data.docs ?? []</code>, and display the number of books found, or the message for no results, as in the example above.</li>
+    <li>Search for <code>qzxjvwk</code>, and check the no-results message appears.</li>
+    <li>At the start of <code>searchBooks</code>, if the search term is empty, show <em>Please type something to search for.</em> and <code>return</code> without sending a request.</li>
+</ol>
+<br>
+
+<h2>Keeping the Results</h2>
+<p>To sort or filter the results, your code needs to keep them after they have been displayed, rather than only using them inside <code>searchBooks</code>. Declare a variable at the top level of your code, outside any function, and store the results in it:</p>
+<pre><code class="language-javascript">let books = [];
+
+async function searchBooks() {
+    // ...
+    books = data.docs ?? [];
+    renderBooks();
+}</code></pre>
+<p>Then move the code that clears the list and appends the cards into its own function, <code>renderBooks()</code>. Sorting and filtering can then call <code>renderBooks()</code> to redisplay the stored results, <strong>without sending a new request</strong>. This is faster for the user, and kinder to the API.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the top-level <code>books</code> variable, and move the code that displays the cards into a <code>renderBooks()</code> function, as described above.</li>
+    <li>Check that searching still works exactly as before.</li>
+</ol>
+<br>
+
+<h2>Sorting the Results</h2>
+<p>JavaScript arrays have a <code>sort()</code> method, which takes a <strong>compare function</strong>. The function is given two items, <code>a</code> and <code>b</code>, and returns a negative number if <code>a</code> should come first, a positive number if <code>b</code> should come first, or zero if their order does not matter.</p>
+<p>For numbers, subtracting one from the other gives exactly this:</p>
+<pre><code class="language-javascript">// Oldest first: smaller years before larger ones
+sorted.sort((a, b) =&gt; a.first_publish_year - b.first_publish_year);
+
+// Newest first: swap a and b
+sorted.sort((a, b) =&gt; b.first_publish_year - a.first_publish_year);</code></pre>
+<p>For text, use the <code>localeCompare</code> method, which compares strings alphabetically, following the rules of the language, rather than by character codes, which would put every capital letter before every lower-case one:</p>
+<pre><code class="language-javascript">sorted.sort((a, b) =&gt; a.title.localeCompare(b.title));</code></pre>
+<div class="warning-box"><strong>⚠️ Warning:</strong> <code>sort()</code> changes the original array, rather than making a new one. If you sorted <code>books</code> itself, the original order from the API, which is ordered by how well each book matches the search, would be lost. Sort a <strong>copy</strong> instead, made with the spread syntax: <code>const sorted = [...books];</code></div>
+<p>Books with no year need care. Subtracting <code>undefined</code> gives <code>NaN</code>, which leaves the order unpredictable. A fallback year solves this: using <code>Infinity</code> for oldest first, and <code>-Infinity</code> for newest first, puts books with no year at the end of the list either way:</p>
+<pre><code class="language-javascript">sorted.sort((a, b) =&gt; (a.first_publish_year ?? Infinity) - (b.first_publish_year ?? Infinity));</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>At the start of <code>renderBooks</code>, make a copy of <code>books</code> called <code>sorted</code>, and sort it according to the value of <code>sortSelect</code>: <code>"title"</code> for A to Z, <code>"newest"</code>, <code>"oldest"</code>, or <code>"relevance"</code>, which leaves the order unchanged. Display the cards from <code>sorted</code>.</li>
+    <li>Make <code>sortSelect</code> call <code>renderBooks</code> when it changes.</li>
+    <li>Search for something, and try each sort order. Check that books with no year appear at the end of both year orders, and that <strong>Best match</strong> returns to the original order.</li>
+</ol>
+<br>
+
+<h2>Filtering the Results</h2>
+<p>The <code>filter()</code> method, which you met in JavaScript lesson 7, creates a new array containing only the items for which a function returns <code>true</code>. The starter page has a filter box, to show only results whose title or author contains some text. As with the search itself, the comparison is easier if both sides are in lower case:</p>
+<pre><code class="language-javascript">const filterText = filterInput.value.trim().toLowerCase();
+
+const shown = sorted.filter((book) =&gt; {
+    const title = book.title.toLowerCase();
+    const authors = (book.author_name?.join(", ") ?? "").toLowerCase();
+    return title.includes(filterText) || authors.includes(filterText);
+});</code></pre>
+<p>An empty filter matches every book, because every string includes the empty string.</p>
+<p>The filter is different from the search: the search asks the API for new results, while the filter narrows down the results the page already has, instantly and without a request. This is why the filter can update on every key press, using the <code>input</code> event, when the search cannot.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>In <code>renderBooks</code>, after sorting, filter the sorted books as in the example above, and display the cards from the filtered array.</li>
+    <li>Make <code>filterInput</code> call <code>renderBooks</code> on every <code>input</code> event.</li>
+    <li>Update the count so that it says, for example, <em>Showing 4 of 20 books.</em> If the filter matches nothing, show <em>No books match your filter.</em> instead.</li>
+    <li>When a new search is made, clear the filter box, so that the new results are not hidden by an old filter.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your <code>renderBooks</code> function should be similar to this:</p>
+<pre><code class="language-javascript">function renderBooks() {
+    const sorted = [...books];
+
+    if (sortSelect.value === "title") {
+        sorted.sort((a, b) =&gt; a.title.localeCompare(b.title));
+    } else if (sortSelect.value === "newest") {
+        sorted.sort((a, b) =&gt; (b.first_publish_year ?? -Infinity) - (a.first_publish_year ?? -Infinity));
+    } else if (sortSelect.value === "oldest") {
+        sorted.sort((a, b) =&gt; (a.first_publish_year ?? Infinity) - (b.first_publish_year ?? Infinity));
+    }
+
+    const filterText = filterInput.value.trim().toLowerCase();
+    const shown = sorted.filter((book) =&gt; {
+        const title = book.title.toLowerCase();
+        const authors = (book.author_name?.join(", ") ?? "").toLowerCase();
+        return title.includes(filterText) || authors.includes(filterText);
+    });
+
+    bookList.replaceChildren();
+    shown.forEach((book) =&gt; {
+        bookList.append(createBookCard(book));
+    });
+
+    if (books.length === 0) {
+        resultCount.textContent = "";
+    } else if (shown.length === 0) {
+        resultCount.textContent = "No books match your filter.";
+    } else {
+        resultCount.textContent = `Showing ${shown.length} of ${books.length} books.`;
+    }
+}</code></pre>
+<p>Also check that:</p>
+<ul>
+    <li>An empty search shows a message, and sends no request.</li>
+    <li>A search with no results says so.</li>
+    <li>Books without covers, authors or years display neatly, with no <em>undefined</em> anywhere.</li>
+    <li>Sorting and filtering work without sending new requests.</li>
+</ul>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>Why should you look at several results, rather than just the first, before writing code to display them?</li>
+    <li>What does <code>book.author_name?.join(", ") ?? "Unknown author"</code> do when a book has no authors?</li>
+    <li>Why is a search with no results not the same as a failed request?</li>
+    <li>Why should you sort a copy of the results, rather than the original array?</li>
+    <li>How does the page keep books with no year at the end of the list?</li>
+    <li>What is the difference between searching and filtering, and why can only one of them run on every key press?</li>
+</ul>
+<p>In the next lesson, you will validate a form with JavaScript, giving users clear and accessible feedback.</p>

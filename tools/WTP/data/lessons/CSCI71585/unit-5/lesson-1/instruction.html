@@ -1,0 +1,212 @@
+<h1>Tutorial</h1> <!--Lesson 1: CSS Custom Properties-->
+<p>In the last three units, you learned the core of front-end development: HTML for structure, CSS for presentation, and JavaScript for behaviour. In this unit, you will build on all three with more advanced techniques that professional websites rely on: CSS variables, transforms and animations, saving data in the browser, fetching live data from APIs, handling forms, and keeping users safe.</p>
+<p>This first lesson covers <strong>custom properties</strong>, often called <strong>CSS variables</strong>. They let you store a value, such as a colour, once, and reuse it throughout your stylesheet. The starter code contains a page for a coding club, whose CSS repeats the same values many times. You will tidy it up with custom properties, then use them to add a dark theme and a colour picker. Whenever you see a <strong>Try It</strong> section, make that change in the editor before moving on.</p>
+<br>
+
+<h2>The Problem: Repeated Values</h2>
+<p>Look at the starter CSS. The club's main colour, <code>#00695c</code>, appears again and again: on the header, the buttons, the links, the card borders and the footer. The same spacing value, <code>16px</code>, appears in many rules too.</p>
+<p>This causes two problems:</p>
+<ul>
+    <li><strong>Changes are slow and risky.</strong> If the club changes its colour, every copy of the value has to be found and changed. Miss one, and the page is inconsistent.</li>
+    <li><strong>The meaning is hidden.</strong> <code>#00695c</code> does not tell another developer that it is the club's main brand colour. It is just a number.</li>
+</ul>
+<p>Custom properties solve both problems.</p>
+<br>
+
+<h2>Declaring and Using Custom Properties</h2>
+<p>A <strong>custom property</strong> is a property whose name you choose, starting with <strong>two hyphens</strong>. It is declared like any other property, inside a rule:</p>
+<pre><code class="language-css">:root {
+    --colour-primary: #00695c;
+    --space: 16px;
+}</code></pre>
+<p>The <code>:root</code> selector selects the root element of the page, <code>&lt;html&gt;</code>. Custom properties are inherited, like <code>color</code> and <code>font-family</code>, so a custom property declared on the root element is available to every element on the page. This makes <code>:root</code> the usual place to declare the values used throughout a site.</p>
+<p>To use a custom property, put its name inside the <code>var()</code> function, anywhere you would normally write a value:</p>
+<pre><code class="language-css">.site-header {
+    background-color: var(--colour-primary);
+    padding: var(--space);
+}</code></pre>
+<p>When the browser sees <code>var(--colour-primary)</code>, it replaces it with the value stored in <code>--colour-primary</code>. Change the value in one place, and every rule that uses it changes too.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> Because you choose the names of custom properties yourself, you can use British spelling, such as <code>--colour-primary</code>. The names of CSS's own properties, such as <code>color</code>, must still use American spelling. Custom property names are also case-sensitive: <code>--Colour-Primary</code> and <code>--colour-primary</code> are two different properties.</div>
+<div class="tip-box"><strong>💡 Tip:</strong> Name custom properties after their <strong>purpose</strong>, not their value. <code>--colour-primary</code> still makes sense if the brand colour changes from green to purple, but <code>--green</code> would then be wrong everywhere it is used. This is the same principle as naming classes after what content is, not how it looks.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>At the very top of the CSS tab, add a <code>:root</code> rule that declares these custom properties:
+        <ul>
+            <li><code>--colour-primary: #00695c;</code></li>
+            <li><code>--colour-primary-dark: #004d40;</code></li>
+            <li><code>--colour-background: #f5f5f5;</code></li>
+            <li><code>--colour-surface: #ffffff;</code></li>
+            <li><code>--colour-text: #222222;</code></li>
+            <li><code>--colour-on-primary: #ffffff;</code> (the colour of text placed <em>on</em> the primary colour)</li>
+        </ul>
+    </li>
+    <li>Work through the rest of the stylesheet, replacing every <code>#00695c</code> with <code>var(--colour-primary)</code>, and every <code>#004d40</code> with <code>var(--colour-primary-dark)</code>.</li>
+    <li>Replace the background colour of the <code>body</code>, the background colour of the cards and the text colour of the <code>body</code> with the matching custom properties.</li>
+    <li>Replace <code>white</code> with <code>var(--colour-on-primary)</code> wherever text or a border sits on the primary colour: in the header, the header button's border, the buttons and the footer. Leave the badge's text as it is.</li>
+    <li>Check the preview: nothing should have changed yet.</li>
+    <li>Now change the value of <code>--colour-primary</code> to <code>#6a1b9a</code>. The header, buttons, links, borders and footer all change at once. Change it back afterwards.</li>
+</ol>
+<br>
+
+<h2>What Custom Properties Can Store</h2>
+<p>A custom property can store any CSS value, not only colours:</p>
+<pre><code class="language-css">:root {
+    --font-body: "Open Sans", Arial, sans-serif;
+    --space: 16px;
+    --radius: 8px;
+    --shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    --speed: 0.2s;
+}</code></pre>
+<p>Storing sizes, spacing, rounded corners and shadows this way keeps a design consistent: every card uses the same radius, and every section the same spacing. In the next two lessons, you will also store animation timings, such as <code>--speed</code>.</p>
+
+<h3>Calculating With Custom Properties</h3>
+<p>The <code>calc()</code> function performs calculations with CSS values, and works with custom properties too. This lets you build a set of related sizes from one value:</p>
+<pre><code class="language-css">section {
+    padding: calc(var(--space) * 2);     /* 32px */
+    margin-bottom: var(--space);          /* 16px */
+}
+
+.button {
+    padding: calc(var(--space) / 2) var(--space);   /* 8px 16px */
+}</code></pre>
+<p>If <code>--space</code> later changes to <code>20px</code>, every size based on it changes in proportion. Spaces are needed around <code>*</code> and <code>/</code> in <code>calc()</code> for readability, and are <strong>required</strong> around <code>+</code> and <code>-</code>.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add <code>--space: 16px;</code> and <code>--radius: 8px;</code> to your <code>:root</code> rule.</li>
+    <li>Replace every <code>16px</code> in the stylesheet with <code>var(--space)</code>, every <code>32px</code> with <code>calc(var(--space) * 2)</code>, and every <code>8px</code> used for <code>border-radius</code> with <code>var(--radius)</code>.</li>
+    <li>Change <code>--space</code> to <code>24px</code>, and notice that the whole page becomes more spacious, in proportion. Change it back afterwards.</li>
+</ol>
+<br>
+
+<h2>Fallback Values</h2>
+<p><code>var()</code> can take a second value, called a <strong>fallback</strong>, which is used if the custom property has not been set:</p>
+<pre><code class="language-css">.badge {
+    background-color: var(--colour-accent, #4527a0);
+}</code></pre>
+<p>If <code>--colour-accent</code> exists, its value is used. If it does not, the badge uses <code>#4527a0</code>, a deep purple.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> If a custom property's name is misspelt in <code>var()</code>, and there is no fallback, the browser does not warn you. Instead, the property behaves as if it had never been set: an inherited property such as <code>color</code> takes its parent's value, and a property such as <code>background-color</code> goes back to its default, which is transparent. If a style quietly disappears, check the spelling of your custom property names.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>The <code>.badge</code> rule in the starter CSS uses <code>var(--colour-accent, #4527a0)</code>. There is no <code>--colour-accent</code> yet, so the badge uses the fallback colour.</li>
+    <li>Add <code>--colour-accent: #bf360c;</code> to <code>:root</code>. The badge changes to the new colour.</li>
+</ol>
+<br>
+
+<h2>Scope: Changing a Value for One Part of the Page</h2>
+<p>A custom property does not have to be declared on <code>:root</code>. Because custom properties are inherited, declaring one on any element changes its value for that element and everything inside it, while the rest of the page keeps the original value. This is called the property's <strong>scope</strong>.</p>
+<pre><code class="language-css">.card.featured {
+    --colour-primary: #8a6100;
+    --colour-on-primary: #ffffff;
+}</code></pre>
+<p>Inside the featured card, every rule that uses <code>var(--colour-primary)</code>, such as the card's border and its button, now uses the gold colour, with white text on it. Outside it, nothing changes. You do not need to write new rules for the border and the button: the existing rules simply pick up the new value.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> This is one of the most useful features of custom properties. Instead of writing a separate rule for every part of a component that needs a different colour, you change one custom property, and the component's existing rules do the rest.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>One of the event cards has the classes <code>card featured</code>. Add the rule from the example above, and check that only that card's border and button turn gold.</li>
+</ol>
+<br>
+
+<h2>Themes</h2>
+<p>Custom properties make themes, such as a dark mode, far simpler than in the JavaScript unit. Instead of writing a new rule for every element that changes colour, you redefine the colour custom properties for the dark theme, and every rule that uses them updates automatically:</p>
+<pre><code class="language-css">body.dark {
+    --colour-background: #121212;
+    --colour-surface: #1e1e1e;
+    --colour-text: #eeeeee;
+    --colour-primary: #4db6ac;
+    --colour-primary-dark: #80cbc4;
+    --colour-on-primary: #121212;
+}</code></pre>
+<p>A rule for <code>body.dark</code> is more specific than <code>:root</code>, and is closer to the elements that use the values, so its values win whenever the body has the <code>dark</code> class. The toggle button from JavaScript lesson 11 then only needs to add or remove the class.</p>
+<p>This is also why <code>--colour-on-primary</code> exists. In the light theme, white text sits on the dark teal. In the dark theme, the teal becomes much lighter, so the text on it becomes dark. Because every rule uses <code>var(--colour-on-primary)</code> instead of <code>white</code>, the theme only has to change one value.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> A dark theme needs its own colours, not just the light ones swapped. In this example, <code>--colour-primary</code> and <code>--colour-primary-dark</code> become lighter, because the original dark teals would not have enough contrast against the dark background, as links and headings. Check every text and background pair in both themes. Every pair in this lesson has been checked against the 4.5:1 contrast ratio from the CSS unit.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> A theme can also follow the user's device setting with no JavaScript at all, by redefining the custom properties inside <code>@media (prefers-color-scheme: dark) { :root { ... } }</code>. Many sites combine both: the media query provides the default, and a button lets the user change it.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>body.dark</code> rule from the example above.</li>
+    <li>In the JS tab, add a click listener to the <code>#theme-button</code> that toggles the <code>dark</code> class on <code>document.body</code>, and updates the button's <code>aria-pressed</code> attribute, as you did in JavaScript lesson 11.</li>
+    <li>Click the button. The whole page switches theme, using only the six values in the <code>body.dark</code> rule.</li>
+</ol>
+<br>
+
+<h2>Custom Properties and JavaScript</h2>
+<p>Because custom properties are real CSS properties, JavaScript can read and change them while the page is running. Changing one custom property updates every rule that uses it, so a single line of JavaScript can restyle a whole page.</p>
+<ul>
+    <li>To <strong>change</strong> a custom property, use <code>style.setProperty()</code> on the element where it is declared. For a property on <code>:root</code>, that element is <code>document.documentElement</code>, the <code>&lt;html&gt;</code> element.</li>
+    <li>To <strong>read</strong> a custom property's current value, use <code>getComputedStyle()</code>, which returns every style that applies to an element, and then <code>getPropertyValue()</code>.</li>
+</ul>
+<pre><code class="language-javascript">const root = document.documentElement;
+
+// Change a custom property
+root.style.setProperty("--colour-primary", "#283593");
+
+// Read a custom property
+const primary = getComputedStyle(root).getPropertyValue("--colour-primary");
+console.log(primary);   // "#283593"</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>The starter HTML has a colour picker, an <code>&lt;input type="color"&gt;</code> with the ID <code>accent-picker</code>. Add an <code>input</code> listener to it that sets <code>--colour-primary</code> on <code>document.documentElement</code> to the picker's <code>value</code>.</li>
+    <li>Open the colour picker in the preview and choose different colours. The header, buttons, links and borders all update as you move through the colours.</li>
+    <li>Choose a very light colour, such as pale yellow, and notice that the white header text becomes unreadable.</li>
+    <li>Switch to dark mode and try the picker again. Nothing changes. The picker sets <code>--colour-primary</code> on the <code>&lt;html&gt;</code> element, but <code>body.dark</code> redefines it on the <code>&lt;body&gt;</code>, which is closer to the elements that use it. This is scope at work: the value declared nearest to an element wins.</li>
+</ol>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Letting users choose colours is fun, but it can easily break contrast, as you have just seen. On a real site, either offer a set of tested colours to choose from, or check the contrast of the chosen colour with JavaScript and adjust the text colour to match.</div>
+<br>
+
+<h2>When to Use Custom Properties</h2>
+<p>Custom properties are a tool for keeping a design consistent and easy to change, so use them where they make a real difference:</p>
+<ul>
+    <li><strong>Values that are repeated</strong>, such as brand colours, spacing, fonts and rounded corners.</li>
+    <li><strong>Values that change together</strong>, such as the colours of a theme.</li>
+    <li><strong>Values that JavaScript needs to change</strong>, such as a colour the user chooses.</li>
+    <li><strong>Values that vary between versions of a component</strong>, such as a featured card.</li>
+</ul>
+<p>A value used only once, such as the width of one particular image, gains nothing from being a custom property, and only adds an extra step for anyone reading the code.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> When you use custom properties in your own projects, write a comment explaining your reasoning, such as <code>/* Theme colours: redefined in body.dark for the dark theme */</code>. A comment that explains <em>why</em> a value is a custom property is far more useful to another developer than one that only says what it is.</div>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your <code>:root</code> and theme rules should be similar to these:</p>
+<pre><code class="language-css">/* Design values used throughout the site.
+   Colours are redefined in body.dark for the dark theme. */
+:root {
+    --colour-primary: #00695c;
+    --colour-primary-dark: #004d40;
+    --colour-background: #f5f5f5;
+    --colour-surface: #ffffff;
+    --colour-text: #222222;
+    --colour-on-primary: #ffffff;
+    --colour-accent: #bf360c;
+    --space: 16px;
+    --radius: 8px;
+}
+
+body.dark {
+    --colour-background: #121212;
+    --colour-surface: #1e1e1e;
+    --colour-text: #eeeeee;
+    --colour-primary: #4db6ac;
+    --colour-primary-dark: #80cbc4;
+    --colour-on-primary: #121212;
+}
+
+.card.featured {
+    --colour-primary: #8a6100;
+    --colour-on-primary: #ffffff;
+}</code></pre>
+<p>Also check that no hex colours, <code>16px</code> or <code>32px</code> values are left in the rest of the stylesheet, apart from the focus outline and the badge, the theme button switches between light and dark, and the colour picker changes the page's main colour.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>How do you declare a custom property, and how do you use one?</li>
+    <li>Why are custom properties usually declared on <code>:root</code>?</li>
+    <li>What does the second value in <code>var(--colour-accent, #4527a0)</code> do?</li>
+    <li>How can one rule change the colour of several parts of a single component?</li>
+    <li>Why does a dark theme need fewer rules with custom properties?</li>
+    <li>How does JavaScript change a custom property?</li>
+</ul>
+<p>In the next lesson, you will learn how to move, rotate and scale elements, and how to animate changes smoothly.</p>

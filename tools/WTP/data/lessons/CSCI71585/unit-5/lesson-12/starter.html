@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UK Weather Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">UK Weather Explorer</p>
+        <button type="button" class="button button-header" id="theme-button" aria-pressed="false">Dark mode</button>
+    </header>
+
+    <main>
+        <h1>Weather Across the UK</h1>
+        <p>The current weather and three-day forecast for places around the UK.</p>
+
+        <div class="load-area">
+            <button type="button" class="button" id="load-button">Load forecast</button>
+            <span class="spinner" id="spinner" hidden></span>
+            <p class="status" id="status-message" role="status"></p>
+        </div>
+
+        <div class="controls">
+            <div>
+                <label for="sort-select">Sort by</label>
+                <select id="sort-select">
+                    <option value="added">Order added</option>
+                    <option value="name">Name (A to Z)</option>
+                    <option value="warmest">Warmest first</option>
+                    <option value="coldest">Coldest first</option>
+                </select>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="rain-filter">
+                <label for="rain-filter">Only show places where rain is likely today</label>
+            </div>
+        </div>
+
+        <p class="result-count" id="result-count"></p>
+
+        <section class="place-list" id="place-list" aria-label="Places"></section>
+
+        <section class="add-place">
+            <h2>Add a UK Place</h2>
+            <form id="place-form" novalidate>
+                <label for="place-input">Town or city</label>
+                <div class="form-row">
+                    <input type="text" id="place-input" autocomplete="off" required aria-describedby="place-input-error">
+                    <button type="submit" class="button" id="place-submit">Add place</button>
+                </div>
+                <p class="error-message" id="place-input-error"></p>
+            </form>
+        </section>
+    </main>
+
+    <dialog class="dialog" id="details-dialog" aria-labelledby="details-title">
+        <div class="dialog-inner">
+            <h2 id="details-title">Place</h2>
+            <p id="details-summary"></p>
+            <ul class="forecast-days" id="details-days"></ul>
+            <div class="dialog-actions">
+                <button type="button" class="button" id="details-close">Close</button>
+            </div>
+        </div>
+    </dialog>
+
+    <footer class="site-footer">
+        <p><a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Weather data by Open-Meteo.com</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

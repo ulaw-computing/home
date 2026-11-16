@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Study Notes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">Study Notes</p>
+        <button type="button" class="button" id="theme-button" aria-pressed="false">Dark mode</button>
+    </header>
+
+    <main>
+        <section class="panel">
+            <h2>My Notes</h2>
+            <div class="note-row">
+                <label for="note-input">New note</label>
+                <input type="text" id="note-input">
+                <button type="button" class="button" id="add-note">Add note</button>
+            </div>
+            <p class="count" id="notes-count">0 notes</p>
+            <ul class="notes-list" id="notes-list"></ul>
+            <button type="button" class="button button-secondary" id="clear-notes">Clear all notes</button>
+        </section>
+
+        <section class="panel">
+            <h2>JSON Practice</h2>
+
+            <h3>From JavaScript to JSON</h3>
+            <pre class="json-output" id="json-output"></pre>
+
+            <h3>Checking JSON</h3>
+            <label for="json-input">JSON to check</label>
+            <textarea id="json-input" rows="6">{
+    "module": "Web Technologies",
+    "credits": 15,
+    "topics": ["HTML", "CSS", "JavaScript"]
+}</textarea>
+            <p><button type="button" class="button" id="parse-button">Check JSON</button></p>
+            <p class="result" id="parse-result"></p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

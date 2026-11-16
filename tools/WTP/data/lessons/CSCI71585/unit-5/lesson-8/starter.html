@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Book Finder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">Book Finder</p>
+    </header>
+
+    <main>
+        <h1>Find a Book</h1>
+
+        <form class="search-form" id="search-form" role="search">
+            <label for="search-input">Search by title, author or subject</label>
+            <div class="search-row">
+                <input type="search" id="search-input">
+                <button type="submit" class="button">Search</button>
+            </div>
+        </form>
+
+        <p class="status" id="status-message" role="status"></p>
+
+        <div class="controls">
+            <div>
+                <label for="sort-select">Sort by</label>
+                <select id="sort-select">
+                    <option value="relevance">Best match</option>
+                    <option value="title">Title (A to Z)</option>
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                </select>
+            </div>
+            <div>
+                <label for="filter-input">Filter these results</label>
+                <input type="text" id="filter-input">
+            </div>
+        </div>
+
+        <p class="result-count" id="result-count"></p>
+
+        <section class="book-list" id="book-list" aria-label="Search results"></section>
+    </main>
+
+    <footer class="site-footer">
+        <p><a href="https://openlibrary.org/" target="_blank" rel="noopener">Book data from Open Library</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sessions | Beginners' Web Workshop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name" id="workshop-name">Workshop</p>
+        <p class="workshop-details">
+            <span id="workshop-date">Date</span> ·
+            <span id="workshop-venue">Venue</span>
+        </p>
+    </header>
+
+    <main>
+        <h1>Workshop Sessions</h1>
+
+        <div class="load-area">
+            <button type="button" class="button" id="load-button">Load sessions</button>
+            <p class="status" id="status-message" role="status"></p>
+            <button type="button" class="button" id="retry-button" hidden>Try again</button>
+        </div>
+
+        <section class="session-list" id="session-list"></section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

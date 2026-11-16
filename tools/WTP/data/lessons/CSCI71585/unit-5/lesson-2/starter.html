@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modules | MSc Computing</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">MSc Computing</p>
+        <button type="button" class="button" id="help-button" aria-expanded="false" aria-controls="help-panel">Help</button>
+    </header>
+
+    <main>
+        <h1>Your Modules</h1>
+
+        <section class="cards">
+            <article class="module-card">
+                <h2>Web Technologies</h2>
+                <p>Build accessible, responsive websites with HTML, CSS and JavaScript.</p>
+                <a href="#">View module</a>
+            </article>
+            <article class="module-card">
+                <h2>Programming</h2>
+                <p>Learn to solve problems with code, using Python.</p>
+                <a href="#">View module</a>
+            </article>
+            <article class="module-card">
+                <h2>Databases</h2>
+                <p>Design databases and query them with SQL.</p>
+                <a href="#">View module</a>
+            </article>
+        </section>
+
+        <p>
+            <button type="button" class="button">Enrol</button>
+            <button type="button" class="button">Download guide</button>
+        </p>
+
+        <h2>Frequently Asked Questions</h2>
+        <h3>
+            <button type="button" class="accordion-button" aria-expanded="false" aria-controls="faq-1">
+                <span class="accordion-arrow" aria-hidden="true">▶</span> How are modules assessed?
+            </button>
+        </h3>
+        <div class="accordion-panel" id="faq-1" hidden>
+            <p>Most modules are assessed by portfolio, with a mix of practical work and written reflection.</p>
+        </div>
+        <h3>
+            <button type="button" class="accordion-button" aria-expanded="false" aria-controls="faq-2">
+                <span class="accordion-arrow" aria-hidden="true">▶</span> Can I change modules?
+            </button>
+        </h3>
+        <div class="accordion-panel" id="faq-2" hidden>
+            <p>Speak to your programme leader in the first two weeks of term.</p>
+        </div>
+
+        <h2>Practice Area</h2>
+        <div class="practice">
+            <div class="box box-move">Move</div>
+            <div class="box box-rotate">Rotate</div>
+            <div class="box box-scale">Scale</div>
+            <div class="box box-origin">Origin</div>
+        </div>
+    </main>
+
+    <aside class="help-panel" id="help-panel" aria-label="Help">
+        <h2>Help</h2>
+        <p>Need help choosing modules? Contact the <a href="#">student support team</a>.</p>
+        <button type="button" class="button" id="close-help">Close</button>
+    </aside>
+
+    <script src="script.js"></script>
+</body>
+</html>

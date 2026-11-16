@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sessions | Beginners' Web Workshop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">Beginners' Web Workshop</p>
+    </header>
+
+    <main>
+        <h1>Workshop Sessions</h1>
+        <p class="page-status" id="page-status" role="status"></p>
+        <section class="session-list" id="session-list"></section>
+    </main>
+
+    <!-- Booking dialog -->
+    <dialog class="dialog" id="booking-dialog" aria-labelledby="booking-title">
+        <div class="dialog-inner">
+            <h2 id="booking-title">Book a place</h2>
+            <p class="dialog-session" id="booking-session"></p>
+
+            <form id="booking-form" novalidate>
+                <div class="field">
+                    <label for="booking-name">Full name</label>
+                    <input type="text" id="booking-name" autocomplete="name" required aria-describedby="booking-name-error">
+                    <p class="error-message" id="booking-name-error"></p>
+                </div>
+
+                <div class="field">
+                    <label for="booking-email">Email address</label>
+                    <input type="email" id="booking-email" autocomplete="email" required aria-describedby="booking-email-error">
+                    <p class="error-message" id="booking-email-error"></p>
+                </div>
+
+                <p class="dialog-error" id="booking-error" role="alert"></p>
+
+                <div class="dialog-actions">
+                    <button type="button" class="button button-secondary" id="booking-cancel">Cancel</button>
+                    <button type="submit" class="button" id="booking-submit">Confirm booking</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- Confirmation dialog -->
+    <dialog class="dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+        <div class="dialog-inner">
+            <h2 id="confirm-title">Cancel this booking?</h2>
+            <p id="confirm-message"></p>
+            <div class="dialog-actions">
+                <button type="button" class="button button-secondary" id="confirm-keep">Keep my booking</button>
+                <button type="button" class="button button-danger" id="confirm-cancel">Cancel booking</button>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+{
+  "unitId": 4,
+  "unitTitle": "Advanced Front-End Technologies (CSS animations, transforms, custom properties, JS async/await, APIs, fetch, JSON, Form Handling, Client-Side Security)",
+  "lessons": [
+    {
+      "id": 1,
+      "title": "CSS Custom Properties",
+      "description": "Storing reusable values in CSS variables, theming a page, and changing variables from JavaScript.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-1/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-1/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-1/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-1/starter.js"
+      },
+      "hints": [
+        "Custom property names start with two hyphens, e.g. --brand-colour: #00695c;",
+        "Use a custom property with var(), e.g. color: var(--brand-colour);",
+        "Declare custom properties on :root to make them available to every element on the page.",
+        "Change a custom property from JavaScript with document.documentElement.style.setProperty('--brand-colour', '#283593');"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Transforms and Transitions",
+      "description": "Moving, rotating and scaling elements, and animating changes smoothly with transitions.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-2/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-2/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-2/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-2/starter.js"
+      },
+      "hints": [
+        "Several transforms go in one declaration, separated by spaces: transform: translateY(-4px) scale(1.05); A second transform declaration replaces the first.",
+        "Put the transition on the element's normal state, not only on :hover, so it animates both ways.",
+        "Transitions on transform and opacity are the smoothest, because the browser does not need to recalculate the layout.",
+        "Add :focus-visible alongside :hover, so keyboard users see the same effect."
+      ]
+    },
+    {
+      "id": 3,
+      "title": "CSS Animations",
+      "description": "Creating animations with keyframes, using motion with purpose, and respecting reduced motion settings.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-3/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-3/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-3/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-3/starter.js"
+      },
+      "hints": [
+        "The name after @keyframes must match the animation-name exactly.",
+        "The animation shorthand takes the name, duration, timing function and number of repeats, e.g. animation: spin 1s linear infinite;",
+        "animation-fill-mode: forwards; keeps the element in its final state when the animation ends.",
+        "Wrap motion you want to turn off in @media (prefers-reduced-motion: reduce) { ... }"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "JSON and Local Storage",
+      "description": "Converting data to and from JSON, and saving it in the browser so it is remembered between visits.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-4/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-4/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-4/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-4/starter.js"
+      },
+      "hints": [
+        "Local storage only stores strings. Use JSON.stringify() before saving an array or object, and JSON.parse() after reading it.",
+        "getItem() returns null when nothing has been saved yet, so always have a default value ready.",
+        "In JSON, property names and strings must use double quotes, and there can be no comma after the last item.",
+        "In this platform, each lesson's storage is kept separate, so saving data here cannot affect the platform or other lessons."
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Asynchronous JavaScript",
+      "description": "Understanding code that waits, using promises, async and await, and handling failures with try and catch.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-5/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-5/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-5/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-5/starter.js"
+      },
+      "hints": [
+        "await only works inside a function declared with async.",
+        "An async function always returns a promise, even if it returns a simple value.",
+        "Put code that could fail inside try { ... }, and decide what the user should see in catch { ... }.",
+        "Code after an await waits for it to finish, but code outside the async function carries on straight away."
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Fetching Data",
+      "description": "Loading data with fetch, checking the response, and showing loading and failure states on the page.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-6/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-6/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-6/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-6/starter.js"
+      },
+      "hints": [
+        "Check response.ok before using the data. A response can arrive successfully but still say the request failed, such as a 404.",
+        "response.json() also needs await, because reading the data takes time too.",
+        "Show a loading message before calling fetch, then replace it with the results or a failure message.",
+        "To test your failure message, temporarily change the file name in the fetch call to one that does not exist."
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Working With APIs",
+      "description": "Reading API documentation, building requests with query parameters, and choosing a suitable public API.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-7/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-7/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-7/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-7/starter.js"
+      },
+      "hints": [
+        "Copy the endpoint address from the API's documentation exactly, including https://.",
+        "Build query strings with URLSearchParams, so that spaces and special characters are encoded correctly.",
+        "A suitable API for the browser needs no key, uses HTTPS, and supports CORS. Test it by fetching it from the preview.",
+        "Do not send a request on every key press. Fetch when the user submits a search, to stay within the API's rate limits."
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Displaying API Data",
+      "description": "Rendering fetched data, filtering and sorting it, and handling empty or unexpected results.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-8/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-8/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-8/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-8/starter.js"
+      },
+      "hints": [
+        "Log the API's response first, to see exactly what shape the data has before writing code to display it.",
+        "Provide a fallback for missing values with ??, e.g. item.name ?? \"Unknown\".",
+        "Sort a copy of the array, not the original: [...items].sort(...). Use a.name.localeCompare(b.name) for text and a.value - b.value for numbers.",
+        "When a search returns an empty array, show a clear message instead of an empty space."
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Form Handling and Validation",
+      "description": "Handling form submissions with JavaScript, validating realistic input, and showing accessible error messages.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-9/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-9/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-9/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-9/starter.js"
+      },
+      "hints": [
+        "Listen for the form's submit event, not the button's click, and call event.preventDefault() first.",
+        "Trim every value before checking it, so that a field containing only spaces counts as empty.",
+        "Check each field for what could realistically go wrong: missing, the wrong format, too short or too long.",
+        "Link each error message to its field with aria-describedby, and set aria-invalid=\"true\" on the field."
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Dialogs and Form Feedback",
+      "description": "Building accessible modal dialogs, managing focus, and giving clear feedback after a form is submitted.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-10/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-10/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-10/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-10/starter.js"
+      },
+      "hints": [
+        "dialog.showModal() opens a dialog as a modal, and dialog.close() closes it.",
+        "Pressing Escape closes a modal dialog automatically, so you do not need to code it yourself.",
+        "When a dialog closes, move focus back to the button that opened it.",
+        "Announce a success message with an element that has aria-live=\"polite\", so screen reader users hear it."
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Client-Side Security",
+      "description": "Protecting users from common front-end risks, and understanding the vulnerabilities of database-driven applications.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-11/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-11/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-11/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-11/starter.js"
+      },
+      "hints": [
+        "Display user input and API data with textContent, never innerHTML.",
+        "Client-side validation helps users, but anyone can bypass it. A server must always check the data again.",
+        "Never put API keys, passwords or other secrets in front-end code: anyone can read it in the browser.",
+        "Add integrity and crossorigin attributes to scripts loaded from a CDN, so the browser rejects them if they have been changed."
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Consolidation: Build an API-Powered Page",
+      "description": "Build a page that fetches, displays, filters and sorts API data, with a validated form, a details dialog and purposeful animation.",
+      "language": "web",
+      "activePanels": ["html", "css", "js"],
+      "instructionFile": "data/lessons/CSCI71585/unit-5/lesson-12/instruction.html",
+      "starterCode": {
+        "html": "data/lessons/CSCI71585/unit-5/lesson-12/starter.html",
+        "css": "data/lessons/CSCI71585/unit-5/lesson-12/starter.css",
+        "js": "data/lessons/CSCI71585/unit-5/lesson-12/starter.js"
+      },
+      "hints": [
+        "Build one feature at a time, and check it works before starting the next.",
+        "Log the API's response with console.log before writing the code that displays it.",
+        "Test what happens when the request fails, by temporarily changing the address to one that does not exist.",
+        "Test the page in both a narrow pop-out preview and the fullscreen preview."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,205 @@
+<h1>Tutorial</h1> <!--Lesson 11: Client-Side Security-->
+<p>In JavaScript lesson 5, you were warned never to put text that users type into <code>innerHTML</code>, because of an attack called cross-site scripting. In this lesson you will see that attack happen on a real page, fix it, and learn about the other common security problems that affect front-end code. You will finish by looking at what happens once data leaves the browser and reaches a server and its database, including an attack called SQL injection.</p>
+<p>The starter code contains a comment wall for the workshop. It works, but it has several security problems, <strong>on purpose</strong>. Complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Everything in the Browser Is Public</h2>
+<p>The most important idea in front-end security is that <strong>the user controls the browser</strong>. Anyone can view your HTML, CSS and JavaScript, change them with the developer tools, turn JavaScript off, or send requests to your server without using your page at all. This has two consequences, which run through this whole lesson:</p>
+<ul>
+    <li><strong>Nothing in front-end code is secret.</strong> Passwords, API keys and private data must never be in it.</li>
+    <li><strong>Nothing the browser checks can be trusted.</strong> Validation in the browser helps honest users, but a server must check everything again.</li>
+</ul>
+<p>Front-end code still has security responsibilities, though: above all, making sure that data cannot turn into code on your page.</p>
+<br>
+
+<h2>Cross-Site Scripting</h2>
+<p><strong>Cross-site scripting</strong> (XSS) happens when an attacker manages to make their own JavaScript run on someone else's page. Once their code is running, it can do anything your own code can: read what the user types, change the page, show a fake login form, or send the user's data to the attacker's server.</p>
+<p>Look at the starter's <code>renderComments</code> function. It builds each comment as a string of HTML, including the name and message that a user typed, and adds it to the page with <code>innerHTML</code>. The browser reads that string as HTML, so if the message contains HTML tags, they become real elements.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Post a comment with your name, and this message, exactly as written:
+        <pre><code class="language-html">&lt;img src="x" onerror="document.body.style.background='red'"&gt;</code></pre>
+    </li>
+    <li>The page's background turns red. The message created an image with an address that does not exist, and its <code>onerror</code> attribute ran JavaScript when the image failed to load.</li>
+    <li>Change any line in the CSS tab, so the preview reloads. The page turns red again, because the comment is saved, and runs every time the comments are displayed.</li>
+</ol>
+<p>This harmless example only changes a colour, but the attribute could contain any JavaScript at all. Imagine the comments were stored in a database on a server, as they would be on a real website. Every visitor to the page would run the attacker's code, without doing anything except opening the page. This is called <strong>stored XSS</strong>, and it is one of the most damaging attacks on the web.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> You might expect <code>&lt;script&gt;</code> tags to be the danger. In fact, browsers do not run <code>&lt;script&gt;</code> elements added with <code>innerHTML</code>, which is why attacks use event attributes such as <code>onerror</code> instead. There are many such tricks, which is why blocking particular words or tags never works as a defence.</div>
+<br>
+
+<h2>Fixing XSS: Data Stays as Text</h2>
+<p>The fix is to make sure that user data is <strong>always treated as text</strong>, never as HTML. Build the elements with <code>createElement</code>, and put the data into them with <code>textContent</code>, exactly as you have done with API data in this unit:</p>
+<pre><code class="language-javascript">function createComment(comment) {
+    const item = document.createElement("li");
+    item.className = "comment";
+
+    const name = document.createElement("p");
+    name.className = "comment-name";
+    name.textContent = comment.name;
+
+    const message = document.createElement("p");
+    message.textContent = comment.message;
+
+    item.append(name, message);
+    return item;
+}</code></pre>
+<p>Whatever a user types, <code>textContent</code> displays it as characters on the screen. An HTML tag in a message appears as text, and nothing in it can ever run.</p>
+<p>The same rule applies to data from APIs. An API is someone else's server: if it were ever attacked, or simply returned something unexpected, data from it could contain HTML too. Treat all data from outside your own code as text.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>createComment</code> function above, and change <code>renderComments</code> so that it clears the list with <code>replaceChildren()</code> and appends a comment element for each comment, instead of using <code>innerHTML</code>. For now, leave out the website link.</li>
+    <li>Check the page is no longer red. The harmful comment is still saved, but its message now appears as harmless text.</li>
+    <li>Click <strong>Reset comments</strong> to remove it.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> Occasionally, a page genuinely needs to display HTML from users, such as a comment with bold and italic text. This needs a <strong>sanitiser</strong>: a well-tested library, such as DOMPurify, that removes everything except a list of safe tags. Never try to write your own.</div>
+<br>
+
+<h2>Unsafe Links</h2>
+<p>The comment wall lets users link to their own website. A link's address can also cause problems. As well as <code>https:</code> addresses, browsers accept addresses that begin with <code>javascript:</code>, which run code when the link is clicked:</p>
+<pre><code class="language-html">&lt;a href="javascript:alert('This ran your code')"&gt;My website&lt;/a&gt;</code></pre>
+<p>Even when a link is built safely with <code>createElement</code>, setting its <code>href</code> to an address like this creates a link that runs the attacker's code for anyone who clicks it. So addresses from users must be checked. The <code>URL</code> object reads an address and splits it into its parts, and fails if the address is not valid at all, so you can check its <code>protocol</code>, the part before the colon:</p>
+<pre><code class="language-javascript">function isSafeWebAddress(address) {
+    try {
+        const url = new URL(address);
+        return url.protocol === "https:" || url.protocol === "http:";
+    } catch (problem) {
+        return false;
+    }
+}
+
+isSafeWebAddress("https://example.com");          // true
+isSafeWebAddress("javascript:alert('Hi')");       // false
+isSafeWebAddress("not an address");               // false</code></pre>
+<p>This is an example of an <strong>allow list</strong>: it lists what is allowed, and rejects everything else. Allow lists are much safer than <strong>block lists</strong>, which try to list everything that is dangerous, and always miss something.</p>
+<p>Links that open in a new tab should also have <code>rel="noopener noreferrer"</code>. <code>noopener</code> stops the new page from controlling your page through <code>window.opener</code>, and <code>noreferrer</code> stops the browser telling the other site which of your pages the user came from.</p>
+<div class="info-box"><strong>ℹ️ Info:</strong> In the preview, links are handled by this platform, so a <code>javascript:</code> link would not run here. On a real page, it would.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the <code>isSafeWebAddress</code> function above.</li>
+    <li>In the submit listener, if the website field is not empty and the address is not safe, show <em>Enter a website address starting with https://</em> in <code>#comment-website-error</code>, set <code>aria-invalid</code> on the field, and stop without posting the comment. Clear the error when a comment is posted.</li>
+    <li>In <code>createComment</code>, if the comment has a website and it passes <code>isSafeWebAddress</code>, put an <code>&lt;a&gt;</code> inside the name paragraph, with its <code>href</code> set to the address, <code>target</code> set to <code>"_blank"</code>, <code>rel</code> set to <code>"noopener noreferrer"</code>, and the name as its <code>textContent</code>.</li>
+    <li>Test the website field with <code>javascript:alert(1)</code>, <code>example.com</code> and <code>https://example.com</code>. Only the last should be accepted.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> Notice that <code>createComment</code> checks the address again, even though the form already checked it. Saved data may have been created before the check existed, or changed by someone outside the form. Checking at the point where data is used is called <strong>defence in depth</strong>.</div>
+<br>
+
+<h2>Browser Checks Can Be Bypassed</h2>
+<p>The name and message fields have <code>maxlength</code> attributes, and your website check runs before a comment is posted. These help users, but none of them protect anything:</p>
+<ul>
+    <li>A user can delete the <code>maxlength</code> attribute in the developer tools, and type as much as they like.</li>
+    <li>A user can run their own JavaScript in the console, and push anything they like into the comments.</li>
+    <li>On a real website, the form would send its data to a server. Anyone can send the same request with a tool such as <code>curl</code>, without using the form at all.</li>
+</ul>
+<p>So every rule that matters, such as length limits, required fields and allowed values, <strong>must be checked again on the server</strong>, which is the only place the user cannot control. Front-end validation is for the user's convenience; server-side validation is for security.</p>
+<br>
+
+<h2>Keeping Secrets Out of the Front End</h2>
+<p>As you learned in lesson 7, anything in your HTML, CSS or JavaScript can be read by anyone, so it must never contain:</p>
+<ul>
+    <li>API keys, passwords, or database connection details.</li>
+    <li>Personal data that only some users should see.</li>
+    <li>"Hidden" features protected only by JavaScript, such as an admin page whose only protection is an <code>if</code> statement checking a password in your code.</li>
+</ul>
+<p>The same applies to <strong>public repositories</strong> on GitHub. Every file you have ever committed, including old versions, stays in the repository's history. If you commit a secret by mistake, deleting the file in a later commit does not remove it. Treat it as stolen: cancel the key or change the password straight away, then create a new one.</p>
+<p>Web storage is not private either. As you saw in lesson 4, any script running on your page can read <code>localStorage</code>, including an attacker's script injected with XSS. Do not store passwords, login tokens or personal information in it.</p>
+<br>
+
+<h2>Third-Party Scripts</h2>
+<p>Many sites load JavaScript from other websites, such as a library from a <strong>content delivery network</strong> (CDN). Every script you load runs with full access to your page, exactly like your own code. If the site hosting it were attacked, and the file changed, the attacker's code would run on your page.</p>
+<p><strong>Subresource Integrity</strong> (SRI) protects against this. The <code>integrity</code> attribute holds a <strong>hash</strong> of the file: a short code calculated from its exact contents. The browser calculates the hash of the file it downloads, and refuses to run it if the two do not match:</p>
+<pre><code class="language-html">&lt;script src="https://cdn.example.com/library@2.1.0/library.min.js"
+        integrity="sha384-...the file's hash..."
+        crossorigin="anonymous"&gt;&lt;/script&gt;</code></pre>
+<p>You do not calculate the hash yourself: CDNs such as cdnjs and jsDelivr show it alongside each file, ready to copy. <code>crossorigin="anonymous"</code> is required, so that the browser is allowed to check a file from another website.</p>
+<div class="tip-box"><strong>💡 Tip:</strong> Only load scripts you need, from sources you trust, and always use a specific version number in the address. An address for the "latest" version can change at any time, and would then fail its integrity check.</div>
+<br>
+
+<h2>Content Security Policy</h2>
+<p>A <strong>Content Security Policy</strong> (CSP) is a second line of defence against XSS. It tells the browser which sources of scripts, styles, images and data the page is allowed to use, and the browser blocks everything else. It can be set by the server, or with a <code>&lt;meta&gt;</code> element in the page's <code>&lt;head&gt;</code>:</p>
+<pre><code class="language-html">&lt;meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' https://covers.openlibrary.org; connect-src 'self' https://api.open-meteo.com"&gt;</code></pre>
+<p>This policy allows scripts, styles and everything else only from the page's own website (<code>'self'</code>), images also from Open Library's covers, and <code>fetch</code> requests also to Open-Meteo. Crucially, a policy like this also blocks <strong>inline</strong> JavaScript, including event attributes such as <code>onerror</code>, so the attack from the start of this lesson would have been stopped even before you fixed it.</p>
+<div class="warning-box"><strong>⚠️ Warning:</strong> Do not add a CSP to your code in this editor. To show the preview, this platform places your CSS and JavaScript inside the page, and a policy that blocks inline code would block your own code too. Try it on a page of your own, run through a local web server such as Live Server.</div>
+<br>
+
+<h2>Beyond the Browser: Servers and Databases</h2>
+<p>On most real websites, data from forms is sent to a <strong>server</strong>, which stores it in a <strong>database</strong>, and reads it back to build pages. Your front-end code cannot protect the server, because, as you have seen, anyone can send it requests directly. The server must defend itself. You will look at this in more detail in the next unit, but you should know the most important risks now.</p>
+<br>
+
+<h3>SQL Injection</h3>
+<p>Most databases are queried with a language called <strong>SQL</strong>. A server that builds an SQL query by joining strings together, including text that a user typed, has the same problem as <code>innerHTML</code>: data can turn into code. Here is part of a login system on a server, written in JavaScript with Node.js:</p>
+<pre><code class="language-javascript">// DANGEROUS: never build a query like this
+const query = "SELECT * FROM users WHERE email = '" + email + "' AND password = '" + password + "'";</code></pre>
+<p>If a user types <code>sam@example.com</code> and a password, the query works as intended. But suppose an attacker types this as the password:</p>
+<pre><code class="language-javascript">' OR '1'='1</code></pre>
+<p>The query becomes:</p>
+<pre><code class="language-javascript">SELECT * FROM users WHERE email = 'sam@example.com' AND password = '' OR '1'='1'</code></pre>
+<p>The quote mark in the input ended the password string early, and the rest became part of the query. Because <code>'1'='1'</code> is always true, the query matches users without checking any password, and the attacker is logged in. Other inputs could read every row in the database, change data, or delete whole tables. This is <strong>SQL injection</strong>, and it has been behind many of the largest data breaches.</p>
+<p>The fix is the same idea as <code>textContent</code>: keep data separate from code. A <strong>parameterised query</strong>, also called a <strong>prepared statement</strong>, has placeholders where the data goes, and the data is passed separately. The database always treats it as a value, never as part of the query:</p>
+<pre><code class="language-javascript">// Safe: the data is passed separately from the query
+const query = "SELECT * FROM users WHERE email = ?";
+const results = await database.query(query, [email]);</code></pre>
+<p>Every server language, including PHP, Python, Java and C#, supports parameterised queries, and they should be used for every query that includes data from outside the code.</p>
+<br>
+
+<h3>Other Server-Side Defences</h3>
+<ul>
+    <li><strong>Validate everything on the server</strong>, using allow lists: the right type, the right length, and only the allowed values.</li>
+    <li><strong>Encode output.</strong> When a server builds HTML that includes stored data, it must convert characters such as <code>&lt;</code> into HTML entities such as <code>&amp;lt;</code>, so that the data displays as text. This is the server's version of <code>textContent</code>, and prevents stored XSS.</li>
+    <li><strong>Never store passwords as plain text.</strong> Store a password <strong>hash</strong>, made with an algorithm designed for passwords, such as bcrypt or Argon2. If the database is stolen, the passwords themselves are not.</li>
+    <li><strong>Give the least privilege.</strong> The account a website uses to connect to its database should only be able to do what the website needs. A page that only reads data does not need permission to delete tables.</li>
+    <li><strong>Show users plain messages.</strong> Detailed technical messages, such as the text of a failed query, help attackers understand your system. Show users a plain message, and record the details on the server, as you did with failed requests in lesson 6.</li>
+    <li><strong>Limit repeated attempts</strong>, such as many wrong passwords in a row, to slow down attackers who try thousands of guesses.</li>
+</ul>
+<p>The <strong>OWASP Top 10</strong>, published by the Open Worldwide Application Security Project at <a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">owasp.org</a>, lists the most serious security risks to web applications, with explanations and defences for each. It is the standard reference for web security, and well worth reading.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Look back at your Book Finder page from lesson 8, or another page you have built. Write down every place where data from a user or an API reaches the page, and check that each one uses <code>textContent</code> or another safe method.</li>
+    <li>Imagine the comment wall saved its comments to a database on a server. Write down three things the server would need to do to keep the site and its users safe.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your <code>createComment</code> function should be similar to this:</p>
+<pre><code class="language-javascript">function createComment(comment) {
+    const item = document.createElement("li");
+    item.className = "comment";
+
+    const name = document.createElement("p");
+    name.className = "comment-name";
+
+    if (comment.website &amp;&amp; isSafeWebAddress(comment.website)) {
+        const link = document.createElement("a");
+        link.href = comment.website;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = comment.name;
+        name.append(link);
+    } else {
+        name.textContent = comment.name;
+    }
+
+    const message = document.createElement("p");
+    message.textContent = comment.message;
+
+    item.append(name, message);
+    return item;
+}</code></pre>
+<p>Also check that the comment from the first Try It now appears as plain text, and that unsafe website addresses are rejected with a message.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is cross-site scripting, and what could an attacker do with it?</li>
+    <li>Why is stored XSS especially dangerous?</li>
+    <li>Why does <code>textContent</code> prevent XSS when <code>innerHTML</code> does not?</li>
+    <li>Why is an allow list safer than a block list?</li>
+    <li>Why must a server validate data that the browser has already validated?</li>
+    <li>What should you do if you commit an API key to a public repository?</li>
+    <li>What do the <code>integrity</code> attribute and a Content Security Policy each protect against?</li>
+    <li>How does SQL injection work, and how do parameterised queries prevent it?</li>
+    <li>Why should passwords be stored as hashes?</li>
+</ul>
+<p>In the next lesson, you will bring together everything from this unit to build a complete page powered by a live API.</p>

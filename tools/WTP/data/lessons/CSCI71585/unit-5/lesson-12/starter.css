@@ -1,0 +1,307 @@
+:root {
+    --colour-primary: #1565c0;
+    --colour-primary-dark: #0d47a1;
+    --colour-on-primary: #ffffff;
+    --colour-background: #eef3f8;
+    --colour-surface: #ffffff;
+    --colour-text: #222222;
+    --colour-muted: #555555;
+    --colour-error: #b71c1c;
+    --space: 16px;
+    --radius: 8px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--colour-text);
+    background-color: var(--colour-background);
+}
+
+/* Header and footer */
+.site-header,
+.site-footer {
+    padding: var(--space);
+    background-color: #0d47a1;
+    color: #ffffff;
+}
+
+.site-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space);
+}
+
+.site-header p,
+.site-footer p {
+    margin: 0;
+}
+
+.site-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.site-footer {
+    margin-top: auto;
+    font-size: 0.9rem;
+}
+
+.site-footer a {
+    color: #ffffff;
+}
+
+main {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--space);
+}
+
+h1,
+h2 {
+    color: var(--colour-primary-dark);
+}
+
+/* Buttons and form controls */
+.button {
+    padding: 8px var(--space);
+    font: inherit;
+    color: var(--colour-on-primary);
+    background-color: var(--colour-primary);
+    border: 2px solid var(--colour-primary);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--colour-primary-dark);
+    border-color: var(--colour-primary-dark);
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.button-header {
+    color: #ffffff;
+    background-color: transparent;
+    border-color: #ffffff;
+}
+
+.button-header:hover {
+    color: #0d47a1;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+select {
+    padding: 6px;
+    font: inherit;
+    color: var(--colour-text);
+    background-color: var(--colour-surface);
+    border: 1px solid var(--colour-muted);
+    border-radius: 4px;
+}
+
+.button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+    outline: 3px solid #ffb300;
+    outline-offset: 2px;
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border: 3px solid var(--colour-error);
+}
+
+.error-message {
+    margin: 4px 0 0;
+    font-weight: bold;
+    color: var(--colour-error);
+}
+
+.error-message:empty {
+    display: none;
+}
+
+/* Loading area */
+.load-area {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space);
+}
+
+.status {
+    margin: 0;
+    font-weight: bold;
+}
+
+.spinner {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border: 4px solid var(--colour-surface);
+    border-top-color: var(--colour-primary);
+    border-radius: 50%;
+}
+
+.spinner[hidden] {
+    display: none;
+}
+
+/* Sort and filter controls */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space) calc(var(--space) * 2);
+    margin-top: var(--space);
+}
+
+.controls label {
+    display: block;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox input {
+    width: 20px;
+    height: 20px;
+}
+
+.result-count {
+    color: var(--colour-muted);
+}
+
+/* Place cards, created by JavaScript */
+.place-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space);
+}
+
+.place-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space);
+    background-color: var(--colour-surface);
+    border-top: 6px solid var(--colour-primary);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.place-card h3 {
+    margin: 0;
+    color: var(--colour-primary-dark);
+}
+
+.place-card p {
+    margin: 0;
+}
+
+.place-card .temperature {
+    font-size: 2.25rem;
+    font-weight: bold;
+    line-height: 1.3;
+}
+
+.place-card .detail {
+    font-size: 0.9rem;
+    color: var(--colour-muted);
+}
+
+.place-card .button {
+    align-self: flex-start;
+    margin-top: 12px;
+}
+
+/* Add a place */
+.add-place {
+    margin-top: calc(var(--space) * 2);
+    padding: var(--space);
+    background-color: var(--colour-surface);
+    border-radius: var(--radius);
+}
+
+.add-place h2 {
+    margin-top: 0;
+}
+
+.add-place label {
+    display: block;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.form-row input {
+    flex: 1;
+    min-width: 180px;
+}
+
+/* Details dialog */
+.dialog {
+    width: min(90vw, 440px);
+    padding: 0;
+    color: var(--colour-text);
+    background-color: var(--colour-surface);
+    border: none;
+    border-radius: var(--radius);
+}
+
+.dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.dialog-inner {
+    padding: calc(var(--space) * 1.5);
+}
+
+.dialog h2 {
+    margin-top: 0;
+}
+
+.forecast-days {
+    padding: 0;
+    list-style: none;
+}
+
+.forecast-days li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--colour-background);
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+}

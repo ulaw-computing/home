@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Events | Leeds Code Club</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">Leeds Code Club</p>
+        <div class="header-controls">
+            <label for="accent-picker">Accent colour</label>
+            <input type="color" id="accent-picker" value="#00695c">
+            <button type="button" class="button" id="theme-button" aria-pressed="false">Dark mode</button>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h1>Upcoming Events</h1>
+            <p>Free sessions for anyone learning to code. Read more about <a href="#">how our sessions work</a>.</p>
+        </section>
+
+        <section class="cards">
+            <article class="card">
+                <h2>Intro to Python</h2>
+                <p>Write your first programs, with mentors on hand to help.</p>
+                <button type="button" class="button">Book a place</button>
+            </article>
+
+            <article class="card featured">
+                <h2>Build a Website in a Day <span class="badge">New</span></h2>
+                <p>Go from a blank page to a published site in one day.</p>
+                <button type="button" class="button">Book a place</button>
+            </article>
+
+            <article class="card">
+                <h2>Games With JavaScript</h2>
+                <p>Make a simple browser game, and learn how games work.</p>
+                <button type="button" class="button">Book a place</button>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Leeds Code Club</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

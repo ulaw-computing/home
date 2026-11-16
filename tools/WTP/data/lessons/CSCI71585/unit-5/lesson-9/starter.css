@@ -1,0 +1,149 @@
+:root {
+    --colour-primary: #00695c;
+    --colour-primary-dark: #004d40;
+    --colour-error: #b71c1c;
+    --colour-background: #f5f5f5;
+    --colour-surface: #ffffff;
+    --space: 16px;
+    --radius: 8px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #222;
+    background-color: var(--colour-background);
+}
+
+.site-header {
+    padding: var(--space);
+    background-color: var(--colour-primary);
+    color: white;
+}
+
+.site-name {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: var(--space);
+}
+
+h1 {
+    color: var(--colour-primary-dark);
+}
+
+form {
+    padding: var(--space);
+    background-color: var(--colour-surface);
+    border-radius: var(--radius);
+}
+
+.field {
+    margin-bottom: var(--space);
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+.hint {
+    margin: 0 0 4px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: 8px;
+    font: inherit;
+    border: 1px solid #767676;
+    border-radius: 4px;
+}
+
+.checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.checkbox input {
+    width: 20px;
+    height: 20px;
+    margin-top: 3px;
+}
+
+.checkbox label {
+    font-weight: normal;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.button:focus-visible {
+    outline: 3px solid #ffb300;
+    outline-offset: 2px;
+}
+
+/* Fields with a problem: set by JavaScript */
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border: 3px solid var(--colour-error);
+}
+
+.error-message {
+    margin: 4px 0 0;
+    font-weight: bold;
+    color: var(--colour-error);
+}
+
+.error-message:empty {
+    display: none;
+}
+
+.error-summary {
+    padding: var(--space);
+    font-weight: bold;
+    color: var(--colour-error);
+    background-color: var(--colour-surface);
+    border-left: 6px solid var(--colour-error);
+}
+
+.form-status:not(:empty) {
+    padding: var(--space);
+    font-weight: bold;
+    color: var(--colour-primary-dark);
+    background-color: #e0f2f1;
+    border-left: 6px solid var(--colour-primary);
+}
+
+.button {
+    padding: 10px 20px;
+    font: inherit;
+    font-weight: bold;
+    color: white;
+    background-color: var(--colour-primary);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--colour-primary-dark);
+}

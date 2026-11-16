@@ -1,0 +1,125 @@
+:root {
+    --colour-primary: #1565c0;
+    --colour-primary-dark: #0d47a1;
+    --colour-background: #eef3f8;
+    --colour-surface: #ffffff;
+    --space: 16px;
+    --radius: 8px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #222;
+    background-color: var(--colour-background);
+}
+
+.site-header,
+.site-footer {
+    padding: var(--space);
+    background-color: var(--colour-primary-dark);
+    color: white;
+}
+
+.site-header p,
+.site-footer p {
+    margin: 0;
+}
+
+.site-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.site-footer {
+    margin-top: auto;
+    font-size: 0.9rem;
+}
+
+.site-footer a {
+    color: white;
+}
+
+main {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: var(--space);
+}
+
+h1 {
+    color: var(--colour-primary-dark);
+}
+
+.weather-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+label {
+    font-weight: bold;
+}
+
+select {
+    padding: 6px;
+    font: inherit;
+}
+
+.button {
+    padding: 8px var(--space);
+    font: inherit;
+    color: white;
+    background-color: var(--colour-primary);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--colour-primary-dark);
+}
+
+.button:focus-visible,
+select:focus-visible {
+    outline: 3px solid #ffb300;
+    outline-offset: 2px;
+}
+
+.status {
+    min-height: 1.6em;
+    font-weight: bold;
+}
+
+.weather-card {
+    padding: calc(var(--space) * 1.5);
+    background-color: var(--colour-surface);
+    border-top: 6px solid var(--colour-primary);
+    border-radius: var(--radius);
+}
+
+.weather-card h2 {
+    margin: 0;
+    color: var(--colour-primary-dark);
+}
+
+.weather-card p {
+    margin: 4px 0;
+}
+
+.temperature {
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1.2;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Weather Checker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main>
+        <h1>Weather Checker</h1>
+
+        <section class="panel">
+            <h2>Check a City</h2>
+            <div class="controls">
+                <label for="city-select">City</label>
+                <select id="city-select">
+                    <option value="Leeds">Leeds</option>
+                    <option value="York">York</option>
+                    <option value="Hull">Hull</option>
+                    <option value="Sheffield">Sheffield</option>
+                    <option value="Atlantis">Atlantis</option>
+                </select>
+                <button type="button" class="button" id="weather-button">Get weather</button>
+            </div>
+            <p class="output" id="weather-result" role="status">Choose a city and click the button.</p>
+        </section>
+
+        <section class="panel">
+            <h2>Compare Cities</h2>
+            <button type="button" class="button" id="compare-button">Compare Leeds, York and Hull</button>
+            <p class="output" id="compare-result" role="status"></p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

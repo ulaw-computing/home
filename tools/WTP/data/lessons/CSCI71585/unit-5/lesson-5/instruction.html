@@ -1,0 +1,197 @@
+<h1>Tutorial</h1> <!--Lesson 5: Asynchronous JavaScript-->
+<p>Until now, almost every line of your JavaScript has finished its work immediately, before the next line started. But some tasks take time: fetching data from a server on the other side of the world might take a second or more. If JavaScript simply stopped and waited, the whole page would freeze: buttons would not respond, and nothing could be scrolled or typed. In this lesson you will learn how JavaScript handles tasks that take time without freezing the page, using <strong>promises</strong>, <code>async</code> and <code>await</code>. These are the foundation of fetching data, which starts in the next lesson.</p>
+<p>So that you can see exactly what is happening, this lesson uses a <strong>simulated</strong> request: a function that pretends to fetch weather data, taking two seconds to respond. The starter code contains a weather page and this function. Keep the console open, and complete each <strong>Try It</strong> section in the editor before moving on.</p>
+<br>
+
+<h2>Synchronous and Asynchronous Code</h2>
+<p><strong>Synchronous</strong> code runs one statement at a time, in order. Each statement must finish before the next one starts:</p>
+<pre><code class="language-javascript">console.log("First");
+console.log("Second");
+console.log("Third");</code></pre>
+<p><strong>Asynchronous</strong> code starts a task, and then carries on with the next statements <em>without waiting</em> for the task to finish. When the task finishes, some code runs to deal with the result. You have seen this already, with <code>setTimeout</code> in JavaScript lesson 4:</p>
+<pre><code class="language-javascript">console.log("First");
+
+setTimeout(() =&gt; {
+    console.log("Second");
+}, 2000);
+
+console.log("Third");</code></pre>
+<p>This logs <em>First</em>, then <em>Third</em> straight away, then <em>Second</em> two seconds later. <code>setTimeout</code> starts the timer and immediately returns, so the script continues while the timer runs in the background.</p>
+<p>This is how the page stays responsive. JavaScript in the browser can only do one thing at a time, so instead of waiting for slow tasks, it hands them to the browser, carries on, and comes back to the result later.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the second example to the JS tab, and check the order of the messages in the console.</li>
+    <li>Delete it once you have seen the result.</li>
+</ol>
+<br>
+
+<h2>The Problem With Waiting</h2>
+<p>The starter code contains a function called <code>fakeFetchWeather(city)</code>. It works like a real request to a weather server: it takes two seconds, and then provides the weather for a city.</p>
+<p>Because it is asynchronous, you cannot simply use its result on the next line:</p>
+<pre><code class="language-javascript">const weather = fakeFetchWeather("Leeds");
+console.log(weather);</code></pre>
+<p>The console does not show weather data. It shows <code>Promise {&lt;pending&gt;}</code>. The data does not exist yet, so the function cannot return it. Instead, it returns a <strong>promise</strong>.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Add the two lines above, and look at what is logged.</li>
+</ol>
+<br>
+
+<h2>Promises</h2>
+<p>A <strong>promise</strong> is an object that stands for a result that is not ready yet. Think of the ticket you are given when you order food at a counter: you do not have the food yet, but the ticket promises that you will get it, or be told that something went wrong.</p>
+<p>A promise is always in one of three states:</p>
+<ul>
+    <li><strong>Pending:</strong> the task has not finished yet.</li>
+    <li><strong>Fulfilled:</strong> the task finished successfully, and the promise now holds its result.</li>
+    <li><strong>Rejected:</strong> the task failed, and the promise now holds the reason why.</li>
+</ul>
+<p>Once a promise is fulfilled or rejected, it is <strong>settled</strong>, and never changes again.</p>
+
+<h3>Using a Promise With then</h3>
+<p>A promise's <code>then()</code> method takes a callback, which runs when the promise is fulfilled, and is given the result. Its <code>catch()</code> method takes a callback that runs if the promise is rejected:</p>
+<pre><code class="language-javascript">fakeFetchWeather("Leeds")
+    .then((weather) =&gt; {
+        console.log(`${weather.city}: ${weather.temperature}°C`);
+    })
+    .catch(() =&gt; {
+        console.log("The weather could not be loaded.");
+    });</code></pre>
+<p>This works, but when several tasks depend on each other, such as fetching a city, then its forecast, then a map, the callbacks start to nest and the code becomes hard to read. Modern JavaScript has a cleaner way to write the same thing.</p>
+<br>
+
+<h2>async and await</h2>
+<p>The <code>await</code> keyword waits for a promise to settle, and then gives you its result, as if the code were synchronous:</p>
+<pre><code class="language-javascript">async function showWeather() {
+    const weather = await fakeFetchWeather("Leeds");
+    console.log(`${weather.city}: ${weather.temperature}°C`);
+}
+
+showWeather();</code></pre>
+<p>Read <code>await</code> as "wait here until this promise has a result". The next line only runs once the weather has arrived, and <code>weather</code> holds the actual data, not a promise.</p>
+<ul>
+    <li><code>await</code> can only be used inside a function declared with the <code>async</code> keyword.</li>
+    <li>Only the <code>async</code> function waits. The rest of the page, and any code after the call to <code>showWeather()</code>, carries on straight away, so the page never freezes.</li>
+    <li>An <code>async</code> function always returns a promise itself, so code that calls it can also <code>await</code> it.</li>
+</ul>
+<div class="warning-box"><strong>⚠️ Warning:</strong> In this platform, as on most simple web pages, <code>await</code> cannot be used on its own at the top level of your script, outside a function. Always put it inside an <code>async</code> function, and call that function.</div>
+<div class="info-box"><strong>ℹ️ Info:</strong> <code>async</code> works with arrow functions too: <code>const showWeather = async () =&gt; { ... };</code>. You will see this form in event listeners: <code>button.addEventListener("click", async () =&gt; { ... });</code>.</div>
+
+<h3>Try It</h3>
+<ol>
+    <li>Delete the two lines from the last Try It.</li>
+    <li>Write an <code>async</code> function called <code>showWeather</code>, which awaits <code>fakeFetchWeather("Leeds")</code> and displays <code>Leeds: 12°C, cloudy</code> in the <code>#weather-result</code> element, using the <code>city</code>, <code>temperature</code> and <code>summary</code> properties of the result.</li>
+    <li>Call <code>showWeather()</code>. After two seconds, the weather appears.</li>
+    <li>Add <code>console.log("Request started");</code> after the call to <code>showWeather()</code>. Notice that it is logged immediately, before the weather arrives.</li>
+</ol>
+<br>
+
+<h2>Showing That Something Is Happening</h2>
+<p>For two seconds, the page shows nothing new, and the user has no way of knowing whether anything is happening. Any task that takes time needs a <strong>loading state</strong>: something on the page that shows the request has started.</p>
+<p>The pattern is simple: show the loading state <strong>before</strong> the <code>await</code>, and replace it with the result <strong>after</strong>:</p>
+<pre><code class="language-javascript">async function showWeather(city) {
+    result.textContent = "Loading…";
+
+    const weather = await fakeFetchWeather(city);
+
+    result.textContent = `${weather.city}: ${weather.temperature}°C, ${weather.summary}`;
+}</code></pre>
+
+<h3>Try It</h3>
+<ol>
+    <li>Change <code>showWeather</code> to take a <code>city</code> parameter and show <code>Loading…</code> first, as in the example above.</li>
+    <li>Remove your call to <code>showWeather()</code>. Instead, add a click listener to the <code>#weather-button</code> that calls <code>showWeather</code> with the city chosen in the <code>#city-select</code> dropdown.</li>
+    <li>Choose different cities and click the button. Notice that the page stays fully responsive while it waits: you can still scroll, and change the dropdown.</li>
+</ol>
+<br>
+
+<h2>Handling Failure</h2>
+<p>Real requests fail. The user might lose their connection, the server might be down, or the data asked for might not exist. When a promise is rejected, the <code>await</code> fails, and the rest of the function does not run. Without any handling, the loading message would stay on screen for ever, and the user would never find out what happened.</p>
+<p>The <code>try...catch</code> statement from the last lesson handles this. Any rejected promise awaited inside <code>try</code> jumps straight to <code>catch</code>:</p>
+<pre><code class="language-javascript">async function showWeather(city) {
+    result.textContent = "Loading…";
+
+    try {
+        const weather = await fakeFetchWeather(city);
+        result.textContent = `${weather.city}: ${weather.temperature}°C, ${weather.summary}`;
+    } catch (problem) {
+        result.textContent = `Sorry, the weather could not be loaded. ${problem.message}`;
+    }
+}</code></pre>
+<p>The <code>catch</code> block can receive the reason the task failed, here called <code>problem</code>. Its <code>message</code> property usually describes what went wrong, so it can be shown to the user, or used to decide what to show.</p>
+
+<h3>finally</h3>
+<p>A <code>finally</code> block runs after the <code>try</code> and <code>catch</code>, <strong>whatever</strong> happened. It is the right place for tidying up that must always happen, such as re-enabling a button:</p>
+<pre><code class="language-javascript">button.disabled = true;
+
+try {
+    // ...
+} catch (problem) {
+    // ...
+} finally {
+    button.disabled = false;
+}</code></pre>
+<p>Disabling the button while a request is in progress stops the user starting the same request several times by clicking repeatedly.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>The simulated weather server does not know about <strong>Atlantis</strong>, which is the last option in the dropdown. Choose it and click the button. The loading message never goes away.</li>
+    <li>Add the <code>try...catch</code> from the example above to <code>showWeather</code>, and try Atlantis again. A clear message now appears instead.</li>
+    <li>Disable the <code>#weather-button</code> at the start of <code>showWeather</code>, and re-enable it in a <code>finally</code> block. Check that the button cannot be clicked while a request is loading.</li>
+</ol>
+<div class="tip-box"><strong>💡 Tip:</strong> For every request, plan what the user sees in three situations: while it is <strong>loading</strong>, when it <strong>succeeds</strong>, and when it <strong>fails</strong>. A page that only plans for success will eventually leave a user staring at a loading message that never ends.</div>
+<br>
+
+<h2>Waiting for Several Tasks</h2>
+<p>Sometimes you need the results of several tasks. Awaiting them one after another works, but each task only starts once the last one has finished, so three two-second requests take six seconds:</p>
+<pre><code class="language-javascript">const leeds = await fakeFetchWeather("Leeds");
+const york = await fakeFetchWeather("York");
+const hull = await fakeFetchWeather("Hull");</code></pre>
+<p>When the tasks do not depend on each other, <code>Promise.all()</code> starts them all at once, and waits until every one has finished. It takes an array of promises, and gives back an array of results, in the same order:</p>
+<pre><code class="language-javascript">const results = await Promise.all([
+    fakeFetchWeather("Leeds"),
+    fakeFetchWeather("York"),
+    fakeFetchWeather("Hull")
+]);
+
+console.log(results.length);   // 3, after two seconds in total</code></pre>
+<p>If any one of the promises is rejected, <code>Promise.all</code> is rejected too, so it should be inside <code>try...catch</code> like any other <code>await</code>.</p>
+
+<h3>Try It</h3>
+<ol>
+    <li>Write an <code>async</code> function called <code>compareCities</code> that uses <code>Promise.all</code> to fetch the weather for Leeds, York and Hull, then displays each one on a new line in the <code>#compare-result</code> element, using <code>map</code> and <code>join("\n")</code>. Include a loading message and a <code>try...catch</code>.</li>
+    <li>Call it from a click listener on the <code>#compare-button</code>. All three results appear together, after about two seconds.</li>
+</ol>
+<br>
+
+<h2>Check Your Page</h2>
+<p>Your <code>showWeather</code> function should be similar to this:</p>
+<pre><code class="language-javascript">async function showWeather(city) {
+    result.textContent = "Loading…";
+    weatherButton.disabled = true;
+
+    try {
+        const weather = await fakeFetchWeather(city);
+        result.textContent = `${weather.city}: ${weather.temperature}°C, ${weather.summary}`;
+    } catch (problem) {
+        result.textContent = `Sorry, the weather could not be loaded. ${problem.message}`;
+    } finally {
+        weatherButton.disabled = false;
+    }
+}
+
+weatherButton.addEventListener("click", () =&gt; {
+    showWeather(citySelect.value);
+});</code></pre>
+<p>Also check that Atlantis shows a clear message, and the comparison shows three cities after about two seconds.</p>
+<p>Before moving on, make sure you can answer these questions:</p>
+<ul>
+    <li>What is the difference between synchronous and asynchronous code?</li>
+    <li>What are the three states of a promise?</li>
+    <li>What does <code>await</code> do, and where can it be used?</li>
+    <li>Why does every request need a loading state and a failure state?</li>
+    <li>What does a <code>finally</code> block do?</li>
+    <li>When is <code>Promise.all</code> faster than awaiting tasks one after another?</li>
+</ul>
+<p>In the next lesson, you will make real requests for data, using <code>fetch</code>.</p>

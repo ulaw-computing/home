@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UK Weather Now</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <p class="site-name">UK Weather Now</p>
+    </header>
+
+    <main>
+        <h1>Current Weather</h1>
+
+        <form class="weather-form" id="weather-form">
+            <label for="city-select">City</label>
+            <select id="city-select">
+                <option>Leeds</option>
+                <option>London</option>
+                <option>Manchester</option>
+                <option>Edinburgh</option>
+                <option>Cardiff</option>
+                <option>Belfast</option>
+            </select>
+            <button type="submit" class="button">Show weather</button>
+        </form>
+
+        <p class="status" id="status-message" role="status"></p>
+
+        <section class="weather-card" aria-labelledby="weather-city">
+            <h2 id="weather-city">Choose a city</h2>
+            <p class="temperature" id="weather-temperature">--</p>
+            <p id="weather-summary">The current weather will appear here.</p>
+            <p>Wind: <span id="weather-wind">--</span></p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p><a href="https://open-meteo.com/" target="_blank" rel="noopener">Weather data by Open-Meteo.com</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
