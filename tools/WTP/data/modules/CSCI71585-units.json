@@ -39,7 +39,7 @@
       "description": "In this unit, we will cover advanced front-end technologies that enhance the user experience. You'll learn about CSS animations, transforms, and custom properties, as well as JavaScript features like async/await, working with APIs, fetch, JSON, form handling, and client-side security best practices.",
       "week": 5,
       "unlockDate": "2026-11-16",
-      "lessonCount": 4,
+      "lessonCount": 12,
       "technologies": ["HTML", "CSS", "JavaScript"],
       "lessonsFile": "data/lessons/CSCI71585/unit-5/lessons.json"
     },
